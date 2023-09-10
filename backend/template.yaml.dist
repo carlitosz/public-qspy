@@ -1,0 +1,223 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: QSpy backend stack.
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  projectName:
+    Description: The name of the project
+    Type: String
+  stage:
+    AllowedValues: [development, production]
+    Default: development
+    Description: The stage where this stack will be deployed to.
+    Type: String
+  readPolicyResource:
+    AllowedPattern: ^arn\:aws\:sqs\:us\-east\-(1|2)\:\d+\:domain\-events\-.*\-deadletter$
+    Description: Resource to create a read policy for. For a single DLQ, the ARN of the DLQ.
+    Type: String
+  queueUrl:
+    AllowedPattern: ^https\:\/\/sqs\.us\-east\-(1|2)\.amazonaws\.com\/\d+\/domain\-events\-.*\-deadletter$
+    Description: The target deadletter queue URL. This URL is passed to the Lambda function from EventBridge for Asynchronous execution.
+    Type: String
+
+Resources:
+  # ===========================================================================
+  # Lambda functions
+  # ===========================================================================
+  AnalyzeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${projectName}-AnalyzeFunction-${stage}'
+      Description: Analyzes deadletter queues.
+      Runtime: nodejs18.x
+      CodeUri: functions/
+      Handler: AnalyzeFunction.handler
+      MemorySize: 256
+      Timeout: 900
+      ReservedConcurrentExecutions: 2
+      Events:
+        InvokeSchedule:
+          Type: Schedule
+          Properties:
+            Name: !Sub '${projectName}-AnalyzeRule-${stage}'
+            Description: 'Invokes the Analyze Lambda function'
+            Schedule: 'cron(0 0 * * ? *)'
+            Enabled: true
+            Input: !Sub '{ "queueUrl": "${queueUrl}" }'
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 60
+        MaximumRetryAttempts: 1
+        DestinationConfig:
+          OnSuccess:
+            Type: Lambda
+            Destination: !GetAtt StoreFunction.Arn
+          OnFailure:
+            Type: Lambda
+            Destination: !GetAtt StoreFunction.Arn
+      Policies:
+        - Statement:
+            - Sid: LambdaAnalyzePolicy
+              Effect: Allow
+              Action:
+                - sqs:ReceiveMessage
+                - sqs:GetQueueAttributes
+              Resource: !Ref readPolicyResource
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: 'es2020'
+        Sourcemap: false
+        EntryPoints:
+          - AnalyzeFunction.ts
+        External:
+          - '@aws-sdk'
+
+  StoreFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${projectName}-StoreFunction-${stage}'
+      Description: Receives and stores results from Analyze to Dynamo.
+      Runtime: nodejs18.x
+      CodeUri: functions/
+      Handler: StoreFunction.handler
+      MemorySize: 128
+      Timeout: 60
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DynamoStore
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoStore
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: 'es2020'
+        Sourcemap: false
+        EntryPoints:
+          - StoreFunction.ts
+        External:
+          - '@aws-sdk'
+
+  ApiGetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${projectName}-ApiGetFunction-${stage}'
+      Description: Lambda proxy that handles GET requests from API Gateway
+      Runtime: nodejs18.x
+      CodeUri: functions/
+      Handler: ApiGetFunction.handler
+      MemorySize: 128
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DynamoStore
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref DynamoStore
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Method: GET
+            Path: '/events'
+            RestApiId: !Ref Api
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: 'es2020'
+        Sourcemap: false
+        EntryPoints:
+          - ApiGetFunction.ts
+        External:
+          - '@aws-sdk'
+
+  # ==========================================================================
+  # Function log groups
+  # ==========================================================================
+  AnalyzeFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AnalyzeFunction}'
+      RetentionInDays: 365
+
+  StoreFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${StoreFunction}'
+      RetentionInDays: 365
+
+  ApiGetFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ApiGetFunction}'
+      RetentionInDays: 365
+
+  # ===========================================================================
+  # Dynamo
+  # ===========================================================================
+  DynamoStore:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${projectName}Events-${stage}'
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        # e.g. "domain-events-preprints-deadletter"
+        - AttributeName: 'Queue'
+          KeyType: 'HASH'
+        # e.g. 2023-01-01
+        - AttributeName: 'Date'
+          KeyType: 'RANGE'
+      AttributeDefinitions:
+        - AttributeName: 'Queue'
+          AttributeType: 'S'
+        - AttributeName: 'Date'
+          AttributeType: 'S'
+      TimeToLiveSpecification:
+        AttributeName: 'Expires'
+        Enabled: true
+
+  # ===========================================================================
+  # API
+  # ===========================================================================
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      AlwaysDeploy: false
+      ApiKeySourceType: HEADER
+      Auth:
+        ApiKeyRequired: true
+        ResourcePolicy:
+          CustomStatements:
+            [
+              {
+                'Effect': 'Allow',
+                'Principal': '*',
+                'Action': ['execute-api:Invoke'],
+                'Resource': [!Sub 'execute-api:/${stage}/GET/events', !Sub 'execute-api:/${stage}/OPTIONS/events']
+              }
+            ]
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: Usage plan for API operations
+          Quota:
+            Limit: 5000
+            Period: MONTH
+          Throttle:
+            BurstLimit: 100
+            RateLimit: 50
+          UsagePlanName: !Sub '${projectName}Api-UsagePlan-${stage}'
+      Cors: '*'
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: config/api.yaml
+      Description: !Sub '${projectName} API for ${stage}'
+      EndpointConfiguration:
+        Type: REGIONAL
+      Name: !Sub '${projectName}Api-${stage}'
+      OpenApiVersion: '3.0.1'
+      StageName: !Ref stage

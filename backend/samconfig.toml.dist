@@ -1,0 +1,31 @@
+version = 0.1
+
+[development.global.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+region = "us-east-1"
+profile = "cz-aws"
+s3_bucket = "cz-aws-sam-cli-managed-default-samclisourcebucket-development"
+s3_prefix = "development-cz-functions"
+stack_name = "qspy-development"
+parameter_overrides = [
+    "queueUrl=",
+    "readPolicyResource=",
+    "projectName=QSpy",
+    "stage=development",
+]
+
+[production.global.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+region = "us-east-1"
+profile = "cz-aws"
+s3_bucket = "cz-aws-sam-cli-managed-default-samclisourcebucket-production"
+s3_prefix = "production-cz-functions"
+stack_name = "qspy-production"
+parameter_overrides = [
+    "queueUrl=",
+    "readPolicyResource=",
+    "projectName=QSpy",
+    "stage=production"
+]

@@ -1,0 +1,22 @@
+{
+  "responseContext": {
+    "statusCode": 200
+  },
+  "responsePayload": {
+    "data": [
+      {
+        "event": "Event1",
+        "count": 1
+      },
+      {
+        "event": "Event2",
+        "count": 2
+      },
+      {
+        "event": "Event3",
+        "count": 3
+      }
+    ],
+    "queue": "test-queue"
+  }
+}

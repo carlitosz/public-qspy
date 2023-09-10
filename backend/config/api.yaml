@@ -1,0 +1,198 @@
+openapi: '3.0.1'
+
+info:
+  title: QSpy API
+  description: API operations for QSpy
+  version: '1.0.0'
+
+x-amazon-apigateway-request-validators:
+  body-only:
+    validateRequestParameters: false
+    validateRequestBody: true
+  query-and-headers:
+    validateRequestParameters: true
+    validateRequestBody: false
+  all:
+    validateRequestParameters: true
+    validateRequestBody: true
+
+paths:
+  /events:
+    get:
+      summary: Get events for a dead-letter queue
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: queue
+          required: true
+          schema:
+            type: string
+            example: 'domain-events-preprints-deadletter'
+          description: The name of the dead-letter queue
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+            example: '2023-01-01'
+          description: Date when the items were collected
+      x-amazon-apigateway-request-validator: query-and-headers
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+                  message:
+                    type: string
+                    example: The queue was sucessfully processed.
+        '400':
+          description: Invalid operation
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Server error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiGetFunction.Arn}/invocations
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Methods: "'GET, OPTIONS'"
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    options:
+      responses:
+        '200':
+          description: 200 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Empty'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,X-API-KEY'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        passthroughBehavior: when_no_match
+        type: mock
+
+components:
+  schemas:
+    Empty:
+      title: Empty Schema
+      type: object
+    Event:
+      title: Event Schema
+      type: object
+      properties:
+        event:
+          type: string
+        count:
+          type: integer
+    InvalidRequest:
+      title: Invalid request
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Invalid request parameters: [date]'
+    NotFound:
+      title: Not found
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'No items matched your request.'
+    ServerError:
+      title: Server error
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Something broke.'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -1,0 +1,25 @@
+{
+    "name": "analyze",
+    "version": "1.0.0",
+    "main": "analyze.js",
+    "description": "Analyze function",
+    "scripts": {
+        "compile": "tsc"
+    },
+    "devDependencies": {
+        "@aws-sdk/client-dynamodb": "^3.354.0",
+        "@aws-sdk/client-sqs": "^3.354.0",
+        "@aws-sdk/util-dynamodb": "^3.408.0",
+        "@types/async": "^3.2.20",
+        "@types/aws-lambda": "^8.10.115",
+        "@types/node": "^20.2.5",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "eslint": "^8.45.0",
+        "typescript": "^5.0.4"
+    },
+    "dependencies": {
+        "esbuild": "^0.18.4",
+        "moment": "^2.29.4"
+    }
+}
