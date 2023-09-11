@@ -35,8 +35,8 @@ paths:
           schema:
             type: string
             format: date
-            example: '2023-01-01'
-          description: Date when the items were collected
+            example: '2023-09-01'
+          description: Date when the items were collected (YYYY-MM-DD America/New_York)
       x-amazon-apigateway-request-validator: query-and-headers
       responses:
         '200':
