@@ -12,8 +12,7 @@ import {
     GetItemCommandOutput
 } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
-
-import moment from 'moment'
+import { DateTime as dt } from 'luxon'
 
 const env: { tableName?: string } = {
     tableName: process.env.TABLE_NAME
@@ -60,7 +59,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         }
     }
 
-    if (date && !moment(date.trim()).isValid()) {
+    if (date && !dt.fromISO(date.trim()).setZone('America/New_York').isValid) {
         return {
             statusCode: 400,
             headers,
@@ -76,7 +75,9 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         TableName: env.tableName,
         Key: marshall({
             Queue: queue,
-            Date: date ? moment(date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+            Date: date
+                ? dt.fromISO(date.trim()).setZone('America/New_York').toISODate()
+                : dt.now().setZone('America/New_York').toISODate()
         }),
         AttributesToGet: ['Data']
     }

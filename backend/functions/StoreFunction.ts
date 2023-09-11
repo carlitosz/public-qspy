@@ -6,7 +6,7 @@ import {
     PutItemCommandOutput
 } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import moment from 'moment'
+import { DateTime as dt } from 'luxon'
 
 import type { Handler } from 'aws-lambda'
 import type { AnalyzePayload, DomainEvent } from './AnalyzeFunction'
@@ -44,9 +44,9 @@ export const handler: Handler = async (event: LambdaEvent): Promise<void> => {
         TableName: env.tableName,
         Item: marshall({
             Queue: queue,
-            Date: moment().format('YYYY-MM-DD'), // UTC
+            Date: dt.now().setZone('America/New_York').toISODate(),
             Data: { data, message },
-            Expires: moment().add(6, 'M').unix() // 6 months
+            Expires: dt.now().plus({ months: 6 }).toUnixInteger()
         })
     }
 
