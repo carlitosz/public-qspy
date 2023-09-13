@@ -37,13 +37,17 @@ Resources:
       ReservedConcurrentExecutions: 2
       Events:
         InvokeSchedule:
-          Type: Schedule
+          Type: ScheduleV2
           Properties:
             Name: !Sub '${projectName}-AnalyzeRule-${stage}'
             Description: 'Invokes the Analyze Lambda function'
-            Schedule: 'cron(0 0 * * ? *)'
-            Enabled: true
             Input: !Sub '{ "queueUrl": "${queueUrl}" }'
+            RetryPolicy:
+              MaximumEventAgeInSeconds: 60
+              MaximumRetryAttempts: 1
+            ScheduleExpression: 'cron(0 3 * * ? *)'
+            ScheduleExpressionTimezone: 'America/New_York'
+            State: 'ENABLED'
       EventInvokeConfig:
         MaximumEventAgeInSeconds: 60
         MaximumRetryAttempts: 1
