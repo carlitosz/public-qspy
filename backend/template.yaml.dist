@@ -70,7 +70,7 @@ Resources:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
-        Target: 'es2020'
+        Target: 'es2022'
         Sourcemap: false
         EntryPoints:
           - AnalyzeFunction.ts
@@ -97,7 +97,7 @@ Resources:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
-        Target: 'es2020'
+        Target: 'es2022'
         Sourcemap: false
         EntryPoints:
           - StoreFunction.ts
@@ -131,7 +131,7 @@ Resources:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
-        Target: 'es2020'
+        Target: 'es2022'
         Sourcemap: false
         EntryPoints:
           - ApiGetFunction.ts
