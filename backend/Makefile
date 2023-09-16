@@ -29,3 +29,8 @@ deploy-production: #! Deploys backend to AWS
 	sam build
 	@echo "\n$(COLOR_GREEN)Deploying...$(COLOR_END)"
 	sam deploy --config-env production
+
+.PHONY: test
+test: #! Runs Jest test suite
+	@echo "$(COLOR_GREEN)Running backend tests...$(COLOR_END)\n"
+	npm run tsc && npm run jest

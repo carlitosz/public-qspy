@@ -11,12 +11,21 @@ import { DateTime as dt } from 'luxon'
 
 import type { Context, Handler } from 'aws-lambda'
 
-const BATCH_SIZE = 10
+export const BATCH_SIZE = 10
+export const TIME_UNTIL_TIMEOUT = 3
+export const QUEUE_NAME_FORMAT = /domain-events-.*-deadletter/gi
+export const MISSING_QUEUE_URL_MSG = 'Missing required parameter: [queueUrl]'
+export const QUEUE_EMPTY_MSG = 'The queue is empty'
+export const QUEUE_NAME_MISMATCH_MSG = 'The queue name does not have the required format (domain-events-.*-deadletter)'
+export const SUCCESS_MSG = 'The queue was sucessfully processed'
+export const VISIBILITY_TIMEOUT_EXPIRED_MSG = "The queue's visibility timeout expired before the function could finish"
+export const FUNCTION_TIMEOUT_MSG = 'The function reached timeout and could not complete processing the queue.'
+
 const config: SQSClientConfig = { region: 'us-east-1' }
 const sqsClient: SQSClient = new SQSClient(config)
 
-declare type QueueAttributesType = { numberOfMessages: number; visibilityTimeout: number }
-declare type LambdaEvent = { queueUrl: string }
+export declare type QueueAttributesType = { numberOfMessages: number; visibilityTimeout: number }
+export declare type LambdaEvent = { queueUrl: string }
 
 export declare type DomainEvent = {
     event: string
@@ -32,7 +41,7 @@ export declare type AnalyzePayload = {
 /**
  * Gets ApproximateNumberOfMessages from queue.
  */
-const getNumberOfMessagesInQueue = async (queueUrl: string): Promise<QueueAttributesType> => {
+export const getNumberOfMessagesInQueue = async (queueUrl: string): Promise<QueueAttributesType> => {
     const { $metadata, Attributes }: GetQueueAttributesCommandOutput = await sqsClient.send(
         new GetQueueAttributesCommand({
             QueueUrl: queueUrl,
@@ -63,7 +72,7 @@ const getNumberOfMessagesInQueue = async (queueUrl: string): Promise<QueueAttrib
 /**
  * Receive messages from the queue.
  */
-const receiveMessages = async (queueUrl: string): Promise<Message[] | undefined> => {
+export const receiveMessages = async (queueUrl: string): Promise<Message[] | undefined> => {
     const { $metadata, Messages }: ReceiveMessageCommandOutput = await sqsClient.send(
         new ReceiveMessageCommand({
             MaxNumberOfMessages: BATCH_SIZE,
@@ -73,7 +82,7 @@ const receiveMessages = async (queueUrl: string): Promise<Message[] | undefined>
     )
 
     if ($metadata.httpStatusCode !== 200) {
-        throw new Error(`receiveMessages failed with status: ${$metadata.httpStatusCode}`)
+        return undefined
     }
 
     if (!Messages) {
@@ -86,7 +95,7 @@ const receiveMessages = async (queueUrl: string): Promise<Message[] | undefined>
 /**
  * Returns an array of event types.
  */
-const getEventsFromMessages = (messages: Message[]): string[] => {
+export const getEventsFromMessages = (messages: Message[]): string[] => {
     return messages
         .filter((m: Message) => m !== undefined)
         .map(({ Body }: Message): string => {
@@ -100,35 +109,40 @@ const getEventsFromMessages = (messages: Message[]): string[] => {
 /**
  * Gets the Lambda function's remaining execution time (in seconds) until timeout.
  */
-const remainingTime = (context: Context): number => dt.fromMillis(context.getRemainingTimeInMillis()).toSeconds()
+export const remainingTime = (context: Context): number => dt.fromMillis(context.getRemainingTimeInMillis()).toSeconds()
 
 export const handler: Handler = async (event: LambdaEvent, context: Context): Promise<AnalyzePayload> => {
     const fnTimeout: number = remainingTime(context)
     const { queueUrl } = event
 
     if (queueUrl === undefined || queueUrl.trim() === '') {
-        throw new Error(`Missing required parameter: queueUrl`)
+        throw new Error(MISSING_QUEUE_URL_MSG)
     }
+
+    // Parse queue name from queue URL
+    const matches: RegExpMatchArray | null = queueUrl.match(QUEUE_NAME_FORMAT)
+
+    if (matches === null) {
+        throw Error(QUEUE_NAME_MISMATCH_MSG)
+    }
+
+    // The queue name
+    const queue = matches[0]
 
     // Get initial numbers in queue
     const response: QueueAttributesType = await getNumberOfMessagesInQueue(queueUrl)
     let { numberOfMessages } = response
     const { visibilityTimeout } = response
 
-    // Queue name
-    const matches: RegExpMatchArray | null = queueUrl.match(/domain-events-.*-deadletter/gi)
-    const queue = matches === null ? '' : matches[0]
-
     if (numberOfMessages === 0) {
         return {
             data: [],
-            message: 'The queue is empty.',
+            message: QUEUE_EMPTY_MSG,
             queue
         }
     }
 
     const collection = new Map<string, number>()
-    let message = `The queue was sucessfully processed.`
 
     do {
         const batches: number = Math.floor(numberOfMessages / BATCH_SIZE)
@@ -150,16 +164,24 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
 
             // The function should only process messages up to the queue visibility timeout.
             if (elapsedTime > visibilityTimeout) {
-                message = `The queue's visibility timeout (${visibilityTimeout}) expired before the function could finish processing the queue.`
+                const data = Array.from(collection).map(([event, count]) => ({ event, count }))
 
-                break
+                return {
+                    data: data as [DomainEvent],
+                    message: VISIBILITY_TIMEOUT_EXPIRED_MSG,
+                    queue
+                }
             }
 
             // Are we running out of time? Do not let the function timeout.
-            if (timeRemaining < 3) {
-                message = `The function reached timeout and could not complete processing the queue.`
+            if (timeRemaining < TIME_UNTIL_TIMEOUT) {
+                const data = Array.from(collection).map(([event, count]) => ({ event, count }))
 
-                break
+                return {
+                    data: data as [DomainEvent],
+                    message: FUNCTION_TIMEOUT_MSG,
+                    queue
+                }
             }
         }
 
@@ -172,7 +194,7 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
 
     return {
         data: data as [DomainEvent],
-        message,
+        message: SUCCESS_MSG,
         queue
     }
 }

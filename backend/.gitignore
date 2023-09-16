@@ -1,6 +1,8 @@
+# Ignore .env
+.env
+
 # Ignore factories
 response.json
-helpers/
 
 # Ignore templates and configs
 template.yaml
