@@ -6,5 +6,6 @@ module.exports = {
         '@functions/(.*)': '<rootDir>/functions/$1',
         '@helpers/(.*)': '<rootDir>/helpers/$1',
         '@testHelpers/(.*)': '<rootDir>/tests/helpers/$1'
-    }
+    },
+    setupFiles: ['dotenv/config']
 }

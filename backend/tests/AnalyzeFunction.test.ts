@@ -42,48 +42,33 @@ beforeEach(() => {
 
 describe('AnalyzeFunction::handler', () => {
     it('Throws an error if queueUrl is not supplied', async () => {
-        try {
-            await handler(
+        expect(() =>
+            handler(
                 {} as LambdaEvent,
                 { getRemainingTimeInMillis: () => 3000 } as AWSContext,
                 () => {}
             )
-        } catch (error: unknown) {
-            expect(error).toBeInstanceOf(Error)
-
-            const e = error as Error
-            expect(e.message).toBe('Missing required parameter: [queueUrl]')
-        }
+        ).rejects.toThrow(Error('Missing required parameter: [queueUrl]'))
     })
 
     it('Throws an error if queueUrl is blank or empty', async () => {
-        try {
-            await handler(
-                { queueUrl: '' } as LambdaEvent,
+        expect(() =>
+            handler(
+                { queueUrl: ' ' } as LambdaEvent,
                 { getRemainingTimeInMillis: () => 3000 } as AWSContext,
                 () => {}
             )
-        } catch (error: unknown) {
-            expect(error).toBeInstanceOf(Error)
-
-            const e = error as Error
-            expect(e.message).toBe(MISSING_QUEUE_URL_MSG)
-        }
+        ).rejects.toThrow(Error(MISSING_QUEUE_URL_MSG))
     })
 
     it('Throws an error if the queue name is not the required queue name format', async () => {
-        try {
-            await handler(
+        expect(() =>
+            handler(
                 { queueUrl: 'queue-url-bad-format' } as LambdaEvent,
                 { getRemainingTimeInMillis: () => 3000 } as AWSContext,
                 () => {}
             )
-        } catch (error: unknown) {
-            expect(error).toBeInstanceOf(Error)
-
-            const e = error as Error
-            expect(e.message).toBe(QUEUE_NAME_MISMATCH_MSG)
-        }
+        ).rejects.toThrow(Error(QUEUE_NAME_MISMATCH_MSG))
     })
 
     it('Successfully returns when a queue is empty', async () => {
