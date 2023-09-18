@@ -12,7 +12,9 @@ import {
     GetItemCommandOutput
 } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
-import { DateTime as dt } from 'luxon'
+import { isValid } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
+import enUS from 'date-fns/locale/en-US'
 
 export const MISSING_TABLE_NAME_MSG = 'Missing environment variable: TABLE_NAME'
 export const ERROR_500_MSG = 'Something exploded.'
@@ -69,7 +71,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         )
     }
 
-    if (date && !dt.fromISO(date.trim()).setZone('America/New_York').isValid) {
+    if (date && !isValid(new Date(date.trim()))) {
         return respondWith(
             400,
             JSON.stringify({
@@ -85,8 +87,8 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         Key: marshall({
             Queue: queue,
             Date: date
-                ? dt.fromISO(date.trim()).setZone('America/New_York').toISODate()
-                : dt.now().setZone('America/New_York').toISODate()
+                ? formatInTimeZone(date.trim(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS })
+                : formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS })
         }),
         AttributesToGet: ['Data']
     }
@@ -111,6 +113,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
 
         return respondWith(200, JSON.stringify(unmarshall(response.Item).Data))
     } catch (e: unknown) {
-        return respondWith(200, JSON.stringify({ error: { message: ERROR_500_MSG } }))
+        return respondWith(500, JSON.stringify({ error: { message: ERROR_500_MSG } }))
     }
 }

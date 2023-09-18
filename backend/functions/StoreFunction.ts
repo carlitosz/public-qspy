@@ -1,6 +1,8 @@
 import { DynamoDBClient, DynamoDBClientConfig, PutItemCommand, PutItemCommandOutput } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import { DateTime as dt } from 'luxon'
+import { addMonths, getUnixTime } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
+import enUS from 'date-fns/locale/en-US'
 
 import type { Handler } from 'aws-lambda'
 import type { AnalyzePayload, DomainEvent } from './AnalyzeFunction'
@@ -41,9 +43,9 @@ export const handler: Handler = async (event: LambdaEvent): Promise<void> => {
             TableName: env.tableName || process.env.TABLE_NAME,
             Item: marshall({
                 Queue: queue,
-                Date: dt.now().setZone('America/New_York').toISODate(),
+                Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS }),
                 Data: { data, message },
-                Expires: dt.now().plus({ months: 6 }).toUnixInteger()
+                Expires: getUnixTime(addMonths(new Date(), 6))
             })
         })
     )

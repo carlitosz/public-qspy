@@ -1,9 +1,15 @@
 import 'aws-sdk-client-mock-jest'
 import { AwsClientStub, mockClient } from 'aws-sdk-client-mock'
-import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
+import {
+    DynamoDBClient,
+    GetItemCommand,
+    GetItemCommandInput,
+    GetItemCommandOutput
+} from '@aws-sdk/client-dynamodb'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import { DateTime as dt } from 'luxon'
+import { formatInTimeZone } from 'date-fns-tz'
+import enUS from 'date-fns/locale/en-US'
 
 import 'dotenv/config'
 
@@ -85,22 +91,20 @@ describe('ApiGetFunction::handler', () => {
             .on(GetItemCommand, {
                 TableName: TEST_TABLE_NAME,
                 Key: marshall({
-                    Queue: TEST_QUEUE_NAME,
-                    Date: '2023-09-01'
+                    Queue: TEST_QUEUE_NAME
                 }),
                 AttributesToGet: ['Data']
-            })
-            .resolvesOnce({
+            } as GetItemCommandInput)
+            .resolves({
                 $metadata: {
                     httpStatusCode: 500
                 }
-            })
+            } as GetItemCommandOutput)
 
         const result: APIGatewayProxyResult = await handler(
             {
                 queryStringParameters: {
-                    queue: TEST_QUEUE_NAME,
-                    date: '2023-09-01'
+                    queue: TEST_QUEUE_NAME
                 }
             },
             {} as Context,
@@ -116,23 +120,21 @@ describe('ApiGetFunction::handler', () => {
             .on(GetItemCommand, {
                 TableName: TEST_TABLE_NAME,
                 Key: marshall({
-                    Queue: TEST_QUEUE_NAME,
-                    Date: '2023-09-01'
+                    Queue: TEST_QUEUE_NAME
                 }),
                 AttributesToGet: ['Data']
-            })
-            .resolvesOnce({
+            } as GetItemCommandInput)
+            .resolves({
                 $metadata: {
                     httpStatusCode: 200
                 },
                 Item: undefined
-            })
+            } as GetItemCommandOutput)
 
         const result: APIGatewayProxyResult = await handler(
             {
                 queryStringParameters: {
-                    queue: TEST_QUEUE_NAME,
-                    date: '2023-09-01'
+                    queue: TEST_QUEUE_NAME
                 }
             },
             {} as Context,
@@ -145,7 +147,7 @@ describe('ApiGetFunction::handler', () => {
 
     describe('Successful requests', () => {
         describe('When query parameters only include [queue]', () => {
-            it("GetItemCommandInput uses today's ISO date in the request to DynamoDB", async () => {
+            it("GetItemCommandInput uses today's date in the request to DynamoDB", async () => {
                 const requestPayload = {
                     queryStringParameters: {
                         queue: TEST_QUEUE_NAME
@@ -155,14 +157,16 @@ describe('ApiGetFunction::handler', () => {
                 const responsePayload = {
                     data: [],
                     message: QUEUE_EMPTY_MSG
-                } as AnalyzePayload
+                }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: dt.now().setZone('America/New_York').toISODate()
+                            Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+                                locale: enUS
+                            })
                         }),
                         AttributesToGet: ['Data']
                     })
@@ -203,17 +207,19 @@ describe('ApiGetFunction::handler', () => {
                         }
                     ],
                     message: SUCCESS_MSG
-                } as AnalyzePayload
+                }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: '2023-01-01'
+                            Date: formatInTimeZone('2023-01-01', 'America/New_York', 'yyyy-MM-dd', {
+                                locale: enUS
+                            })
                         }),
                         AttributesToGet: ['Data']
-                    })
+                    } as GetItemCommandInput)
                     .resolvesOnce({
                         $metadata: {
                             httpStatusCode: 200
@@ -221,7 +227,7 @@ describe('ApiGetFunction::handler', () => {
                         Item: marshall({
                             Data: responsePayload
                         })
-                    })
+                    } as GetItemCommandOutput)
 
                 const result: APIGatewayProxyResult = await handler(
                     requestPayload,

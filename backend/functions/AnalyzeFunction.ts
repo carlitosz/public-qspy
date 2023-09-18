@@ -7,7 +7,7 @@ import {
     ReceiveMessageCommand,
     ReceiveMessageCommandOutput
 } from '@aws-sdk/client-sqs'
-import { DateTime as dt } from 'luxon'
+import { millisecondsToSeconds } from 'date-fns'
 
 import type { Context, Handler } from 'aws-lambda'
 
@@ -109,7 +109,7 @@ export const getEventsFromMessages = (messages: Message[]): string[] => {
 /**
  * Gets the Lambda function's remaining execution time (in seconds) until timeout.
  */
-export const remainingTime = (context: Context): number => dt.fromMillis(context.getRemainingTimeInMillis()).toSeconds()
+export const remainingTime = (context: Context): number => millisecondsToSeconds(context.getRemainingTimeInMillis())
 
 export const handler: Handler = async (event: LambdaEvent, context: Context): Promise<AnalyzePayload> => {
     const fnTimeout: number = remainingTime(context)
