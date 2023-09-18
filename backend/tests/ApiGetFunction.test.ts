@@ -214,7 +214,9 @@ describe('ApiGetFunction::handler', () => {
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: '2023-01-01'
+                            Date: formatInTimeZone('2023-01-01', 'America/New_York', 'yyyy-MM-dd', {
+                                locale: enUS
+                            })
                         }),
                         AttributesToGet: ['Data']
                     } as GetItemCommandInput)

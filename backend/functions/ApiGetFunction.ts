@@ -113,7 +113,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
 
         return respondWith(200, JSON.stringify(unmarshall(response.Item).Data))
     } catch (e: unknown) {
-        console.log(JSON.stringify(e))
-        return respondWith(200, JSON.stringify({ error: { message: ERROR_500_MSG } }))
+        return respondWith(500, JSON.stringify({ error: { message: ERROR_500_MSG } }))
     }
 }
