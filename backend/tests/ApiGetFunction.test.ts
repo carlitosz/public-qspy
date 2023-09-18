@@ -8,7 +8,8 @@ import {
 } from '@aws-sdk/client-dynamodb'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import { DateTime as dt } from 'luxon'
+import { formatInTimeZone } from 'date-fns-tz'
+import enUS from 'date-fns/locale/en-US'
 
 import 'dotenv/config'
 
@@ -146,7 +147,7 @@ describe('ApiGetFunction::handler', () => {
 
     describe('Successful requests', () => {
         describe('When query parameters only include [queue]', () => {
-            it("GetItemCommandInput uses today's ISO date in the request to DynamoDB", async () => {
+            it("GetItemCommandInput uses today's date in the request to DynamoDB", async () => {
                 const requestPayload = {
                     queryStringParameters: {
                         queue: TEST_QUEUE_NAME
@@ -156,14 +157,16 @@ describe('ApiGetFunction::handler', () => {
                 const responsePayload = {
                     data: [],
                     message: QUEUE_EMPTY_MSG
-                } as AnalyzePayload
+                }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: dt.now().setZone('America/New_York').toISODate()
+                            Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+                                locale: enUS
+                            })
                         }),
                         AttributesToGet: ['Data']
                     })
@@ -204,7 +207,7 @@ describe('ApiGetFunction::handler', () => {
                         }
                     ],
                     message: SUCCESS_MSG
-                } as AnalyzePayload
+                }
 
                 dynamoDbMock
                     .on(GetItemCommand, {

@@ -3,7 +3,9 @@ import { AwsClientStub, mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBClient, PutItemCommand, PutItemCommandOutput } from '@aws-sdk/client-dynamodb'
 import { Context } from 'aws-lambda'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import { DateTime as dt } from 'luxon'
+import { addMonths, getUnixTime } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
+import enUS from 'date-fns/locale/en-US'
 
 import 'dotenv/config'
 
@@ -66,9 +68,11 @@ describe('StoreFunction::handler', () => {
                 TableName: TEST_TABLE_NAME,
                 Item: marshall({
                     Queue: TEST_QUEUE_NAME,
-                    Date: dt.now().setZone('America/New_York').toISODate(),
+                    Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+                        locale: enUS
+                    }),
                     Data: { data: payload.data, message: payload.message },
-                    Expires: dt.now().plus({ months: 6 }).toUnixInteger()
+                    Expires: getUnixTime(addMonths(new Date(), 6))
                 })
             })
             .resolvesOnce({
@@ -109,9 +113,11 @@ describe('StoreFunction::handler', () => {
                 TableName: TEST_TABLE_NAME,
                 Item: marshall({
                     Queue: TEST_QUEUE_NAME,
-                    Date: dt.now().setZone('America/New_York').toISODate(),
+                    Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+                        locale: enUS
+                    }),
                     Data: { data: payload.data, message: payload.message },
-                    Expires: dt.now().plus({ months: 6 }).toUnixInteger()
+                    Expires: getUnixTime(addMonths(new Date(), 6))
                 })
             })
             .resolves({
