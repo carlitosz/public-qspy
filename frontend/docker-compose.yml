@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  qspy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qspy
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '8000:8000'
+    restart: always
+    volumes:
+      - .:/app
+      - next_cache:/app/.next
+      - node_modules:/app/node_modules
+
+networks:
+  default:
+    name: spynet
+
+volumes:
+  next_cache:
+  node_modules:
