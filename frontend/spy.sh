@@ -15,8 +15,6 @@ function display_help {
   echo "  spy ps        Display the status of all containers"
   echo "  spy sh        Enter interactive mode"
   echo
-  echo "Customization:"
-  echo "  spy build --no-cache       Rebuild all of the spy containers"
 
   exit 1
 }
