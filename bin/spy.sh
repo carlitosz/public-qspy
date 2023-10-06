@@ -23,9 +23,9 @@ if [ $# -gt 0 ]; then
   if [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
     display_help
   elif [ "$1" == "sh" ]; then
-    docker exec -it qspy sh
+    docker exec -it --detach-keys 'ctrl-q,q' next-app sh
   else
-    docker-compose -f ./docker-compose.yml "$@"
+    docker-compose -f docker-compose.dev.yml "$@"
   fi
 else
   display_help
