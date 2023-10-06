@@ -9,7 +9,7 @@ PREFIX ?= $(PWD)
 .PHONY: deps
 deps: #! Initialize dependencies
 	@echo "$(COLOR_GREEN)Installing client-side deps...$(COLOR_END)\n"
-	cd $(PREFIX)/next-app && npm i
+	cd $(PREFIX)/qspy && npm i
 	@echo "\n\n$(COLOR_GREEN)Installing function deps...$(COLOR_END)\n"
 	cd $(PREFIX)/functions && npm i
 
@@ -17,33 +17,33 @@ deps: #! Initialize dependencies
 deploy-development: #! Deploys backend to AWS
 	@echo "$(COLOR_GREEN)Deploying $(COLOR_BLUE)DEVELOPMENT$(COLOR_GREEN) infrastructure...$(COLOR_END)"
 	@echo "\n$(COLOR_GREEN)Clearing cache...$(COLOR_END)"
-	cd $(PREFIX)/functions && rm -rf .aws-sam
+	cd $(PREFIX)/infrastructure && rm -rf .aws-sam
 	@echo "\n$(COLOR_GREEN)Building...$(COLOR_END)"
-	cd $(PREFIX)/functions && sam build
+	cd $(PREFIX)/infrastructure && sam build
 	@echo "\n$(COLOR_GREEN)Deploying...$(COLOR_END)"
-	cd $(PREFIX)/functions && sam deploy --config-env development
+	cd $(PREFIX)/infrastructure && sam deploy --config-env development
 
 .PHONY: sync-development
 sync-development: #! Syncs lambda function code without deploying. *ONLY USE ON DEVELOPMENT*
 	@echo "$(COLOR_GREEN)Running $(COLOR_RED)SYNC$(COLOR_GREEN) on lambda code...$(COLOR_END)"
 	@echo "\n$(COLOR_GREEN)Syncing...$(COLOR_END)"
-	cd $(PREFIX)/functions && sam sync --code --config-env development
+	cd $(PREFIX)/infrastructure && sam sync --code --config-env development
 
 
 .PHONY: dev
 dev: #! Spin up dev environment
 	@echo "$(COLOR_GREEN)Starting dev...$(COLOR_END)\n"
-	cd $(PREFIX)/next-app && npm run dev
+	cd $(PREFIX)/qspy && npm run dev
 
 .PHONY: test
 test: #! Run all tests
 	@echo "+ $@"
 	@echo "$(COLOR_GREEN)Running tsc ...$(COLOR_END)\n"
-	cd $(PREFIX)/functions && npm run tsc
+	cd $(PREFIX)/infrastructure && npm run tsc
 	@echo "\n\n$(COLOR_GREEN)Running jest ...$(COLOR_END)\n"
-	cd $(PREFIX)/functions && npm run jest
+	cd $(PREFIX)/infrastructure && npm run jest
 
 .PHONY: test-watch
 test-watch: #! Watches for file changes when writing tests
 	@echo "$(COLOR_GREEN)Test watch mode starting...$(COLOR_END)\n"
-	cd $(PREFIX)/functions && npm run jest:watch
+	cd $(PREFIX)/infrastructure && npm run jest:watch

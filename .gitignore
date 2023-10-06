@@ -34,12 +34,15 @@ npm-debug.log*
 # Ignore .env
 .env
 
-# AWS responses
-functions/response.json
+# AWS
+response.json
 
 # Ignore templates and configs
-functions/template.yaml
-functions/samconfig.toml
+template.yaml
+samconfig.toml
 
 # Ignore all builds and packages
-functions/.aws-sam
+.aws-sam
+
+# Ignore helpers
+infrastructure/functions/helpers

@@ -25,7 +25,7 @@ if [ $# -gt 0 ]; then
   elif [ "$1" == "sh" ]; then
     docker exec -it --detach-keys 'ctrl-q,q' next-app sh
   else
-    docker-compose -f docker-compose.dev.yml "$@"
+    docker-compose -f qspy/docker-compose.dev.yml "$@"
   fi
 else
   display_help

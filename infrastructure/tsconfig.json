@@ -14,8 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@functions/*": ["functions/*"],
-      "@helpers/*": ["helpers/*"],
-      "@testHelpers/*": ["./tests/helpers/*"]
+      "@testHelpers/*": ["functions/tests/helpers/*"]
     }
   },
   "exclude": ["./node_modules"]
