@@ -6,10 +6,23 @@ COLOR_END=\033[0m
 
 PREFIX ?= $(PWD)
 
-.PHONY: deps
-deps: #! Initialize dependencies
+.PHONY: build
+build: #! Generate a production build of next
+	@echo "$(COLOR_BLUE)Creating a production build ...$(COLOR_END)\n"
+	cd $(PREFIX)/next && npm run build
+
+.PHONY: dev
+dev: #! Start a new development environment
+	@echo "+ $@"
+	cd $(PREFIX)/next && npm run dev
+
+.PHONY: next-deps
+next-deps: #! Initialize client dependencies
 	@echo "$(COLOR_GREEN)Installing client-side deps...$(COLOR_END)\n"
-	cd $(PREFIX)/qspy && npm i
+	cd $(PREFIX)/next && npm i
+
+.PHONY: function-deps
+function-deps: #! Init function dependencies
 	@echo "\n\n$(COLOR_GREEN)Installing function deps...$(COLOR_END)\n"
 	cd $(PREFIX)/functions && npm i
 
@@ -28,12 +41,6 @@ sync-development: #! Syncs lambda function code without deploying. *ONLY USE ON 
 	@echo "$(COLOR_GREEN)Running $(COLOR_RED)SYNC$(COLOR_GREEN) on lambda code...$(COLOR_END)"
 	@echo "\n$(COLOR_GREEN)Syncing...$(COLOR_END)"
 	cd $(PREFIX)/infrastructure && sam sync --code --config-env development
-
-
-.PHONY: dev
-dev: #! Spin up dev environment
-	@echo "$(COLOR_GREEN)Starting dev...$(COLOR_END)\n"
-	cd $(PREFIX)/qspy && npm run dev
 
 .PHONY: test
 test: #! Run all tests
