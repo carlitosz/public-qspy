@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  next:
+    build:
+      args:
+        - AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    command: make dev
+    container_name: next
+    ports:
+      - 3000:3000
+    volumes:
+      - ./next:/app/next
+      - node_modules:/app/next/node_modules
+      - cache:/app/next/.next
+
+volumes:
+  node_modules:
+  cache:
+
+networks:
+  default:
+    name: spynet
