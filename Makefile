@@ -24,7 +24,7 @@ next-deps: #! Initialize client dependencies
 .PHONY: function-deps
 function-deps: #! Init function dependencies
 	@echo "\n\n$(COLOR_GREEN)Installing function deps...$(COLOR_END)\n"
-	cd $(PREFIX)/functions && npm i
+	cd $(PREFIX)/infrastructure && npm i
 
 .PHONY: deploy-development
 deploy-development: #! Deploys backend to AWS
