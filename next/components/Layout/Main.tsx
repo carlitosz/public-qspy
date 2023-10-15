@@ -1,10 +1,10 @@
 import React from 'react'
 
-interface MainContentProps {
+interface MainProps {
     children: React.ReactNode
 }
 
-const MainContent = ({ children }: MainContentProps): JSX.Element => {
+const Main = ({ children }: MainProps): JSX.Element => {
     return (
         <main className="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
             {children}
@@ -12,4 +12,4 @@ const MainContent = ({ children }: MainContentProps): JSX.Element => {
     )
 }
 
-export default MainContent
+export default Main

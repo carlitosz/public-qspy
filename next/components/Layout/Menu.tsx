@@ -9,12 +9,12 @@ import SubMenu from '@/components/Layout/SubMenu'
 const Menu = (): JSX.Element => {
     return (
         <ul className="flex flex-col w-full">
-            <MenuItem icon={<HomeIcon className="h-5 w-5 text-indigo-600" />} label="Dashboard" href="#" />
+            <MenuItem icon={<HomeIcon className="h-6 w-6 text-indigo-600" />} label="Dashboard" href="#" />
             <SubMenu label="Sub Menu" />
-            <MenuItem icon={<ChartBarSquareIcon className="h-5 w-5 text-indigo-600" />} label="Statistics" href="#" />
-            <MenuItem icon={<ChartBarSquareIcon className="h-5 w-5 text-indigo-600" />} label="Numbers" href="#" />
+            <MenuItem icon={<ChartBarSquareIcon className="h-6 w-6 text-indigo-600" />} label="Statistics" href="#" />
+            <MenuItem icon={<ChartBarSquareIcon className="h-6 w-6 text-indigo-600" />} label="Numbers" href="#" />
             <SubMenu label="My Account" />
-            <MenuItem icon={<UserCircleIcon className="h-5 w-5 text-indigo-600" />} label="Profile" href="#" />
+            <MenuItem icon={<UserCircleIcon className="h-6 w-6 text-indigo-600" />} label="Profile" href="#" />
         </ul>
     )
 }
