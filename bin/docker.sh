@@ -27,7 +27,6 @@ IMAGES=$(_compose images | grep "$(basename $PWD)-next" | awk '{ print $2 }')
 export AWS_ACCOUNT_ID="$(cat ${BASE_DIR}/.env | grep AWS_ACCOUNT_ID | cut -d'=' -f2)"
 export AWS_PROFILE="$(cat ${BASE_DIR}/.env | grep AWS_PROFILE | cut -d'=' -f2)"
 export AWS_REGION="$(cat ${BASE_DIR}/.env | grep AWS_REGION | cut -d'=' -f2)"
-export DOCKER_IMAGE="$(cat ${BASE_DIR}/.env | grep DOCKER_IMAGE | cut -d'=' -f2)"
 
 case ${1} in
     start)
@@ -68,10 +67,6 @@ case ${1} in
         ;;
 
     sh)
-        _docker exec -it --detach-keys 'ctrl-q,q' $DOCKER_IMAGE sh
-        ;;
-
-    *)
-        _docker exec -it --detach-keys "ctrl-q,q" $DOCKER_IMAGE ${@:1}
+        _docker exec -it --detach-keys 'ctrl-q,q' next sh
         ;;
 esac

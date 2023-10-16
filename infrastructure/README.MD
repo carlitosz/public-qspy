@@ -50,7 +50,7 @@ aws lambda invoke \
     --function-name FUNCTION_NAME \
     --profile PROFILE \
     --region REGION \
-    --payload file://functions/events/analyze_event.json response.json
+    --payload file://infrastructure/functions/events/analyze_event.json response.json
 ```
 
 Alternatively, analyze can be invoked **asynchronously** via the AWS CLI using the following command.
@@ -61,7 +61,7 @@ aws lambda invoke \
     --profile PROFILE \
     --region REGION \
     --cli-binary-format raw-in-base64-out \
-    --payload file://functions/events/analyze_event.json \
+    --payload file://infrastructure/functions/events/analyze_event.json \
     --invocation-type Event response.json
 ```
 
@@ -81,6 +81,6 @@ aws lambda invoke \
     --profile PROFILE \
     --region REGION \
     --cli-binary-format raw-in-base64-out \
-    --payload file://functions/events/store_event.json \
+    --payload file://infrastructure/functions/events/store_event.json \
     --invocation-type Event response.json
 ```

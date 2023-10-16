@@ -49,8 +49,3 @@ test: #! Run all tests
 	cd $(PREFIX)/infrastructure && npm run tsc
 	@echo "\n\n$(COLOR_GREEN)Running jest ...$(COLOR_END)\n"
 	cd $(PREFIX)/infrastructure && npm run jest
-
-.PHONY: test-watch
-test-watch: #! Watches for file changes when writing tests
-	@echo "$(COLOR_GREEN)Test watch mode starting...$(COLOR_END)\n"
-	cd $(PREFIX)/infrastructure && npm run jest:watch
