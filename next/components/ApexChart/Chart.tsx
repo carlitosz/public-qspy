@@ -2,16 +2,12 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 
 import type { ApexOptions } from 'apexcharts'
+import type { DomainEvent } from 'types'
 
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 
-export type DataType = {
-    event: string
-    count: number
-}
-
 interface ChartProps {
-    data: DataType[]
+    data: DomainEvent[]
     type:
         | 'line'
         | 'area'
@@ -46,7 +42,7 @@ const Chart = ({ data, type }: ChartProps): JSX.Element => {
         series: [
             {
                 name: 'Deadletters',
-                data: data.map((d: DataType) => {
+                data: data.map((d: DomainEvent) => {
                     var split = d.event.split('\\')
                     const name: string = split.pop() ?? ''
                     const prefix: string = split.pop() ?? ''
@@ -57,7 +53,7 @@ const Chart = ({ data, type }: ChartProps): JSX.Element => {
         ]
     })
 
-    return <ApexChart height={1600} options={_data.options} series={_data.series} type={type} />
+    return <ApexChart options={_data.options} series={_data.series} type={type} />
 }
 
 export default Chart

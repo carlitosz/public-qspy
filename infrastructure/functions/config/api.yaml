@@ -1,9 +1,9 @@
-openapi: '3.0.1'
+openapi: "3.0.1"
 
 info:
   title: QSpy API
   description: API operations for QSpy
-  version: '1.0.0'
+  version: "1.0.0"
 
 x-amazon-apigateway-request-validators:
   body-only:
@@ -20,26 +20,26 @@ paths:
   /events:
     get:
       summary: Get events for a dead-letter queue
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
         - in: query
           name: queue
           required: true
           schema:
             type: string
-            example: 'domain-events-preprints-deadletter'
+            example: "domain-events-preprints-deadletter"
           description: The name of the dead-letter queue
         - in: query
           name: date
           schema:
             type: string
             format: date
-            example: '2023-09-01'
+            example: "2023-09-01"
           description: Date when the items were collected (yyyy-MM-dd America/New_York)
       x-amazon-apigateway-request-validator: query-and-headers
       responses:
-        '200':
+        "200":
           description: Successful operation
           headers:
             Access-Control-Allow-Origin:
@@ -59,11 +59,11 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Event'
+                      $ref: "#/components/schemas/Event"
                   message:
                     type: string
                     example: The queue was sucessfully processed.
-        '400':
+        "400":
           description: Invalid operation
           headers:
             Access-Control-Allow-Origin:
@@ -78,8 +78,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvalidRequest'
-        '404':
+                $ref: "#/components/schemas/InvalidRequest"
+        "403":
+          description: Unauthorized operation
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedRequest"
+        "404":
           description: Not found
           headers:
             Access-Control-Allow-Origin:
@@ -94,8 +110,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NotFound'
-        '500':
+                $ref: "#/components/schemas/NotFound"
+        "500":
           description: Server error
           headers:
             Access-Control-Allow-Origin:
@@ -110,23 +126,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServerError'
+                $ref: "#/components/schemas/ServerError"
       x-amazon-apigateway-integration:
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiGetFunction.Arn}/invocations
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
-              method.response.header.Access-Control-Allow-Methods: "'GET, OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Accept'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
     options:
       responses:
-        '200':
+        "200":
           description: 200 response
           headers:
             Access-Control-Allow-Origin:
@@ -138,19 +154,22 @@ paths:
             Access-Control-Allow-Headers:
               schema:
                 type: string
+            X-Requested-With:
+              schema:
+                type: string
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Empty'
+                  $ref: "#/components/schemas/Empty"
       x-amazon-apigateway-integration:
         responses:
           default:
-            statusCode: '200'
+            statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,X-API-KEY'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Accept'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
         requestTemplates:
           application/json: '{"statusCode": 200}'
@@ -176,21 +195,28 @@ components:
       properties:
         message:
           type: string
-          example: 'Invalid request parameters: [date]'
+          example: "Invalid request parameters: [date]"
+    UnauthorizedRequest:
+      title: Unauthorized request
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Unauthorized."
     NotFound:
       title: Not found
       type: object
       properties:
         message:
           type: string
-          example: 'No items matched your request.'
+          example: "No items matched your request."
     ServerError:
       title: Server error
       type: object
       properties:
         message:
           type: string
-          example: 'Something broke.'
+          example: "Something broke."
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
