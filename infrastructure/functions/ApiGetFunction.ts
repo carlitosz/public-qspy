@@ -36,8 +36,7 @@ const respondWith = (statusCode: number, body: string): APIGatewayProxyResult =>
             'Content-Type': 'application/json; charset=utf-8',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, OPTIONS',
-            'Access-Control-Allow-Headers':
-                "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
+            'Access-Control-Allow-Headers': "'X-Api-Key'"
         },
         body
     }

@@ -38,7 +38,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
         <div className="main-content flex flex-col flex-grow p-6">
             <h1 className="font-bold text-2xl text-indigo-700">Dashboard</h1>
             <div className="flex flex-col bg-white rounded mt-4">
-                <Chart data={data.data} type="bar" />
+                <Chart data={data.data} breakLabels={true} type="bar" />
             </div>
         </div>
     )
