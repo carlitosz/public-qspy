@@ -47,3 +47,40 @@ export const request = <Data = unknown, Error = unknown>(
         mutate
     }
 }
+
+interface ErrorResponse {
+    message: string
+}
+
+interface ServerErrorResponse {
+    data: {
+        error: {
+            message: string
+        }
+    }
+}
+
+export const getErrorMessage = (error: Error): string => {
+    if (axios.isAxiosError(error)) {
+        const { code } = error
+
+        // No status? This sucks. Return a generic message.
+        if (!code) {
+            return 'No status code returned. Something really bad happened.'
+        }
+
+        const { response } = error
+
+        // No response? At least we have a status code.
+        if (!response) {
+            return `Failed to fetch data with status code: ${code}`
+        }
+
+        const { data } = response as ServerErrorResponse
+
+        // We got server data and a status code
+        return data.error.message
+    }
+
+    return 'Everything failed'
+}

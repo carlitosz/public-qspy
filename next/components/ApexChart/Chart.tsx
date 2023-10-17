@@ -1,14 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import ReactDomServer from 'react-dom/server'
 import dynamic from 'next/dynamic'
 
 import type { ApexOptions } from 'apexcharts'
 import type { DomainEvent } from 'types'
 
+import ChartTooltip from '@/components/ApexChart/ChartTooltip'
+import Pagination from '@/components/Pagination/Pagination'
+import { createSeries } from '@/util/chart'
+
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 
 interface ChartProps {
-    breakLabels: boolean
-    data: DomainEvent[]
+    data: [DomainEvent[]] | [[]]
+    name: string
+    range: number
+    resultsPerPage: number
+    totalResults: number
     type:
         | 'line'
         | 'area'
@@ -28,50 +36,120 @@ interface ChartProps {
         | 'treemap'
 }
 
-const Chart = ({ data, type }: ChartProps): JSX.Element => {
-    const [_data, setData] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
+const options = {
+    chart: {
+        id: 'bar-chart',
+        toolbar: {
+            show: false
+        }
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true
+        }
+    },
+    responsive: [
+        {
+            breakpoint: 390,
+            options: {
+                plotOptions: {
+                    bar: {
+                        horizontal: false
+                    }
+                }
+            }
+        }
+    ],
+    tooltip: {
+        custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
+            return ReactDomServer.renderToString(
+                <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
+            )
+        },
+        intersect: true,
+        marker: {
+            show: true
+        }
+    }
+}
+
+const Chart = ({ data, name, range, resultsPerPage, totalResults, type }: ChartProps): JSX.Element => {
+    const [currentPage, setCurrentPage] = useState<number>(0)
+    const [pages] = useState<[DomainEvent[] | []]>(data)
+    const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
         options: {
-            chart: {
-                id: 'bar-chart'
-            },
+            ...options,
             plotOptions: {
                 bar: {
-                    horizontal: true
+                    colors: {
+                        ranges: [
+                            {
+                                from: range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5,
+                                to: range,
+                                color: '#e11d48'
+                            },
+                            {
+                                from: range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5,
+                                to: (range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5) - 1,
+                                color: '#fb923c'
+                            },
+                            {
+                                from: 0,
+                                to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
+                                color: '#22c55e'
+                            }
+                        ]
+                    }
                 }
             },
-            tooltip: {
-                custom: ({ seriesIndex, dataPointIndex, w }) => {
-                    var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
-
-                    return `<div class="block rounded-md bg-white text-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
-                                <div class="flex items-center justify-center border-b-2 border-neutral-100 px-4 py-3">
-                                    <p class="ml-3 text-sm tracking-tight antialiased text-neutral-600">${data.x}</p>
-                                </div>
-                                <div class="px-3 py-3">
-                                    <p class="text-xl">${data.y}</p>
-                                    <p class="text-sm tracking-tight antialiased text-neutral-600">
-                                        Occurrences
-                                    </p>
-                                </div>
-                            </div>`
-                }
+            yaxis: {
+                min: 0,
+                max: range + 1
             }
         },
-        series: [
-            {
-                name: 'Deadletters',
-                data: data.map((d: DomainEvent) => {
-                    var split = d.event.split('\\')
-                    const name: string = split.pop() ?? ''
-                    const prefix: string = split.pop() ?? ''
-
-                    return { x: name, y: d.count }
-                })
-            }
-        ]
+        series: createSeries(data[0], name)
     })
 
-    return <ApexChart options={_data.options} series={_data.series} type={type} />
+    // Only re-render when the page changes
+    useEffect(() => {
+        setSeries({
+            options: {
+                ...options,
+                yaxis: {
+                    min: 0,
+                    max: range + 1
+                }
+            },
+            series: createSeries(pages[currentPage], name)
+        })
+    }, [currentPage])
+
+    return (
+        <>
+            <Pagination
+                startIndex={currentPage * resultsPerPage}
+                endIndex={currentPage * resultsPerPage + pages[currentPage].length}
+                total={totalResults}
+                next={() => {
+                    if (pages.length - 1 === currentPage) {
+                        return
+                    }
+
+                    setCurrentPage(currentPage + 1)
+                }}
+                back={() => {
+                    if (currentPage === 0) {
+                        return
+                    }
+
+                    setCurrentPage(currentPage - 1)
+                }}
+            />
+            {series && (
+                <ApexChart options={series.options} series={series.series} type={type} height={resultsPerPage * 30} />
+            )}
+        </>
+    )
 }
 
 export default Chart

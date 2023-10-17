@@ -94,7 +94,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     }
 
     try {
-        console.log(JSON.stringify(input))
         const response: GetItemCommandOutput = await dynamodbClient.send(new GetItemCommand(input))
 
         if (response.$metadata.httpStatusCode !== 200) {
@@ -107,8 +106,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 })
             )
         }
-
-        console.log(JSON.stringify(response))
 
         if (!response?.Item) {
             return respondWith(404, JSON.stringify({ error: { message: ERROR_404_MSG } }))

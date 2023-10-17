@@ -5,6 +5,7 @@
     "useTabs": false,
     "semi": false,
     "singleQuote": true,
+    "formatOnSave": true,
     "overrides": [
         {
             "files": ["*.yaml", "*.yml", "*.toml", "*.json"],

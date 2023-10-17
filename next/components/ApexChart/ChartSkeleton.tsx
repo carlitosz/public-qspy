@@ -7,10 +7,11 @@ const ChartSkeleton = (): JSX.Element => {
                 <div className="w-1/2 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-1/3 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-2/3 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
-                <div className="w-1/2 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-1/4 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-1/3 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-1/2 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
+                <div className="w-1/4 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
+                <div className="w-1/3 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
                 <div className="w-2/3 h-8 bg-gray-200 rounded-r-lg dark:bg-gray-700" />
             </div>
             <span className="sr-only">Loading...</span>
