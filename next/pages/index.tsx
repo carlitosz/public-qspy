@@ -12,7 +12,7 @@ import type { DomainEvent, GetEventsResponse } from 'types'
 interface HomePageProps {}
 
 const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-const RESULTS_PER_PAGE = 25
+const RESULTS_PER_PAGE = 20
 
 const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
     const { isValidating, error, data } = request<GetEventsResponse>(
