@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Chart from '@/components/ApexChart/Chart'
+import BarChart from '@/components/ApexChart/BarChart'
 import Container from '@/components/Layout/Containers/Container'
 import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
 import { getErrorMessage, request } from '@/util/axios'
@@ -12,9 +12,10 @@ import type { DomainEvent, GetEventsResponse } from 'types'
 interface HomePageProps {}
 
 const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-const RESULTS_PER_PAGE = 20
+const RESULTS_PER_PAGE = 25
 
 const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
+    const [horizontal, setHorizontal] = useState<boolean>(true)
     const { isValidating, error, data } = request<GetEventsResponse>(
         {
             url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent('2023-10-18')}`,
@@ -30,7 +31,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
         const message: string = getErrorMessage(error)
 
         return (
-            <Container title={QUEUE_NAME}>
+            <Container>
                 <div className="flex justify-center align-center py-12 bg-neutral-100">
                     <p className="text-xl">{message}</p>
                 </div>
@@ -40,7 +41,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
 
     if (!data || isValidating) {
         return (
-            <Container title={QUEUE_NAME}>
+            <Container>
                 <ChartSkeleton />
             </Container>
         )
@@ -48,7 +49,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
 
     if (data.data.length === 0) {
         return (
-            <Container title="No results">
+            <Container>
                 <div className="flex justify-center align-center py-12 bg-neutral-100">
                     <p className="text-xl">No results returned :\</p>
                 </div>
@@ -60,9 +61,13 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
     const paginated: [DomainEvent[]] = paginate(sorted, RESULTS_PER_PAGE)
 
     return (
-        <Container title={QUEUE_NAME}>
-            <Chart
+        <Container>
+            <p className="text-neutral-500 border-b border-gray-200 text-sm font-semibold antialiased pb-4">
+                {QUEUE_NAME}
+            </p>
+            <BarChart
                 data={paginated}
+                horizontal={horizontal}
                 name={QUEUE_NAME}
                 range={sorted[0].count}
                 resultsPerPage={RESULTS_PER_PAGE}

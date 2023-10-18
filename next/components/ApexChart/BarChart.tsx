@@ -9,8 +9,9 @@ import { createSeries, horizontalBarGraphOptions } from '@/util/chart-helper'
 
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 
-interface ChartProps {
+interface BarChartProps {
     data: [DomainEvent[]] | [[]]
+    horizontal: boolean
     name: string
     range: number
     resultsPerPage: number
@@ -34,12 +35,20 @@ interface ChartProps {
         | 'treemap'
 }
 
-const Chart = ({ data, name, range, resultsPerPage, totalResults, type }: ChartProps): JSX.Element => {
+const BarChart = ({
+    data,
+    horizontal,
+    name,
+    range,
+    resultsPerPage,
+    totalResults,
+    type
+}: BarChartProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [pages] = useState<[DomainEvent[] | []]>(data)
     const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
         options: {
-            ...horizontalBarGraphOptions(range)
+            ...horizontalBarGraphOptions(range, horizontal)
         },
         series: createSeries(data[0], name)
     })
@@ -48,7 +57,7 @@ const Chart = ({ data, name, range, resultsPerPage, totalResults, type }: ChartP
     useEffect(() => {
         setSeries({
             options: {
-                ...horizontalBarGraphOptions(range)
+                ...horizontalBarGraphOptions(range, horizontal)
             },
             series: createSeries(pages[currentPage], name)
         })
@@ -57,17 +66,27 @@ const Chart = ({ data, name, range, resultsPerPage, totalResults, type }: ChartP
     return (
         <>
             <Pagination
-                startIndex={currentPage * resultsPerPage}
-                endIndex={currentPage * resultsPerPage + pages[currentPage].length}
-                total={totalResults}
-                next={() => pages.length - 1 !== currentPage && setCurrentPage(currentPage + 1)}
-                back={() => currentPage !== 0 && setCurrentPage(currentPage - 1)}
+                currentPage={currentPage}
+                goToPage={(desiredPage: number) => {
+                    if (desiredPage < 0 || desiredPage >= pages.length) {
+                        return
+                    }
+
+                    setCurrentPage(desiredPage)
+                }}
+                numPages={pages.length}
             />
             {series && (
-                <ApexChart options={series.options} series={series.series} type={type} height={resultsPerPage * 30} />
+                <ApexChart
+                    options={series.options}
+                    series={series.series}
+                    type={type}
+                    height={horizontal ? resultsPerPage * 30 : 700}
+                />
             )}
+            {/* <Legend /> */}
         </>
     )
 }
 
-export default Chart
+export default BarChart

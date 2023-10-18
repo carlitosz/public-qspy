@@ -1,39 +1,54 @@
 import React from 'react'
 import ChevronLeftIcon from '@heroicons/react/24/solid/ChevronLeftIcon'
+import ChevronDoubleLeftIcon from '@heroicons/react/24/solid/ChevronDoubleLeftIcon'
 import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon'
+import ChevronDoubleRightIcon from '@heroicons/react/24/solid/ChevronDoubleRightIcon'
 
 interface PaginationProps {
-    startIndex: number
-    endIndex: number
-    total: number
-    next: (currentPage: number) => void
-    back: (currentPage: number) => void
+    currentPage: number
+    goToPage: (desiredPage: number) => void
+    numPages: number
 }
 
-const Pagination = ({ startIndex, endIndex, total, next, back }: PaginationProps): JSX.Element => {
+const Pagination = ({ currentPage, goToPage, numPages }: PaginationProps): JSX.Element => {
+    const pageNumbers = Array(numPages).fill('x', 0, numPages)
+    const unselected = `text-sm font-medium leading-none cursor-pointer text-gray-500 hover:text-indigo-500 border-t-2 border-transparent hover:border-indigo-500 p-4`
+    const selected = `text-sm font-medium leading-none cursor-pointer text-indigo-600 hover:text-gray-500 border-t-2 p-4 border-indigo-500`
+
     return (
-        <div className="flex justify-between items-center">
-            <p className="text-xs text-neutral-600 antialiased">
-                Showing results <span className="font-bold">{startIndex}</span>
-                {'-'}
-                <span className="font-bold">{endIndex}</span> of <span className="font-bold">{total}</span> results
-            </p>
-            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                <a
-                    onClick={() => back(startIndex)}
-                    className="relative inline-flex border items-center rounded-l-md px-2 py-2 text-indigo-600 cursor-pointer"
-                >
-                    <ChevronLeftIcon className="h-5 w-5" />
-                    <span className="text-sm ml-3">Back</span>
-                </a>
-                <a
-                    onClick={() => next(endIndex)}
-                    className="relative inline-flex border items-center rounded-r-md px-2 py-2 text-indigo-600 cursor-pointer"
-                >
-                    <span className="text-sm mr-3">Next</span>
-                    <ChevronRightIcon className="h-5 w-5" />
-                </a>
-            </nav>
+        <div className="w-full flex items-center justify-center">
+            <div
+                className="flex items-center p-4 text-gray-600 hover:text-indigo-600 cursor-pointer"
+                onClick={() => goToPage(0)}
+            >
+                <ChevronDoubleLeftIcon className="h-4 w-4" />
+            </div>
+            <div
+                className="flex items-center p-4 text-gray-600 hover:text-indigo-600 cursor-pointer"
+                onClick={() => goToPage(currentPage - 1)}
+            >
+                <ChevronLeftIcon className="h-4 w-4" />
+            </div>
+            <div className="sm:flex hidden">
+                {pageNumbers.map((value: string, index: number) => (
+                    <p className={currentPage === index ? selected : unselected} onClick={() => goToPage(index)}>
+                        {index + 1}
+                    </p>
+                ))}
+            </div>
+
+            <div
+                className="flex items-center p-4 text-gray-600 hover:text-indigo-600 cursor-pointer"
+                onClick={() => goToPage(currentPage + 1)}
+            >
+                <ChevronRightIcon className="h-4 w-4" />
+            </div>
+            <div
+                className="flex items-center p-4 text-gray-600 hover:text-indigo-600 cursor-pointer"
+                onClick={() => goToPage(numPages - 1)}
+            >
+                <ChevronDoubleRightIcon className="h-4 w-4" />
+            </div>
         </div>
     )
 }

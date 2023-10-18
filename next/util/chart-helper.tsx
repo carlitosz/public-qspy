@@ -34,33 +34,61 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
  *
  * @returns ApexOptions
  */
-export const horizontalBarGraphOptions = (range: number): ApexOptions => {
+export const horizontalBarGraphOptions = (range: number, horizontal: boolean): ApexOptions => {
     return {
         chart: {
             id: 'bar-chart',
             toolbar: {
                 show: false
+            },
+            animations: {
+                easing: 'easeinout',
+                speed: 200,
+                dynamicAnimation: {
+                    speed: 200
+                }
+            }
+        },
+        grid: {
+            yaxis: {
+                lines: {
+                    show: false
+                }
+            },
+            xaxis: {
+                lines: {
+                    show: true
+                }
             }
         },
         plotOptions: {
             bar: {
-                horizontal: true,
+                barHeight: '80%',
+                borderRadius: 0,
+                columnWidth: '80%',
+                borderRadiusApplication: 'end',
+                horizontal: horizontal,
                 colors: {
                     ranges: [
                         {
                             from: range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5,
                             to: range,
-                            color: '#e11d48'
+                            color: '#4338ca'
                         },
                         {
                             from: range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5,
                             to: (range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5) - 1,
-                            color: '#fb923c'
+                            color: '#1d4ed8'
+                        },
+                        {
+                            from: range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5,
+                            to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
+                            color: '#6366f1'
                         },
                         {
                             from: 0,
-                            to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
-                            color: '#22c55e'
+                            to: (range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5) - 1,
+                            color: '#2563eb'
                         }
                     ]
                 }
