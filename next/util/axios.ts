@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_GATEWAY || ''
 axios.defaults.headers.common['x-api-key'] = process.env.NEXT_PUBLIC_API_KEY || ''
 
-export type GetRequest = AxiosRequestConfig | null
+export type Request = AxiosRequestConfig | null
 
 interface Return<Data, Error>
     extends Pick<SWRResponse<AxiosResponse<Data>, AxiosError<Error>>, 'isValidating' | 'error' | 'mutate'> {
@@ -18,7 +18,7 @@ export interface Config<Data = unknown, Error = unknown>
 }
 
 export const request = <Data = unknown, Error = unknown>(
-    request: GetRequest,
+    request: Request,
     { fallbackData, ...config }: Config<Data, Error> = {}
 ): Return<Data, Error> => {
     const {
@@ -46,4 +46,41 @@ export const request = <Data = unknown, Error = unknown>(
         isValidating,
         mutate
     }
+}
+
+interface ErrorResponse {
+    message: string
+}
+
+interface ServerErrorResponse {
+    data: {
+        error: {
+            message: string
+        }
+    }
+}
+
+export const getErrorMessage = (error: Error): string => {
+    if (axios.isAxiosError(error)) {
+        const { code } = error
+
+        // No status? This sucks. Return a generic message.
+        if (!code) {
+            return 'No status code returned. Something really bad happened.'
+        }
+
+        const { response } = error
+
+        // No response? At least we have a status code.
+        if (!response) {
+            return `Failed to fetch data with status code: ${code}`
+        }
+
+        const { data } = response as ServerErrorResponse
+
+        // We got server data and a status code
+        return data.error.message
+    }
+
+    return 'Everything failed'
 }

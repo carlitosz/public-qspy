@@ -6,22 +6,16 @@ info:
   version: "1.0.0"
 
 x-amazon-apigateway-request-validators:
-  body-only:
-    validateRequestParameters: false
-    validateRequestBody: true
   query-and-headers:
     validateRequestParameters: true
     validateRequestBody: false
-  all:
-    validateRequestParameters: true
-    validateRequestBody: true
 
 paths:
   /events:
     get:
       summary: Get events for a dead-letter queue
-      # security:
-      #   - ApiKeyAuth: []
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: query
           name: queue
@@ -135,7 +129,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Accept'"
+              method.response.header.Access-Control-Allow-Headers: "'x-api-key'"
               method.response.header.Access-Control-Allow-Methods: "'*'"
         passthroughBehavior: when_no_match
         httpMethod: POST
@@ -169,7 +163,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'*'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Accept'"
+              method.response.header.Access-Control-Allow-Headers: "'x-api-key'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
         requestTemplates:
           application/json: '{"statusCode": 200}'

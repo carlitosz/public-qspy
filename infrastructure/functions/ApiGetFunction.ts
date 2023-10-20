@@ -36,8 +36,7 @@ const respondWith = (statusCode: number, body: string): APIGatewayProxyResult =>
             'Content-Type': 'application/json; charset=utf-8',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, OPTIONS',
-            'Access-Control-Allow-Headers':
-                "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
+            'Access-Control-Allow-Headers': "'X-Api-Key'"
         },
         body
     }
@@ -95,7 +94,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     }
 
     try {
-        console.log(JSON.stringify(input))
         const response: GetItemCommandOutput = await dynamodbClient.send(new GetItemCommand(input))
 
         if (response.$metadata.httpStatusCode !== 200) {
@@ -108,8 +106,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 })
             )
         }
-
-        console.log(JSON.stringify(response))
 
         if (!response?.Item) {
             return respondWith(404, JSON.stringify({ error: { message: ERROR_404_MSG } }))
