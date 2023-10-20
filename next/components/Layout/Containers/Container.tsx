@@ -2,12 +2,14 @@ import React from 'react'
 
 interface Container {
     children: React.ReactNode
+    mainTitle: string
 }
 
-const Container = ({ children }: Container): JSX.Element => {
+const Container = ({ children, mainTitle }: Container): JSX.Element => {
     return (
-        <div className="main-content flex flex-col flex-grow p-12 bg-neutral-50">
-            <div className="border border-gray-200 shadow-lg bg-neutral-100 p-4">{children}</div>
+        <div className="md:container md:mx-auto">
+            <p className="text-md text-neutral-500 border-b my-8">{mainTitle}</p>
+            {children}
         </div>
     )
 }

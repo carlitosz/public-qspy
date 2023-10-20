@@ -49,6 +49,9 @@ export const horizontalBarGraphOptions = (range: number, horizontal: boolean): A
                 }
             }
         },
+        dataLabels: {
+            enabled: false
+        },
         grid: {
             yaxis: {
                 lines: {
@@ -112,14 +115,28 @@ export const horizontalBarGraphOptions = (range: number, horizontal: boolean): A
                     <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
                 )
             },
-            intersect: true,
             marker: {
                 show: true
             }
         },
+        xaxis: {
+            axisBorder: {
+                show: false
+            },
+            labels: {
+                show: false
+            },
+            tickAmount: 10
+        },
         yaxis: {
+            axisBorder: {
+                show: false
+            },
             min: 0,
-            max: range + 1
+            max: range,
+            labels: {
+                maxWidth: 150
+            }
         }
     }
 }

@@ -81,7 +81,7 @@ const BarChart = ({
                     options={series.options}
                     series={series.series}
                     type={type}
-                    height={horizontal ? resultsPerPage * 30 : 700}
+                    height={horizontal ? resultsPerPage * 40 : 700}
                 />
             )}
             {/* <Legend /> */}
