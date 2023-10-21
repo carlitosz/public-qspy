@@ -15,7 +15,6 @@ interface BarChartProps {
     name: string
     range: number
     resultsPerPage: number
-    totalResults: number
     type:
         | 'line'
         | 'area'
@@ -35,15 +34,7 @@ interface BarChartProps {
         | 'treemap'
 }
 
-const BarChart = ({
-    data,
-    horizontal,
-    name,
-    range,
-    resultsPerPage,
-    totalResults,
-    type
-}: BarChartProps): JSX.Element => {
+const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarChartProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [pages] = useState<[DomainEvent[] | []]>(data)
     const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
@@ -61,10 +52,10 @@ const BarChart = ({
             },
             series: createSeries(pages[currentPage], name)
         })
-    }, [currentPage])
+    }, [currentPage, horizontal, name, pages, range])
 
     return (
-        <>
+        <div className="brder p-4">
             <Pagination
                 currentPage={currentPage}
                 goToPage={(desiredPage: number) => {
@@ -84,8 +75,7 @@ const BarChart = ({
                     height={horizontal ? resultsPerPage * 40 : 700}
                 />
             )}
-            {/* <Legend /> */}
-        </>
+        </div>
     )
 }
 

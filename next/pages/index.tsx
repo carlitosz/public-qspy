@@ -4,19 +4,18 @@ import BarChart from '@/components/ApexChart/BarChart'
 import Container from '@/components/Layout/Containers/Container'
 import ChartContainer from '@/components/Layout/Containers/ChartContainer'
 import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
+import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
 import { getErrorMessage, request } from '@/util/axios'
 import { paginate, sort } from '@/util/paginate'
 
 import type { NextPage } from 'next'
 import type { DomainEvent, GetEventsResponse } from 'types'
 
-interface HomePageProps {}
+const Home: NextPage = () => {
+    const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
+    const RESULTS_PER_PAGE = 15
 
-const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-const RESULTS_PER_PAGE = 70
-
-const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
-    const [horizontal, setHorizontal] = useState<boolean>(false)
+    const [horizontal] = useState<boolean>(false)
     const { isValidating, error, data } = request<GetEventsResponse>(
         {
             url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent('2023-10-18')}`,
@@ -33,7 +32,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
 
         return (
             <Container mainTitle="Daily Analytics">
-                <ChartContainer title="">
+                <ChartContainer title={QUEUE_NAME}>
                     <div className="flex justify-center align-center py-12 bg-neutral-100">
                         <p className="text-xl">{message}</p>
                     </div>
@@ -55,7 +54,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
     if (data.data.length === 0) {
         return (
             <Container mainTitle="Daily Analytics">
-                <ChartContainer title="">
+                <ChartContainer title={QUEUE_NAME}>
                     <div className="flex justify-center align-center py-12 bg-neutral-100">
                         <p className="text-xl">No results returned :\</p>
                     </div>
@@ -69,14 +68,13 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
 
     return (
         <Container mainTitle="Daily Analytics">
-            <ChartContainer title={QUEUE_NAME}>
+            <ChartContainer title={QUEUE_NAME} withToolbar={true}>
                 <BarChart
                     data={paginated}
                     horizontal={horizontal}
                     name={QUEUE_NAME}
                     range={sorted[0].count}
                     resultsPerPage={RESULTS_PER_PAGE}
-                    totalResults={data.data.length}
                     type="bar"
                 />
             </ChartContainer>
