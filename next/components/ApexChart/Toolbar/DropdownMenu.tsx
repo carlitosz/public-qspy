@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon'
 import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 
@@ -14,18 +14,42 @@ const iconClass = 'h-6 w-6 animate-wiggle'
 
 const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
+    const menuRef = useRef<HTMLButtonElement>(null)
+
+    const toggleMenu = (e) => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        const { current } = menuRef
+
+        if (current && !current.contains(e.target)) {
+            console.log(open)
+            setOpen(false)
+        } else {
+            setOpen(!open)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', toggleMenu)
+
+        return () => {
+            document.removeEventListener('click', toggleMenu)
+        }
+    }, [])
 
     return (
         <div className="relative inline-block">
             <button
-                onClick={() => setOpen(!open)}
-                type="button"
+                aria-expanded="true"
+                aria-haspopup="true"
                 className={`${
                     open ? 'bg-neutral-200' : ''
                 } p-1 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full`}
                 id="menu-button"
-                aria-expanded="true"
-                aria-haspopup="true"
+                onClick={toggleMenu}
+                ref={menuRef}
+                type="button"
             >
                 {open ? <XMarkIcon className={iconClass} /> : <EllipsisVerticalIcon className={iconClass} />}
             </button>
