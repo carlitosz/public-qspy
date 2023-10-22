@@ -125,7 +125,7 @@ export const horizontalBarGraphOptions = (range: number, horizontal: boolean): A
                 show: false
             },
             labels: {
-                show: false
+                show: horizontal
             },
             tickAmount: 10
         },
