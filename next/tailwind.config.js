@@ -5,8 +5,14 @@ module.exports = {
     plugins: [],
     theme: {
         extend: {
-            scale: {
-                '-100': '-1'
+            keyframes: {
+                wiggle: {
+                    '0%, 100%': { transform: 'rotate(-50deg)' },
+                    '50%': { transform: 'rotate(50deg)' }
+                }
+            },
+            animation: {
+                wiggle: 'wiggle 200ms ease-in-out'
             }
         }
     }

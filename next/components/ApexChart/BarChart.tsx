@@ -15,6 +15,7 @@ interface BarChartProps {
     name: string
     range: number
     resultsPerPage: number
+    totalResults: number
     type:
         | 'line'
         | 'area'
@@ -34,9 +35,17 @@ interface BarChartProps {
         | 'treemap'
 }
 
-const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarChartProps): JSX.Element => {
+const BarChart = ({
+    data,
+    horizontal,
+    name,
+    range,
+    resultsPerPage,
+    totalResults,
+    type
+}: BarChartProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [pages] = useState<[DomainEvent[] | []]>(data)
+    const [pages, setPages] = useState<[DomainEvent[] | []]>(data)
     const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
         options: {
             ...horizontalBarGraphOptions(range, horizontal)
@@ -44,7 +53,6 @@ const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarCh
         series: createSeries(data[0], name)
     })
 
-    // Only re-render when the page changes
     useEffect(() => {
         setSeries({
             options: {
@@ -54,10 +62,14 @@ const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarCh
         })
     }, [currentPage, horizontal, name, pages, range])
 
+    useEffect(() => setPages(data), [data])
+    useEffect(() => setCurrentPage(0), [resultsPerPage])
+
     return (
-        <div className="brder p-4">
+        <div className="px-4">
             <Pagination
                 currentPage={currentPage}
+                currentPageTotal={pages[currentPage].length}
                 goToPage={(desiredPage: number) => {
                     if (desiredPage < 0 || desiredPage >= pages.length) {
                         return
@@ -66,13 +78,14 @@ const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarCh
                     setCurrentPage(desiredPage)
                 }}
                 numPages={pages.length}
+                totalResults={totalResults}
             />
             {series && (
                 <ApexChart
                     options={series.options}
                     series={series.series}
                     type={type}
-                    height={horizontal ? resultsPerPage * 40 : 700}
+                    height={horizontal ? pages[currentPage].length * 25 : 600}
                 />
             )}
         </div>

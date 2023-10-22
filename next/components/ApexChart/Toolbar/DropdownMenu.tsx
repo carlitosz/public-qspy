@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon'
+import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 
 import DropdownMenuItem from '@/components/ApexChart/Toolbar/DropdownMenuItem'
 
@@ -9,6 +10,8 @@ interface DropdownProps {
     menuItems: DropdownItem[]
 }
 
+const iconClass = 'h-6 w-6 animate-wiggle'
+
 const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
 
@@ -16,14 +19,15 @@ const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
         <div className="relative inline-block">
             <button
                 onClick={() => setOpen(!open)}
-                onBlur={() => setOpen(false)}
                 type="button"
-                className="p-1 active:bg-neutral-300 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full"
+                className={`${
+                    open ? 'bg-neutral-200' : ''
+                } p-1 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full`}
                 id="menu-button"
                 aria-expanded="true"
                 aria-haspopup="true"
             >
-                <EllipsisVerticalIcon className="h-6 w-6" />
+                {open ? <XMarkIcon className={iconClass} /> : <EllipsisVerticalIcon className={iconClass} />}
             </button>
 
             {open && (
@@ -34,10 +38,13 @@ const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
                     aria-labelledby="menu-button"
                     tabIndex={-1}
                 >
-                    <div className="flex flex-col" role="none">
+                    <ul className="flex flex-col" role="none">
                         {menuItems &&
                             menuItems.map(
-                                ({ divider, label, icon, title }: DropdownItem, index: number): JSX.Element => {
+                                (
+                                    { divider, label, icon, onClick, selected, title }: DropdownItem,
+                                    index: number
+                                ): JSX.Element => {
                                     if (divider) {
                                         return <div className="h-1 w-full border-b" key={index} />
                                     }
@@ -46,16 +53,18 @@ const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
                                         <DropdownMenuItem
                                             id={`menu-item-${index}`}
                                             icon={icon}
+                                            onClick={onClick}
                                             role="menuitem"
                                             key={index}
                                             label={label}
                                             tabIndex={-1}
                                             title={title}
+                                            selected={selected}
                                         />
                                     )
                                 }
                             )}
-                    </div>
+                    </ul>
                 </div>
             )}
         </div>

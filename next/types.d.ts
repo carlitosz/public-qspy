@@ -7,3 +7,5 @@ export interface GetEventsResponse {
     data: DomainEvent[] | []
     message: string
 }
+
+export type Orientation = 'horizontal' | 'vertical'

@@ -4,18 +4,17 @@ import BarChart from '@/components/ApexChart/BarChart'
 import Container from '@/components/Layout/Containers/Container'
 import ChartContainer from '@/components/Layout/Containers/ChartContainer'
 import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
-import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
 import { getErrorMessage, request } from '@/util/axios'
 import { paginate, sort } from '@/util/paginate'
 
 import type { NextPage } from 'next'
-import type { DomainEvent, GetEventsResponse } from 'types'
+import type { DomainEvent, GetEventsResponse, Orientation } from 'types'
 
 const Home: NextPage = () => {
     const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-    const RESULTS_PER_PAGE = 15
 
-    const [horizontal] = useState<boolean>(false)
+    const [orientation, setOrientation] = useState<Orientation>('vertical')
+    const [resultsPerPage, setResultsPerPage] = useState<number>(15)
     const { isValidating, error, data } = request<GetEventsResponse>(
         {
             url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent('2023-10-18')}`,
@@ -64,17 +63,38 @@ const Home: NextPage = () => {
     }
 
     const sorted: DomainEvent[] = sort(data.data, 'DESC')
-    const paginated: [DomainEvent[]] = paginate(sorted, RESULTS_PER_PAGE)
+    const paginated: [DomainEvent[]] = paginate(sorted, resultsPerPage)
 
     return (
         <Container mainTitle="Daily Analytics">
-            <ChartContainer title={QUEUE_NAME} withToolbar={true}>
+            <ChartContainer
+                changeOrientation={(desiredOrientation: Orientation) => {
+                    if (desiredOrientation === orientation) {
+                        return
+                    }
+
+                    setOrientation(desiredOrientation)
+                }}
+                changeResultsPerPage={(desiredResultsPerPage: number) => {
+                    if (desiredResultsPerPage === resultsPerPage) {
+                        return
+                    }
+
+                    setResultsPerPage(desiredResultsPerPage)
+                }}
+                orientation={orientation}
+                resultsPerPage={resultsPerPage}
+                title={QUEUE_NAME}
+                totalResults={sorted.length}
+                withToolbar={true}
+            >
                 <BarChart
                     data={paginated}
-                    horizontal={horizontal}
+                    horizontal={orientation === 'horizontal'}
                     name={QUEUE_NAME}
                     range={sorted[0].count}
-                    resultsPerPage={RESULTS_PER_PAGE}
+                    resultsPerPage={resultsPerPage}
+                    totalResults={sorted.length}
                     type="bar"
                 />
             </ChartContainer>

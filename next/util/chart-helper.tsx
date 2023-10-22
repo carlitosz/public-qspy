@@ -1,3 +1,4 @@
+import React from 'react'
 import ReactDomServer from 'react-dom/server'
 
 import ChartTooltip from '@/components/ApexChart/ChartTooltip'
@@ -135,7 +136,7 @@ export const horizontalBarGraphOptions = (range: number, horizontal: boolean): A
             min: 0,
             max: range,
             labels: {
-                maxWidth: 150
+                maxWidth: 250
             }
         }
     }
