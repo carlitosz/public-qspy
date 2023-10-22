@@ -8,15 +8,13 @@ import { getErrorMessage, request } from '@/util/axios'
 import { paginate, sort } from '@/util/paginate'
 
 import type { NextPage } from 'next'
-import type { DomainEvent, GetEventsResponse } from 'types'
+import type { DomainEvent, GetEventsResponse, Orientation } from 'types'
 
-interface HomePageProps {}
+const Home: NextPage = () => {
+    const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
 
-const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-const RESULTS_PER_PAGE = 70
-
-const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
-    const [horizontal, setHorizontal] = useState<boolean>(false)
+    const [orientation, setOrientation] = useState<Orientation>('vertical')
+    const [resultsPerPage, setResultsPerPage] = useState<number>(15)
     const { isValidating, error, data } = request<GetEventsResponse>(
         {
             url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent('2023-10-18')}`,
@@ -33,7 +31,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
 
         return (
             <Container mainTitle="Daily Analytics">
-                <ChartContainer title="">
+                <ChartContainer title={QUEUE_NAME}>
                     <div className="flex justify-center align-center py-12 bg-neutral-100">
                         <p className="text-xl">{message}</p>
                     </div>
@@ -55,7 +53,7 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
     if (data.data.length === 0) {
         return (
             <Container mainTitle="Daily Analytics">
-                <ChartContainer title="">
+                <ChartContainer title={QUEUE_NAME}>
                     <div className="flex justify-center align-center py-12 bg-neutral-100">
                         <p className="text-xl">No results returned :\</p>
                     </div>
@@ -65,18 +63,38 @@ const Home: NextPage<HomePageProps> = ({}: HomePageProps) => {
     }
 
     const sorted: DomainEvent[] = sort(data.data, 'DESC')
-    const paginated: [DomainEvent[]] = paginate(sorted, RESULTS_PER_PAGE)
+    const paginated: [DomainEvent[]] = paginate(sorted, resultsPerPage)
 
     return (
         <Container mainTitle="Daily Analytics">
-            <ChartContainer title={QUEUE_NAME}>
+            <ChartContainer
+                changeOrientation={(desiredOrientation: Orientation) => {
+                    if (desiredOrientation === orientation) {
+                        return
+                    }
+
+                    setOrientation(desiredOrientation)
+                }}
+                changeResultsPerPage={(desiredResultsPerPage: number) => {
+                    if (desiredResultsPerPage === resultsPerPage) {
+                        return
+                    }
+
+                    setResultsPerPage(desiredResultsPerPage)
+                }}
+                orientation={orientation}
+                resultsPerPage={resultsPerPage}
+                title={QUEUE_NAME}
+                totalResults={sorted.length}
+                withToolbar={true}
+            >
                 <BarChart
                     data={paginated}
-                    horizontal={horizontal}
+                    horizontal={orientation === 'horizontal'}
                     name={QUEUE_NAME}
                     range={sorted[0].count}
-                    resultsPerPage={RESULTS_PER_PAGE}
-                    totalResults={data.data.length}
+                    resultsPerPage={resultsPerPage}
+                    totalResults={sorted.length}
                     type="bar"
                 />
             </ChartContainer>

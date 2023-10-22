@@ -45,7 +45,7 @@ const BarChart = ({
     type
 }: BarChartProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [pages] = useState<[DomainEvent[] | []]>(data)
+    const [pages, setPages] = useState<[DomainEvent[] | []]>(data)
     const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
         options: {
             ...horizontalBarGraphOptions(range, horizontal)
@@ -53,7 +53,6 @@ const BarChart = ({
         series: createSeries(data[0], name)
     })
 
-    // Only re-render when the page changes
     useEffect(() => {
         setSeries({
             options: {
@@ -61,12 +60,16 @@ const BarChart = ({
             },
             series: createSeries(pages[currentPage], name)
         })
-    }, [currentPage])
+    }, [currentPage, horizontal, name, pages, range])
+
+    useEffect(() => setPages(data), [data])
+    useEffect(() => setCurrentPage(0), [resultsPerPage])
 
     return (
-        <>
+        <div className="px-4">
             <Pagination
                 currentPage={currentPage}
+                currentPageTotal={pages[currentPage].length}
                 goToPage={(desiredPage: number) => {
                     if (desiredPage < 0 || desiredPage >= pages.length) {
                         return
@@ -75,17 +78,17 @@ const BarChart = ({
                     setCurrentPage(desiredPage)
                 }}
                 numPages={pages.length}
+                totalResults={totalResults}
             />
             {series && (
                 <ApexChart
                     options={series.options}
                     series={series.series}
                     type={type}
-                    height={horizontal ? resultsPerPage * 40 : 700}
+                    height={horizontal ? pages[currentPage].length * 25 : 600}
                 />
             )}
-            {/* <Legend /> */}
-        </>
+        </div>
     )
 }
 
