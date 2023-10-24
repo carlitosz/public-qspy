@@ -56,7 +56,7 @@ const Pagination = ({
                     onClick={() => goToPage(numPages - 1)}
                 />
             </div>
-            <div className="w-full flex flex-row justify-center mt-4">
+            <div className="w-full flex flex-row justify-center mt-2">
                 <p className="inline-block text-neutral-600 text-xs font-normal antialiased">
                     Displaying <span className="font-bold">{currentPageTotal}</span> of{' '}
                     <span className="font-bold">{totalResults}</span> results

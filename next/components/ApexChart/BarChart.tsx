@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 import type { ApexOptions } from 'apexcharts'
+import type { Props } from 'react-apexcharts'
 import type { DomainEvent } from 'types'
 
 import Pagination from '@/components/Pagination/Pagination'
@@ -16,23 +17,7 @@ interface BarChartProps {
     range: number
     resultsPerPage: number
     totalResults: number
-    type:
-        | 'line'
-        | 'area'
-        | 'bar'
-        | 'pie'
-        | 'donut'
-        | 'radialBar'
-        | 'scatter'
-        | 'bubble'
-        | 'heatmap'
-        | 'candlestick'
-        | 'boxPlot'
-        | 'radar'
-        | 'polarArea'
-        | 'rangeBar'
-        | 'rangeArea'
-        | 'treemap'
+    type: Props['type']
 }
 
 const BarChart = ({
@@ -46,27 +31,22 @@ const BarChart = ({
 }: BarChartProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [pages, setPages] = useState<[DomainEvent[] | []]>(data)
-    const [series, setSeries] = useState<{ options: ApexOptions; series: ApexOptions['series'] }>({
-        options: {
-            ...horizontalBarGraphOptions(range, horizontal)
-        },
-        series: createSeries(data[0], name)
-    })
+    const [options, setOptions] = useState<ApexOptions>(horizontalBarGraphOptions(name, range, horizontal))
+    const [series, setSeries] = useState<ApexOptions['series']>(createSeries(data[0], name))
 
     useEffect(() => {
-        setSeries({
-            options: {
-                ...horizontalBarGraphOptions(range, horizontal)
-            },
-            series: createSeries(pages[currentPage], name)
-        })
-    }, [currentPage, horizontal, name, pages, range])
+        setSeries(createSeries(pages[currentPage], name))
+    }, [currentPage, name, pages])
+
+    useEffect(() => {
+        setOptions(horizontalBarGraphOptions(name, range, horizontal))
+    }, [name, range, horizontal])
 
     useEffect(() => setPages(data), [data])
     useEffect(() => setCurrentPage(0), [resultsPerPage])
 
     return (
-        <div className="px-4">
+        <div className="px-4" id="stuff">
             <Pagination
                 currentPage={currentPage}
                 currentPageTotal={pages[currentPage].length}
@@ -80,14 +60,7 @@ const BarChart = ({
                 numPages={pages.length}
                 totalResults={totalResults}
             />
-            {series && (
-                <ApexChart
-                    options={series.options}
-                    series={series.series}
-                    type={type}
-                    height={horizontal ? pages[currentPage].length * 25 : 600}
-                />
-            )}
+            {series && <ApexChart options={options} series={series} type={type} height={550} />}
         </div>
     )
 }

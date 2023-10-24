@@ -14,21 +14,7 @@ const iconClass = 'h-6 w-6 animate-wiggle'
 
 const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
-    const menuRef = useRef<HTMLButtonElement>(null)
-
-    const toggleMenu = (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-
-        const { current } = menuRef
-
-        if (current && !current.contains(e.target)) {
-            console.log(open)
-            setOpen(false)
-        } else {
-            setOpen(!open)
-        }
-    }
+    const menuRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         document.addEventListener('click', toggleMenu)
@@ -36,19 +22,36 @@ const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
         return () => {
             document.removeEventListener('click', toggleMenu)
         }
-    }, [])
+    })
+
+    const toggleMenu = (e: MouseEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        const { current } = menuRef
+
+        if (e.target instanceof HTMLElement && e.target !== current) {
+            if (current && !current.contains(e.target)) {
+                setOpen(false)
+            } else {
+                setOpen(!open)
+            }
+        }
+    }
 
     return (
-        <div className="relative inline-block">
+        <div
+            aria-hidden={true}
+            className="relative inline-block cursor-pointer rounded-full"
+            onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setOpen(!open)
+            }}
+            ref={menuRef}
+        >
             <button
-                aria-expanded="true"
-                aria-haspopup="true"
                 className={`${
                     open ? 'bg-neutral-200' : ''
-                } p-1 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full`}
+                } p-2 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full`}
                 id="menu-button"
-                onClick={toggleMenu}
-                ref={menuRef}
                 type="button"
             >
                 {open ? <XMarkIcon className={iconClass} /> : <EllipsisVerticalIcon className={iconClass} />}
