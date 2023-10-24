@@ -7,8 +7,9 @@ import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIc
 import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon'
 
 import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
+import { formattedJSONArray } from '@/util/paginate'
 
-import type { Orientation } from 'types'
+import type { DomainEvent, Orientation } from 'types'
 
 interface ImgUri {
     imgURI: string
@@ -36,11 +37,11 @@ declare global {
 interface ChartContainerProps {
     changeOrientation?: (desiredOrientation: Orientation) => void
     changeResultsPerPage?: (desiredResultsPerPage: number) => void
+    data: DomainEvent[]
     children: JSX.Element | JSX.Element[]
     orientation?: Orientation
     resultsPerPage?: number
     title: string
-    totalResults?: number
     withToolbar?: boolean
 }
 
@@ -50,9 +51,9 @@ const ChartContainer = ({
     changeOrientation,
     changeResultsPerPage,
     children,
+    data,
     orientation,
     resultsPerPage,
-    totalResults,
     title,
     withToolbar = false
 }: ChartContainerProps): JSX.Element => {
@@ -84,10 +85,9 @@ const ChartContainer = ({
                             },
                             {
                                 icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: `All (${totalResults})`,
-                                onClick: () =>
-                                    changeResultsPerPage && totalResults && changeResultsPerPage(totalResults),
-                                selected: resultsPerPage === totalResults
+                                label: `All (${data.length})`,
+                                onClick: () => changeResultsPerPage && changeResultsPerPage(data.length),
+                                selected: resultsPerPage === data.length
                             },
                             { divider: true },
                             { title: 'Orientation' },
@@ -105,7 +105,11 @@ const ChartContainer = ({
                             },
                             { divider: true },
                             { title: 'Data' },
-                            { icon: <ClipboardDocumentListIcon className={iconClass} />, label: 'Copy JSON' },
+                            {
+                                icon: <ClipboardDocumentListIcon className={iconClass} />,
+                                label: 'Copy JSON',
+                                onClick: () => navigator.clipboard.writeText(formattedJSONArray(data))
+                            },
                             { divider: true },
                             { title: 'Save as image' },
                             {

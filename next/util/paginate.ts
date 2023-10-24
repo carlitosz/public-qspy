@@ -18,3 +18,15 @@ export const sort = (data: DomainEvent[] | [], direction: Direction): DomainEven
         return direction === 'ASC' ? a.count - b.count : b.count - a.count
     })
 }
+
+type FormattedJSONData = {
+    [key: DomainEvent['event']]: DomainEvent['count']
+}
+
+export const formattedJSONArray = (data: DomainEvent[]): string => {
+    const obj: FormattedJSONData = {}
+
+    data.forEach(({ event, count }: DomainEvent) => (obj[event] = count))
+
+    return JSON.stringify(obj, undefined, 2)
+}

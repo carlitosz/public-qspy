@@ -82,10 +82,10 @@ const Home: NextPage = () => {
 
                     setResultsPerPage(desiredResultsPerPage)
                 }}
+                data={sorted}
                 orientation={orientation}
                 resultsPerPage={resultsPerPage}
                 title={QUEUE_NAME}
-                totalResults={sorted.length}
                 withToolbar={true}
             >
                 <BarChart
