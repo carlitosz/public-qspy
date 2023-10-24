@@ -35,103 +35,115 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
  *
  * @returns ApexOptions
  */
-export const horizontalBarGraphOptions = (range: number, horizontal: boolean): ApexOptions => {
+export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
     return {
+        colors: ['#4f46e5', '#a5b4fc'],
         chart: {
-            id: 'bar-chart',
-            toolbar: {
-                show: false
-            },
+            id,
             animations: {
                 easing: 'easeinout',
                 speed: 200,
                 dynamicAnimation: {
                     speed: 200
+                },
+                animateGradually: {
+                    enabled: true
+                }
+            },
+            toolbar: {
+                show: false,
+                export: {
+                    png: {
+                        filename: `${id}-chart.png`
+                    }
                 }
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: true
+        },
+        fill: {
+            opacity: 0.98
         },
         grid: {
+            position: 'back',
             yaxis: {
                 lines: {
-                    show: false
+                    show: !horizontal
                 }
             },
             xaxis: {
                 lines: {
-                    show: true
+                    show: horizontal
                 }
             }
+        },
+        legend: {
+            show: false
         },
         plotOptions: {
             bar: {
-                barHeight: '80%',
-                borderRadius: 0,
-                columnWidth: '80%',
+                barHeight: '80%', // Vertical
+                borderRadius: 2,
+                columnWidth: '70%', // Horizontal
                 borderRadiusApplication: 'end',
-                horizontal: horizontal,
-                colors: {
-                    ranges: [
-                        {
-                            from: range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5,
-                            to: range,
-                            color: '#4338ca'
-                        },
-                        {
-                            from: range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5,
-                            to: (range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5) - 1,
-                            color: '#1d4ed8'
-                        },
-                        {
-                            from: range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5,
-                            to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
-                            color: '#6366f1'
-                        },
-                        {
-                            from: 0,
-                            to: (range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5) - 1,
-                            color: '#2563eb'
-                        }
-                    ]
-                }
+                distributed: true,
+                horizontal: horizontal
+                // colors: {
+                //     ranges: [
+                //         {
+                //             from: range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5,
+                //             to: range,
+                //             color: '#4338ca'
+                //         },
+                //         {
+                //             from: range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5,
+                //             to: (range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5) - 1,
+                //             color: '#1d4ed8'
+                //         },
+                //         {
+                //             from: range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5,
+                //             to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
+                //             color: '#6366f1'
+                //         },
+                //         {
+                //             from: 0,
+                //             to: (range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5) - 1,
+                //             color: '#2563eb'
+                //         }
+                //     ]
+                // }
             }
         },
-        responsive: [
-            {
-                breakpoint: 390,
-                options: {
-                    plotOptions: {
-                        bar: {
-                            horizontal: false
-                        }
-                    }
-                }
-            }
-        ],
         tooltip: {
+            enabled: true,
+            followCursor: true,
+            fillSeriesColor: true,
+            intersect: true,
+            onDatasetHover: {
+                highlightDataSeries: true
+            },
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
                 return ReactDomServer.renderToString(
                     <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
                 )
-            },
-            marker: {
-                show: true
             }
         },
         xaxis: {
             axisBorder: {
                 show: false
             },
-            labels: {
-                show: horizontal
+            axisTicks: {
+                show: false
             },
-            tickAmount: 10
+            labels: {
+                show: false
+            },
+            tickAmount: range
         },
         yaxis: {
             axisBorder: {
-                show: false
+                show: true
             },
             min: 0,
             max: range,

@@ -42,7 +42,6 @@ const DropdownMenuItem = ({
             onClick={onClick}
             role={role}
             tabIndex={tabIndex}
-            value={label}
         >
             <div className="inline-flex items-center">
                 {icon && icon}

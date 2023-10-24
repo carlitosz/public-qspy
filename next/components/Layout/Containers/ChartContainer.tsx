@@ -1,3 +1,4 @@
+import ApexCharts from 'apexcharts'
 import React from 'react'
 import ArrowsUpDownIcon from '@heroicons/react/24/outline/ArrowsUpDownIcon'
 import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon'
@@ -8,6 +9,29 @@ import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon'
 import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
 
 import type { Orientation } from 'types'
+
+interface ImgUri {
+    imgURI: string
+}
+
+interface blob {
+    blob: Blob
+}
+
+interface ChartInstance {
+    chart: ApexCharts
+    group: string
+    id: string
+}
+
+declare global {
+    // eslint-disable-next-line no-unused-vars
+    interface Window {
+        Apex: {
+            _chartInstances: [ChartInstance]
+        }
+    }
+}
 
 interface ChartContainerProps {
     changeOrientation?: (desiredOrientation: Orientation) => void
@@ -38,14 +62,13 @@ const ChartContainer = ({
                 <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
                 {withToolbar && (
                     <Toolbar
-                        actions={[]}
                         dropdown={[
                             { title: 'Results per page' },
                             {
                                 icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: 15,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(15),
-                                selected: resultsPerPage === 15
+                                label: 20,
+                                onClick: () => changeResultsPerPage && changeResultsPerPage(20),
+                                selected: resultsPerPage === 20
                             },
                             {
                                 icon: <DocumentChartBarIcon className={iconClass} />,
@@ -55,9 +78,9 @@ const ChartContainer = ({
                             },
                             {
                                 icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: 60,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(60),
-                                selected: resultsPerPage === 60
+                                label: 40,
+                                onClick: () => changeResultsPerPage && changeResultsPerPage(40),
+                                selected: resultsPerPage === 40
                             },
                             {
                                 icon: <DocumentChartBarIcon className={iconClass} />,
@@ -85,7 +108,29 @@ const ChartContainer = ({
                             { icon: <ClipboardDocumentListIcon className={iconClass} />, label: 'Copy JSON' },
                             { divider: true },
                             { title: 'Save as image' },
-                            { icon: <PhotoIcon className={iconClass} />, label: 'JPG' }
+                            {
+                                icon: <PhotoIcon className={iconClass} />,
+                                label: 'PNG',
+                                onClick: async () => {
+                                    const chartInstance: ChartInstance | undefined = window.Apex._chartInstances.find(
+                                        (chart: ApexChart | undefined) => {
+                                            if (chart && chart.id === title) return chart
+                                        }
+                                    )
+
+                                    if (!chartInstance) {
+                                        return
+                                    }
+
+                                    const { chart }: { chart: ChartInstance['chart'] } = chartInstance
+                                    const data: ImgUri | blob = await chart.dataURI()
+
+                                    const a = document.createElement('a')
+                                    a.download = title + '.png'
+                                    a.href = (data as ImgUri).imgURI
+                                    a.click()
+                                }
+                            }
                         ]}
                     />
                 )}

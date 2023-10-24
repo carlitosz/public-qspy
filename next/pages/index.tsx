@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
 
     const [orientation, setOrientation] = useState<Orientation>('vertical')
-    const [resultsPerPage, setResultsPerPage] = useState<number>(15)
+    const [resultsPerPage, setResultsPerPage] = useState<number>(20)
     const { isValidating, error, data } = request<GetEventsResponse>(
         {
             url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent('2023-10-18')}`,

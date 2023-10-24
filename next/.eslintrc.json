@@ -8,7 +8,6 @@
     "eslint:recommended",
     "plugin:jsx-a11y/recommended"
   ],
-  "plugins": ["prettier"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx"],
@@ -17,5 +16,6 @@
         "jsx-a11y/anchor-is-valid": "off"
       }
     }
-  ]
+  ],
+  "plugins": ["prettier"]
 }
