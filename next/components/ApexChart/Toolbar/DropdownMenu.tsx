@@ -7,12 +7,14 @@ import DropdownMenuItem from '@/components/ApexChart/Toolbar/DropdownMenuItem'
 import type { DropdownItem } from '@/components/ApexChart/Toolbar/DropdownMenuItem'
 
 interface DropdownProps {
+    closeIcon?: React.ReactNode
     menuItems: DropdownItem[]
+    openIcon?: React.ReactNode
 }
 
 const iconClass = 'h-6 w-6 animate-wiggle'
 
-const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
+const Dropdown = ({ closeIcon, menuItems, openIcon }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -54,7 +56,9 @@ const Dropdown = ({ menuItems }: DropdownProps): JSX.Element => {
                 id="menu-button"
                 type="button"
             >
-                {open ? <XMarkIcon className={iconClass} /> : <EllipsisVerticalIcon className={iconClass} />}
+                {open
+                    ? closeIcon ?? <XMarkIcon className={iconClass} />
+                    : openIcon ?? <EllipsisVerticalIcon className={iconClass} />}
             </button>
 
             {open && (

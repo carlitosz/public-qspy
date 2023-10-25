@@ -1,145 +1,94 @@
-import ApexCharts from 'apexcharts'
-import React from 'react'
-import ArrowsUpDownIcon from '@heroicons/react/24/outline/ArrowsUpDownIcon'
-import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon'
-import ClipboardDocumentListIcon from '@heroicons/react/24/outline/ClipboardDocumentListIcon'
-import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIcon'
-import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon'
+import React, { useEffect, useState } from 'react'
 
-import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
-import { formattedJSONArray } from '@/util/paginate'
+import BarChart from '@/components/ApexChart/BarChart'
+import Pagination from '@/components/Pagination/Pagination'
+import { paginate, sort } from '@/util/paginate'
 
-import type { DomainEvent, Orientation } from 'types'
+import ChartContainerHeader from '@/components/Layout/Containers/ChartContainerHeader'
+import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
 
-interface ImgUri {
-    imgURI: string
-}
-
-interface blob {
-    blob: Blob
-}
-
-interface ChartInstance {
-    chart: ApexCharts
-    group: string
-    id: string
-}
-
-declare global {
-    // eslint-disable-next-line no-unused-vars
-    interface Window {
-        Apex: {
-            _chartInstances: [ChartInstance]
-        }
-    }
-}
+import type { DomainEvent, GetEventsResponse, Orientation } from 'types'
 
 interface ChartContainerProps {
-    changeOrientation?: (desiredOrientation: Orientation) => void
-    changeResultsPerPage?: (desiredResultsPerPage: number) => void
-    data: DomainEvent[]
-    children: JSX.Element | JSX.Element[]
-    orientation?: Orientation
-    resultsPerPage?: number
+    data: GetEventsResponse | undefined
+    isLoading: boolean
+    skeleton: React.ReactNode
     title: string
     withToolbar?: boolean
 }
 
-const iconClass = 'h-5 w-5 mr-3 antialiased'
+const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartContainerProps): JSX.Element => {
+    const [pages, setPages] = useState<[DomainEvent[] | []]>([[]])
+    const [currentPage, setCurrentPage] = useState<number>(0)
+    const [orientation, setOrientation] = useState<Orientation>('vertical')
+    const [range, setRange] = useState<number>(0)
+    const [resultsPerPage, setResultsPerPage] = useState<number>(20)
+    const [totalResults, setTotalResults] = useState<number>(0)
 
-const ChartContainer = ({
-    changeOrientation,
-    changeResultsPerPage,
-    children,
-    data,
-    orientation,
-    resultsPerPage,
-    title,
-    withToolbar = false
-}: ChartContainerProps): JSX.Element => {
+    useEffect(() => {
+        if (data) {
+            const sorted = sort(data.data, 'DESC')
+            const paginated = paginate(sorted, resultsPerPage)
+
+            setRange(sorted[0].count)
+            setPages(paginated)
+            setTotalResults(sorted.length)
+        }
+    }, [data, resultsPerPage])
+
+    useEffect(() => setCurrentPage(0), [resultsPerPage])
+
+    if (isLoading || !pages || !data) {
+        return (
+            <div className="border border-neutral-200 rounded-xl bg-neutral-50">
+                <ChartSkeleton />
+            </div>
+        )
+    }
+
     return (
         <div className="border border-neutral-200 rounded-xl bg-neutral-50">
-            <div className="flex flex-row justify-between items-center border-b p-4">
-                <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
-                {withToolbar && (
-                    <Toolbar
-                        dropdown={[
-                            { title: 'Results per page' },
-                            {
-                                icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: 20,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(20),
-                                selected: resultsPerPage === 20
-                            },
-                            {
-                                icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: 30,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(30),
-                                selected: resultsPerPage === 30
-                            },
-                            {
-                                icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: 40,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(40),
-                                selected: resultsPerPage === 40
-                            },
-                            {
-                                icon: <DocumentChartBarIcon className={iconClass} />,
-                                label: `All (${data.length})`,
-                                onClick: () => changeResultsPerPage && changeResultsPerPage(data.length),
-                                selected: resultsPerPage === data.length
-                            },
-                            { divider: true },
-                            { title: 'Orientation' },
-                            {
-                                icon: <ArrowsUpDownIcon className={iconClass} />,
-                                label: 'Vertical',
-                                selected: orientation === 'vertical',
-                                onClick: () => changeOrientation && changeOrientation('vertical')
-                            },
-                            {
-                                icon: <ArrowsRightLeftIcon className={iconClass} />,
-                                label: 'Horizontal',
-                                selected: orientation === 'horizontal',
-                                onClick: () => changeOrientation && changeOrientation('horizontal')
-                            },
-                            { divider: true },
-                            { title: 'Data' },
-                            {
-                                icon: <ClipboardDocumentListIcon className={iconClass} />,
-                                label: 'Copy JSON',
-                                onClick: () => navigator.clipboard.writeText(formattedJSONArray(data))
-                            },
-                            { divider: true },
-                            { title: 'Save as image' },
-                            {
-                                icon: <PhotoIcon className={iconClass} />,
-                                label: 'PNG',
-                                onClick: async () => {
-                                    const chartInstance: ChartInstance | undefined = window.Apex._chartInstances.find(
-                                        (chart: ApexChart | undefined) => {
-                                            if (chart && chart.id === title) return chart
-                                        }
-                                    )
+            <ChartContainerHeader
+                data={sort(data.data, 'DESC')}
+                changeOrientation={(desiredOrientation: Orientation) => {
+                    if (desiredOrientation === orientation) {
+                        return
+                    }
 
-                                    if (!chartInstance) {
-                                        return
-                                    }
+                    setOrientation(desiredOrientation)
+                }}
+                orientation={orientation}
+                title={title}
+                withToolbar={withToolbar}
+            />
+            <Pagination
+                changeResultsPerPage={(desiredResultsPerPage: number) => {
+                    if (desiredResultsPerPage === resultsPerPage) {
+                        return
+                    }
 
-                                    const { chart }: { chart: ChartInstance['chart'] } = chartInstance
-                                    const data: ImgUri | blob = await chart.dataURI()
+                    setResultsPerPage(desiredResultsPerPage)
+                }}
+                currentPage={currentPage}
+                currentPageTotal={pages[currentPage].length}
+                goToPage={(desiredPage: number) => {
+                    if (desiredPage < 0 || desiredPage >= pages.length) {
+                        return
+                    }
 
-                                    const a = document.createElement('a')
-                                    a.download = title + '.png'
-                                    a.href = (data as ImgUri).imgURI
-                                    a.click()
-                                }
-                            }
-                        ]}
-                    />
-                )}
-            </div>
-            {children}
+                    setCurrentPage(desiredPage)
+                }}
+                numPages={pages.length}
+                resultsPerPage={resultsPerPage}
+                totalResults={totalResults}
+            />
+            <BarChart
+                data={pages[currentPage]}
+                horizontal={orientation === 'horizontal'}
+                name={title}
+                range={range}
+                type="bar"
+            />
         </div>
     )
 }

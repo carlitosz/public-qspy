@@ -37,7 +37,7 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
  */
 export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
     return {
-        colors: ['#4f46e5', '#a5b4fc'],
+        colors: ['#6366f1'],
         chart: {
             id,
             animations: {
@@ -51,16 +51,11 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 }
             },
             toolbar: {
-                show: false,
-                export: {
-                    png: {
-                        filename: `${id}-chart.png`
-                    }
-                }
+                show: false
             }
         },
         dataLabels: {
-            enabled: true
+            enabled: false
         },
         fill: {
             opacity: 0.98
@@ -85,7 +80,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             bar: {
                 barHeight: '80%', // Vertical
                 borderRadius: 2,
-                columnWidth: '70%', // Horizontal
+                columnWidth: '90%', // Horizontal
                 borderRadiusApplication: 'end',
                 distributed: true,
                 horizontal: horizontal
@@ -118,11 +113,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         tooltip: {
             enabled: true,
             followCursor: true,
-            fillSeriesColor: true,
             intersect: true,
-            onDatasetHover: {
-                highlightDataSeries: true
-            },
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
                 return ReactDomServer.renderToString(
                     <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
@@ -137,18 +128,24 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 show: false
             },
             labels: {
-                show: false
+                show: horizontal
             },
-            tickAmount: range
+            tickAmount: range + 1,
+            tooltip: {
+                enabled: horizontal
+            }
         },
         yaxis: {
             axisBorder: {
                 show: true
             },
             min: 0,
-            max: range,
+            max: range + 1,
             labels: {
-                maxWidth: 250
+                maxWidth: 200
+            },
+            tooltip: {
+                enabled: !horizontal
             }
         }
     }

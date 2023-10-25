@@ -5,13 +5,15 @@ import DropdownMenu from '@/components/ApexChart/Toolbar/DropdownMenu'
 import type { DropdownItem } from '@/components/ApexChart/Toolbar/DropdownMenuItem'
 
 interface ToolbarProps {
+    closeIcon?: React.ReactNode
     dropdown: DropdownItem[]
+    openIcon?: React.ReactNode
 }
 
-const Toolbar = ({ dropdown }: ToolbarProps): JSX.Element => {
+const Toolbar = ({ closeIcon, dropdown, openIcon }: ToolbarProps): JSX.Element => {
     return (
         <div className="inline-flex" role="group">
-            {dropdown && <DropdownMenu menuItems={dropdown} />}
+            {dropdown && <DropdownMenu closeIcon={closeIcon} menuItems={dropdown} openIcon={openIcon} />}
         </div>
     )
 }
