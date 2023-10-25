@@ -5,7 +5,7 @@ import type { ApexOptions } from 'apexcharts'
 import type { Props } from 'react-apexcharts'
 import type { DomainEvent } from 'types'
 
-import { createSeries, horizontalBarGraphOptions } from '@/util/chart-helper'
+import { createSeries, horizontalBarGraphOptions } from '@/util/chart'
 
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 
@@ -30,9 +30,7 @@ const BarChart = ({ data, horizontal, name, range, type }: BarChartProps): JSX.E
     }, [name, range, horizontal])
 
     return (
-        <div className="px-4" id="stuff">
-            {series && <ApexChart options={options} series={series} type={type} height={550} />}
-        </div>
+        <div className="px-4">{series && <ApexChart options={options} series={series} type={type} height={550} />}</div>
     )
 }
 

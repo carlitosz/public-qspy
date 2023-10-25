@@ -51,16 +51,11 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 }
             },
             toolbar: {
-                show: false,
-                export: {
-                    png: {
-                        filename: `${id}-chart.png`
-                    }
-                }
+                show: false
             }
         },
         dataLabels: {
-            enabled: true
+            enabled: false
         },
         fill: {
             opacity: 0.98
@@ -85,7 +80,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             bar: {
                 barHeight: '80%', // Vertical
                 borderRadius: 2,
-                columnWidth: '70%', // Horizontal
+                columnWidth: '90%', // Horizontal
                 borderRadiusApplication: 'end',
                 distributed: true,
                 horizontal: horizontal
@@ -118,11 +113,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         tooltip: {
             enabled: true,
             followCursor: true,
-            fillSeriesColor: true,
             intersect: true,
-            onDatasetHover: {
-                highlightDataSeries: true
-            },
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
                 return ReactDomServer.renderToString(
                     <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
@@ -139,7 +130,10 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             labels: {
                 show: horizontal
             },
-            tickAmount: range + 1
+            tickAmount: range + 1,
+            tooltip: {
+                enabled: horizontal
+            }
         },
         yaxis: {
             axisBorder: {
@@ -148,7 +142,10 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             min: 0,
             max: range + 1,
             labels: {
-                maxWidth: 250
+                maxWidth: 200
+            },
+            tooltip: {
+                enabled: !horizontal
             }
         }
     }
