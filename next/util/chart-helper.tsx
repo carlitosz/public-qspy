@@ -37,7 +37,7 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
  */
 export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
     return {
-        colors: ['#4f46e5', '#a5b4fc'],
+        colors: ['#6366f1'],
         chart: {
             id,
             animations: {
@@ -137,16 +137,16 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 show: false
             },
             labels: {
-                show: false
+                show: horizontal
             },
-            tickAmount: range
+            tickAmount: range + 1
         },
         yaxis: {
             axisBorder: {
                 show: true
             },
             min: 0,
-            max: range,
+            max: range + 1,
             labels: {
                 maxWidth: 250
             }
