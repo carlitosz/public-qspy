@@ -29,9 +29,7 @@ const BarChart = ({ data, horizontal, name, range, type }: BarChartProps): JSX.E
         setOptions(horizontalBarGraphOptions(name, range, horizontal))
     }, [name, range, horizontal])
 
-    return (
-        <div className="px-4">{series && <ApexChart options={options} series={series} type={type} height={550} />}</div>
-    )
+    return <>{series && <ApexChart options={options} series={series} type={type} height={600} />}</>
 }
 
 export default BarChart

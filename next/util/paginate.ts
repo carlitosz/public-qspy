@@ -13,8 +13,16 @@ export const paginate = (data: DomainEvent[] | [], perChunk: number): [DomainEve
 
 type Direction = 'ASC' | 'DESC'
 
-export const sort = (data: DomainEvent[] | [], direction: Direction): DomainEvent[] | [] => {
+export const sort = (
+    data: DomainEvent[] | [],
+    direction: Direction,
+    property: keyof DomainEvent
+): DomainEvent[] | [] => {
     return data.sort((a: DomainEvent, b: DomainEvent) => {
+        if (typeof a[property] === 'string') {
+            return direction === 'ASC' ? b.event.localeCompare(a.event) : a.event.localeCompare(b.event)
+        }
+
         return direction === 'ASC' ? a.count - b.count : b.count - a.count
     })
 }
