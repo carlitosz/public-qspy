@@ -114,6 +114,7 @@ describe('StoreFunction::handler', () => {
                 TableName: TEST_TABLE_NAME,
                 Item: marshall({
                     Queue: TEST_QUEUE_NAME,
+                    Count: payload.data.length,
                     Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
                         locale: enUS
                     }),

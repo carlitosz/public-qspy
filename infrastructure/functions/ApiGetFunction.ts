@@ -85,14 +85,14 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     console.log(`Received query parameters: `, event.queryStringParameters)
 
     const input: GetItemCommandInput = {
-        ExpressionAttributeNames: { '#Data': 'Data', '#Date': 'Date', '#Message': 'Message' },
+        ExpressionAttributeNames: { '#Count': 'Count', '#Data': 'Data', '#Date': 'Date', '#Message': 'Message' },
         Key: marshall({
             Queue: queue,
             Date: date
                 ? format(new Date(date.trim()), 'yyyy-MM-dd')
                 : formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS })
         }),
-        ProjectionExpression: '#Data, #Date, #Message',
+        ProjectionExpression: '#Count, #Data, #Date, #Message',
         TableName: env.tableName || process.env.TABLE_NAME
     }
 

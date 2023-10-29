@@ -12,7 +12,7 @@ interface DropdownProps {
     openIcon?: React.ReactNode
 }
 
-const iconClass = 'h-6 w-6 animate-wiggle'
+const iconClass = 'h-5 w-5 animate-wiggle'
 
 const Dropdown = ({ closeIcon, menuItems, openIcon }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)

@@ -4,6 +4,7 @@ export interface DomainEvent {
 }
 
 export interface GetEventsResponse {
+    Count: number
     Data: DomainEvent[] | []
     Date: string
     Message: string

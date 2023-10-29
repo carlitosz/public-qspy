@@ -18,8 +18,8 @@ export const MISSING_QUEUE_URL_MSG = 'Missing required parameter: [queueUrl]'
 export const QUEUE_EMPTY_MSG = 'The queue is empty'
 export const QUEUE_NAME_MISMATCH_MSG = 'The queue name does not have the required format (domain-events-.*-deadletter)'
 export const SUCCESS_MSG = 'The queue was sucessfully processed'
-export const VISIBILITY_TIMEOUT_EXPIRED_MSG = "The queue's visibility timeout expired before the function could finish"
-export const FUNCTION_TIMEOUT_MSG = 'The function reached timeout and could not complete processing the queue.'
+export const VISIBILITY_TIMEOUT_EXPIRED_MSG = 'Incomplete data due to visibility timeout'
+export const FUNCTION_TIMEOUT_MSG = 'Incomplete data due to function timeout'
 
 const config: SQSClientConfig = { region: 'us-east-1' }
 const sqsClient: SQSClient = new SQSClient(config)

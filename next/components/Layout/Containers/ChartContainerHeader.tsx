@@ -51,7 +51,7 @@ const ChartContainerHeader = ({
 }: ChartContainerHeaderProps): JSX.Element => {
     return (
         <div className="flex flex-row justify-between items-center border-b px-4 py-2">
-            <p className="text-neutral-500 text-xs font-medium antialiased">{title}</p>
+            <p className="text-neutral-500 text-sm font-medium antialiased">{title}</p>
             {withToolbar && (
                 <Toolbar
                     dropdown={[

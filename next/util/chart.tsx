@@ -85,7 +85,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         },
         plotOptions: {
             bar: {
-                barHeight: '50%', // Horizontal
+                barHeight: '60%', // Horizontal
                 borderRadius: 2,
                 columnWidth: '80%', // Vertical
                 borderRadiusApplication: 'end',
@@ -119,7 +119,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             labels: {
                 show: horizontal
             },
-            tickAmount: range
+            tickAmount: range + 1
         },
         yaxis: {
             axisBorder: {
@@ -133,7 +133,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 }
             },
             min: 0,
-            max: range,
+            max: range + 1,
             labels: {
                 show: true,
                 maxWidth: 200
