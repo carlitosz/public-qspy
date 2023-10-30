@@ -26,7 +26,7 @@ const DropdownMenuItem = ({
 }: DropdownItem & DropdownItemHtmlProps): JSX.Element => {
     if (title) {
         return (
-            <li className={`inline flex items-center text-neutral-400 w-full ${paddings}`}>
+            <li className={`inline flex items-center text-neutral-400 w-full cursor-auto ${paddings}`}>
                 {icon && icon}
                 <span className="text-xs font-medium uppercase antialiased">{title}</span>
             </li>

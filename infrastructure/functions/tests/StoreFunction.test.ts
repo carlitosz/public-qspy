@@ -71,7 +71,8 @@ describe('StoreFunction::handler', () => {
                     Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
                         locale: enUS
                     }),
-                    Data: { data: payload.data, message: payload.message },
+                    Data: payload.data,
+                    Message: payload.message,
                     Expires: getUnixTime(addMonths(new Date(), 6))
                 })
             })
@@ -113,10 +114,12 @@ describe('StoreFunction::handler', () => {
                 TableName: TEST_TABLE_NAME,
                 Item: marshall({
                     Queue: TEST_QUEUE_NAME,
+                    Count: payload.data.length,
                     Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
                         locale: enUS
                     }),
-                    Data: { data: payload.data, message: payload.message },
+                    Data: payload.data,
+                    Message: payload.message,
                     Expires: getUnixTime(addMonths(new Date(), 6))
                 })
             })

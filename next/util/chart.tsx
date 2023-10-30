@@ -37,7 +37,7 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
  */
 export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
     return {
-        colors: ['#6366f1'],
+        colors: ['#4f46e5', '#818cf8'],
         chart: {
             id,
             animations: {
@@ -50,15 +50,22 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                     enabled: true
                 }
             },
+            events: {
+                dataPointMouseEnter: function (event) {
+                    event.target.style.cursor = 'pointer'
+                }
+            },
+            fontFamily: 'Poppins',
             toolbar: {
                 show: false
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: false,
+            textAnchor: 'middle'
         },
         fill: {
-            opacity: 0.98
+            opacity: 0.9
         },
         grid: {
             position: 'back',
@@ -78,47 +85,24 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         },
         plotOptions: {
             bar: {
-                barHeight: '80%', // Vertical
+                barHeight: '60%', // Horizontal
                 borderRadius: 2,
-                columnWidth: '90%', // Horizontal
+                columnWidth: '80%', // Vertical
                 borderRadiusApplication: 'end',
                 distributed: true,
                 horizontal: horizontal
-                // colors: {
-                //     ranges: [
-                //         {
-                //             from: range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5,
-                //             to: range,
-                //             color: '#4338ca'
-                //         },
-                //         {
-                //             from: range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5,
-                //             to: (range % 1.5 > 0 ? Math.ceil(range / 1.5) : range / 1.5) - 1,
-                //             color: '#1d4ed8'
-                //         },
-                //         {
-                //             from: range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5,
-                //             to: (range % 2.5 > 0 ? Math.ceil(range / 2.5) : range / 2.5) - 1,
-                //             color: '#6366f1'
-                //         },
-                //         {
-                //             from: 0,
-                //             to: (range % 3.5 > 0 ? Math.ceil(range / 3.5) : range / 3.5) - 1,
-                //             color: '#2563eb'
-                //         }
-                //     ]
-                // }
             }
         },
         tooltip: {
-            enabled: true,
-            followCursor: true,
-            intersect: true,
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
                 return ReactDomServer.renderToString(
                     <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
                 )
-            }
+            },
+            enabled: true,
+            followCursor: true,
+            intersect: true,
+            shared: false
         },
         xaxis: {
             axisBorder: {
@@ -127,25 +111,32 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             axisTicks: {
                 show: false
             },
+            crosshairs: {
+                show: true,
+                width: 1,
+                opacity: 1
+            },
             labels: {
                 show: horizontal
             },
-            tickAmount: range + 1,
-            tooltip: {
-                enabled: horizontal
-            }
+            tickAmount: range + 1
         },
         yaxis: {
             axisBorder: {
                 show: true
             },
+            crosshairs: {
+                show: true,
+                position: 'front',
+                stroke: {
+                    width: 1
+                }
+            },
             min: 0,
             max: range + 1,
             labels: {
+                show: true,
                 maxWidth: 200
-            },
-            tooltip: {
-                enabled: !horizontal
             }
         }
     }

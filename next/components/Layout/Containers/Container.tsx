@@ -7,8 +7,11 @@ interface ContainerProps {
 
 const Container = ({ children, mainTitle }: ContainerProps): JSX.Element => {
     return (
-        <div className="md:container md:mx-auto">
-            <p className="text-md text-neutral-500 my-8">{mainTitle}</p>
+        <div className="md:container mx-auto">
+            <div className="flex flex-col w-full justify-start py-6">
+                <p className="text-sm text-indigo-600 antialiased">Overview</p>
+                <p className="text-xl text-neutral-700 font-semibold antialiased">{mainTitle}</p>
+            </div>
             {children}
         </div>
     )

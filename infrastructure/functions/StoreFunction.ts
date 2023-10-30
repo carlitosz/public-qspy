@@ -43,8 +43,10 @@ export const handler: Handler = async (event: LambdaEvent): Promise<void> => {
             TableName: env.tableName || process.env.TABLE_NAME,
             Item: marshall({
                 Queue: queue,
+                Count: data.length,
                 Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS }),
-                Data: { data, message },
+                Data: data,
+                Message: message,
                 Expires: getUnixTime(addMonths(new Date(), 6))
             })
         })

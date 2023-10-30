@@ -14,7 +14,7 @@ const PaginationItem = ({ icon, klass, onClick, text }: PaginationItemProps): JS
     return (
         <div className={klass ? klass : defaultClass} onClick={onClick} aria-hidden="true">
             {icon && icon}
-            {text && text}
+            {text && <span className="text-sm">{text}</span>}
         </div>
     )
 }

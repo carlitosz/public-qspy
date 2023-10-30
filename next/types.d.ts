@@ -4,8 +4,12 @@ export interface DomainEvent {
 }
 
 export interface GetEventsResponse {
-    data: DomainEvent[] | []
-    message: string
+    Count: number
+    Data: DomainEvent[] | []
+    Date: string
+    Message: string
 }
 
 export type Orientation = 'horizontal' | 'vertical'
+
+export type SortDirection = 'ASC' | 'DESC'

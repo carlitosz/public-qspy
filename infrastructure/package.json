@@ -5,7 +5,7 @@
   "description": "Analyze function",
   "scripts": {
     "tsc": "tsc",
-    "jest": "jest",
+    "jest": "jest --silent",
     "jest:watch": "jest --watch"
   },
   "devDependencies": {

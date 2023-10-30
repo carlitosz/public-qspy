@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const LayoutWithSidebar = ({ children }: LayoutProps): JSX.Element => {
     return (
-        <div className="flex flex-row min-h-screen bg-neutral-50">
+        <div className="flex flex-row h-screen">
             <Sidebar />
             <Main>{children}</Main>
         </div>

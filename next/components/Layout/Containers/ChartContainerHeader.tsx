@@ -50,8 +50,8 @@ const ChartContainerHeader = ({
     withToolbar
 }: ChartContainerHeaderProps): JSX.Element => {
     return (
-        <div className="flex flex-row justify-between items-center border-b p-4">
-            <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
+        <div className="flex flex-row justify-between items-center border-b px-4 py-2">
+            <p className="text-neutral-500 text-sm font-medium antialiased">{title}</p>
             {withToolbar && (
                 <Toolbar
                     dropdown={[

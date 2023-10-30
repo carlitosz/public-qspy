@@ -1,4 +1,6 @@
 import React from 'react'
+import BarsArrowDownIcon from '@heroicons/react/24/outline/BarsArrowDownIcon'
+import BarsArrowUpIcon from '@heroicons/react/24/outline/BarsArrowUpIcon'
 import ChevronLeftIcon from '@heroicons/react/24/solid/ChevronLeftIcon'
 import ChevronDoubleLeftIcon from '@heroicons/react/24/solid/ChevronDoubleLeftIcon'
 import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon'
@@ -8,14 +10,17 @@ import EllipsisHorizontalCircleIcon from '@heroicons/react/24/outline/EllipsisHo
 
 import PaginationItem from '@/components/Pagination/PaginationItem'
 import Toolbar from '../ApexChart/Toolbar/Toolbar'
+import { SortDirection } from 'types'
 
 interface PaginationProps {
     changeResultsPerPage: (desiredResultsPerPage: number) => void
+    changeSortDirection: (desiredSortDirection: SortDirection) => void
     currentPage: number
     currentPageTotal: number
     goToPage: (desiredPage: number) => void
     numPages: number
     resultsPerPage: number
+    sortDirection: SortDirection
     totalResults: number
 }
 
@@ -23,23 +28,30 @@ const iconClass = 'h-5 w-5 mr-3'
 
 const Pagination = ({
     changeResultsPerPage,
+    changeSortDirection,
     currentPage,
     currentPageTotal,
     goToPage,
     numPages,
     resultsPerPage,
+    sortDirection,
     totalResults
 }: PaginationProps): JSX.Element => {
     const pageNumbers = Array(numPages).fill('x', 0, numPages)
-    const unselected = `text-sm font-medium leading-none cursor-pointer text-neutral-500 hover:text-indigo-500 border-t-2 border-transparent hover:border-indigo-500 p-4 duration-150 ease-out hover:ease-in`
-    const selected = `text-sm font-medium leading-none cursor-pointer text-indigo-600 hover:text-neutral-500 border-t-2 p-4 border-indigo-500 duration-150 ease-out hover:ease-in`
+    const unselected = `text-sm font-normal leading-none cursor-pointer text-neutral-500 hover:text-indigo-500 border-t-2 border-transparent hover:border-indigo-500 p-4 duration-150 ease-out hover:ease-in`
+    const selected = `text-sm font-normal leading-none cursor-pointer text-indigo-600 hover:text-neutral-500 border-t-2 p-4 border-indigo-500 duration-150 ease-out hover:ease-in`
 
     return (
-        <div className="w-full flex flex-col align-center justify-center">
-            <div className="w-full flex flex-row justify-center items-center">
-                <PaginationItem icon={<ChevronDoubleLeftIcon className={iconClass} />} onClick={() => goToPage(0)} />
+        <div className="flex flex-col align-center justify-center">
+            <div className="flex flex-row justify-center items-center">
                 <PaginationItem
-                    icon={<ChevronLeftIcon className={iconClass} />}
+                    icon={<ChevronDoubleLeftIcon className="h-5 w-5" />}
+                    klass={unselected}
+                    onClick={() => goToPage(0)}
+                />
+                <PaginationItem
+                    icon={<ChevronLeftIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(currentPage - 1)}
                 />
 
@@ -55,52 +67,62 @@ const Pagination = ({
                 </div>
 
                 <PaginationItem
-                    icon={<ChevronRightIcon className={iconClass} />}
+                    icon={<ChevronRightIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(currentPage + 1)}
                 />
                 <PaginationItem
-                    icon={<ChevronDoubleRightIcon className={iconClass} />}
+                    icon={<ChevronDoubleRightIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(numPages - 1)}
                 />
 
                 <Toolbar
-                    openIcon={<EllipsisHorizontalCircleIcon className="h-6 w-6 animate-wiggle" />}
+                    openIcon={<EllipsisHorizontalCircleIcon className="h-5 w-5 animate-wiggle transform-gpu" />}
                     dropdown={[
                         { title: 'Results per page' },
                         {
                             icon: <DocumentChartBarIcon className={iconClass} />,
                             label: 20,
-                            onClick: () => changeResultsPerPage && changeResultsPerPage(20),
+                            onClick: () => changeResultsPerPage(20),
                             selected: resultsPerPage === 20
                         },
                         {
                             icon: <DocumentChartBarIcon className={iconClass} />,
-                            label: 30,
-                            onClick: () => changeResultsPerPage && changeResultsPerPage(30),
-                            selected: resultsPerPage === 30
-                        },
-                        {
-                            icon: <DocumentChartBarIcon className={iconClass} />,
                             label: 40,
-                            onClick: () => changeResultsPerPage && changeResultsPerPage(40),
+                            onClick: () => changeResultsPerPage(40),
                             selected: resultsPerPage === 40
                         },
                         {
                             icon: <DocumentChartBarIcon className={iconClass} />,
                             label: `All (${totalResults})`,
-                            onClick: () => changeResultsPerPage && changeResultsPerPage(totalResults),
+                            onClick: () => changeResultsPerPage(totalResults),
                             selected: resultsPerPage === totalResults
+                        },
+                        { divider: true },
+                        { title: 'Sort' },
+                        {
+                            icon: <BarsArrowUpIcon className={iconClass} />,
+                            label: 'Ascending',
+                            onClick: () => changeSortDirection('ASC'),
+                            selected: sortDirection === 'ASC'
+                        },
+                        {
+                            icon: <BarsArrowDownIcon className={iconClass} />,
+                            label: 'Descending',
+                            onClick: () => changeSortDirection('DESC'),
+                            selected: sortDirection === 'DESC'
                         }
                     ]}
                 />
             </div>
-            <div className="w-full flex flex-row justify-center mt-2">
-                <p className="inline-block text-neutral-600 text-xs font-normal antialiased">
+            <div className="w-full flex flex-row justify-center mb-4">
+                <p className="inline-block text-neutral-500 text-xs font-normal antialiased">
                     Displaying{' '}
-                    <span className="font-bold">
+                    <span className="font-medium">
                         {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
                     </span>{' '}
-                    of <span className="font-bold">{totalResults}</span> results
+                    of <span className="font-medium">{totalResults}</span> results
                 </p>
             </div>
         </div>

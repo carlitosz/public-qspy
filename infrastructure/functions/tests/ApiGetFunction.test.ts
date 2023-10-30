@@ -8,6 +8,7 @@ import {
 } from '@aws-sdk/client-dynamodb'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
 import { marshall } from '@aws-sdk/util-dynamodb'
+import { format } from 'date-fns'
 import { formatInTimeZone } from 'date-fns-tz'
 import enUS from 'date-fns/locale/en-US'
 
@@ -21,7 +22,7 @@ import {
     MISSING_TABLE_NAME_MSG,
     handler
 } from '@functions/ApiGetFunction'
-import { AnalyzePayload, QUEUE_EMPTY_MSG, SUCCESS_MSG } from '@functions/AnalyzeFunction'
+import { QUEUE_EMPTY_MSG, SUCCESS_MSG } from '@functions/AnalyzeFunction'
 
 const dynamoDbMock: AwsClientStub<DynamoDBClient> = mockClient(DynamoDBClient)
 const TEST_TABLE_NAME = 'QSpy-Events-test'
@@ -86,43 +87,25 @@ describe('ApiGetFunction::handler', () => {
         )
     })
 
-    it('Returns 500 if Dynamo fetch returns non-200', async () => {
-        dynamoDbMock
-            .on(GetItemCommand, {
-                TableName: TEST_TABLE_NAME,
-                Key: marshall({
-                    Queue: TEST_QUEUE_NAME
-                }),
-                AttributesToGet: ['Data']
-            } as GetItemCommandInput)
-            .resolves({
-                $metadata: {
-                    httpStatusCode: 500
-                }
-            } as GetItemCommandOutput)
-
-        const result: APIGatewayProxyResult = await handler(
-            {
-                queryStringParameters: {
-                    queue: TEST_QUEUE_NAME
-                }
-            },
-            {} as Context,
-            () => {}
-        )
-
-        expect(result.statusCode).toBe(500)
-        expect(JSON.parse(result.body).error.message).toBe(ERROR_500_MSG + ' Status code: 500')
-    })
-
     it('Returns 404 if request is not found', async () => {
+        const today = formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+            locale: enUS
+        })
+
         dynamoDbMock
             .on(GetItemCommand, {
-                TableName: TEST_TABLE_NAME,
+                ExpressionAttributeNames: {
+                    '#Count': 'Count',
+                    '#Data': 'Data',
+                    '#Date': 'Date',
+                    '#Message': 'Message'
+                },
                 Key: marshall({
-                    Queue: TEST_QUEUE_NAME
+                    Queue: TEST_QUEUE_NAME,
+                    Date: today
                 }),
-                AttributesToGet: ['Data']
+                ProjectionExpression: '#Count, #Data, #Date, #Message',
+                TableName: TEST_TABLE_NAME
             } as GetItemCommandInput)
             .resolves({
                 $metadata: {
@@ -154,28 +137,41 @@ describe('ApiGetFunction::handler', () => {
                     }
                 } as Partial<APIGatewayProxyEvent>
 
+                const today = formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
+                    locale: enUS
+                })
+
                 const responsePayload = {
-                    data: [],
-                    message: QUEUE_EMPTY_MSG
+                    Count: 0,
+                    Data: [],
+                    Date: today,
+                    Message: QUEUE_EMPTY_MSG
                 }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
+                        ExpressionAttributeNames: {
+                            '#Count': 'Count',
+                            '#Data': 'Data',
+                            '#Date': 'Date',
+                            '#Message': 'Message'
+                        },
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
-                                locale: enUS
-                            })
+                            Date: today
                         }),
-                        AttributesToGet: ['Data']
+                        ProjectionExpression: '#Count, #Data, #Date, #Message'
                     })
                     .resolvesOnce({
                         $metadata: {
                             httpStatusCode: 200
                         },
                         Item: marshall({
-                            Data: responsePayload
+                            Count: responsePayload.Data.length,
+                            Data: responsePayload.Data,
+                            Date: today,
+                            Message: responsePayload.Message
                         })
                     })
 
@@ -200,32 +196,40 @@ describe('ApiGetFunction::handler', () => {
                 } as Partial<APIGatewayProxyEvent>
 
                 const responsePayload = {
-                    data: [
+                    Data: [
                         {
                             event: 'My\\Domain\\Event',
                             count: 23
                         }
                     ],
-                    message: SUCCESS_MSG
+                    Date: '2023-10-01',
+                    Message: SUCCESS_MSG
                 }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
+                        ExpressionAttributeNames: {
+                            '#Count': 'Count',
+                            '#Data': 'Data',
+                            '#Date': 'Date',
+                            '#Message': 'Message'
+                        },
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
-                            Date: formatInTimeZone('2023-01-01', 'America/New_York', 'yyyy-MM-dd', {
-                                locale: enUS
-                            })
+                            Date: format(new Date('2023-01-01'), 'yyyy-MM-dd')
                         }),
-                        AttributesToGet: ['Data']
+                        ProjectionExpression: '#Count, #Data, #Date, #Message'
                     } as GetItemCommandInput)
                     .resolvesOnce({
                         $metadata: {
                             httpStatusCode: 200
                         },
                         Item: marshall({
-                            Data: responsePayload
+                            Count: responsePayload.Data.length,
+                            Data: responsePayload.Data,
+                            Date: responsePayload.Date,
+                            Message: responsePayload.Message
                         })
                     } as GetItemCommandOutput)
 

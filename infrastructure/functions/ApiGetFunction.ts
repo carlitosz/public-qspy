@@ -12,7 +12,7 @@ import {
     GetItemCommandOutput
 } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
-import { isValid } from 'date-fns'
+import { isValid, format } from 'date-fns'
 import { formatInTimeZone } from 'date-fns-tz'
 import enUS from 'date-fns/locale/en-US'
 
@@ -82,16 +82,21 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         )
     }
 
+    console.log(`Received query parameters: `, event.queryStringParameters)
+
     const input: GetItemCommandInput = {
-        TableName: env.tableName || process.env.TABLE_NAME,
+        ExpressionAttributeNames: { '#Count': 'Count', '#Data': 'Data', '#Date': 'Date', '#Message': 'Message' },
         Key: marshall({
             Queue: queue,
             Date: date
-                ? formatInTimeZone(date.trim(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS })
+                ? format(new Date(date.trim()), 'yyyy-MM-dd')
                 : formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS })
         }),
-        AttributesToGet: ['Data']
+        ProjectionExpression: '#Count, #Data, #Date, #Message',
+        TableName: env.tableName || process.env.TABLE_NAME
     }
+
+    console.log(`GetItemCommandInput: `, JSON.stringify(input))
 
     try {
         const response: GetItemCommandOutput = await dynamodbClient.send(new GetItemCommand(input))
@@ -101,7 +106,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 500,
                 JSON.stringify({
                     error: {
-                        message: ERROR_500_MSG + ' Status code: ' + response.$metadata.httpStatusCode
+                        message: ERROR_500_MSG
                     }
                 })
             )
@@ -111,8 +116,9 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
             return respondWith(404, JSON.stringify({ error: { message: ERROR_404_MSG } }))
         }
 
-        return respondWith(200, JSON.stringify(unmarshall(response.Item).Data))
+        return respondWith(200, JSON.stringify(unmarshall(response.Item)))
     } catch (e: unknown) {
+        console.log(JSON.stringify(e))
         return respondWith(500, JSON.stringify({ error: { message: ERROR_500_MSG } }))
     }
 }

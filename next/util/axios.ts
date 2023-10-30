@@ -17,7 +17,7 @@ export interface Config<Data = unknown, Error = unknown>
     fallbackData?: Data
 }
 
-export const request = <Data = unknown, Error = unknown>(
+export const useRequest = <Data = unknown, Error = unknown>(
     request: Request,
     { fallbackData, ...config }: Config<Data, Error> = {}
 ): Return<Data, Error> => {
@@ -46,10 +46,6 @@ export const request = <Data = unknown, Error = unknown>(
         isValidating,
         mutate
     }
-}
-
-interface ErrorResponse {
-    message: string
 }
 
 interface ServerErrorResponse {
