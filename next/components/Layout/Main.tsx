@@ -6,7 +6,7 @@ interface MainProps {
 
 const Main = ({ children }: MainProps): JSX.Element => {
     return (
-        <main className="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+        <main className="flex flex-grow h-screen overflow-y-scroll bg-neutral-100 -ml-64 md:ml-0 transition-all duration-150 ease-in">
             {children}
         </main>
     )

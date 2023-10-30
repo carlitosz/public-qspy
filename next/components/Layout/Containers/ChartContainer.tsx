@@ -5,14 +5,13 @@ import Pagination from '@/components/Pagination/Pagination'
 import { paginate, sort } from '@/util/paginate'
 
 import ChartContainerHeader from '@/components/Layout/Containers/ChartContainerHeader'
-import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
+import BarChartSkeleton from '@/components/ApexChart/BarChartSkeleton'
 
 import type { SortDirection, DomainEvent, GetEventsResponse, Orientation } from 'types'
 
 interface ChartContainerProps {
     data: GetEventsResponse | undefined
     isLoading: boolean
-    skeleton: React.ReactNode
     title: string
     withToolbar?: boolean
 }
@@ -48,14 +47,14 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
 
     if (isLoading || !pages || !data) {
         return (
-            <div className="border border-neutral-200 rounded-xl bg-neutral-50">
-                <ChartSkeleton />
+            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+                <BarChartSkeleton orientation={orientation} />
             </div>
         )
     }
 
     return (
-        <div className="border border-neutral-200 rounded-xl bg-neutral-50">
+        <div className="flex flex-col border border-neutral-200 rounded-xl bg-neutral-50 h-full">
             <ChartContainerHeader
                 data={sorted}
                 changeOrientation={(desiredOrientation: Orientation) => {

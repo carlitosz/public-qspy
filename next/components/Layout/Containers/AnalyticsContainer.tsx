@@ -3,6 +3,7 @@ import { subDays } from 'date-fns'
 import { format } from 'date-fns-tz'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
+import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
 
 import { GetEventsResponse } from 'types'
 import { useRequest } from '@/util/axios'
@@ -34,14 +35,22 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
         return <>Error occurred.</>
     }
 
-    if (!todaysData || isValidating || !yesterdaysData) {
-        return <></>
+    if (isValidating || !yesterdaysData || !todaysData) {
+        return (
+            <>
+                <AnalyticsCardSkeleton borderRadius="rounded-l-xl" />
+                <AnalyticsCardSkeleton />
+                <AnalyticsCardSkeleton />
+                <AnalyticsCardSkeleton borderRadius="rounded-r-xl" />
+            </>
+        )
     }
 
     return (
         <>
             <AnalyticsCard
                 analytic={todaysData.Count}
+                borderRadius="rounded-l-xl"
                 data={{ now: todaysData.Count, before: yesterdaysData.Count }}
                 meta={`from ${yesterdaysData.Count} yesterday`}
                 title="Total"
@@ -53,7 +62,12 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
                 title="Past week"
             />
             <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
+            <AnalyticsCard
+                analytic={todaysData.Date}
+                borderRadius="rounded-r-xl"
+                meta={todaysData.Message}
+                title="Invocation Date & Status"
+            />
         </>
     )
 }

@@ -42,11 +42,16 @@ const Pagination = ({
     const selected = `text-sm font-normal leading-none cursor-pointer text-indigo-600 hover:text-neutral-500 border-t-2 p-4 border-indigo-500 duration-150 ease-out hover:ease-in`
 
     return (
-        <div className="w-full flex flex-col align-center justify-center">
-            <div className="w-full flex flex-row justify-center items-center">
-                <PaginationItem icon={<ChevronDoubleLeftIcon className={iconClass} />} onClick={() => goToPage(0)} />
+        <div className="flex flex-col align-center justify-center">
+            <div className="flex flex-row justify-center items-center">
                 <PaginationItem
-                    icon={<ChevronLeftIcon className={iconClass} />}
+                    icon={<ChevronDoubleLeftIcon className="h-5 w-5" />}
+                    klass={unselected}
+                    onClick={() => goToPage(0)}
+                />
+                <PaginationItem
+                    icon={<ChevronLeftIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(currentPage - 1)}
                 />
 
@@ -62,16 +67,18 @@ const Pagination = ({
                 </div>
 
                 <PaginationItem
-                    icon={<ChevronRightIcon className={iconClass} />}
+                    icon={<ChevronRightIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(currentPage + 1)}
                 />
                 <PaginationItem
-                    icon={<ChevronDoubleRightIcon className={iconClass} />}
+                    icon={<ChevronDoubleRightIcon className="h-5 w-5" />}
+                    klass={unselected}
                     onClick={() => goToPage(numPages - 1)}
                 />
 
                 <Toolbar
-                    openIcon={<EllipsisHorizontalCircleIcon className="h-6 w-6 animate-wiggle" />}
+                    openIcon={<EllipsisHorizontalCircleIcon className="h-5 w-5 animate-wiggle transform-gpu" />}
                     dropdown={[
                         { title: 'Results per page' },
                         {
@@ -109,7 +116,7 @@ const Pagination = ({
                     ]}
                 />
             </div>
-            <div className="w-full flex flex-row justify-center mt-2">
+            <div className="w-full flex flex-row justify-center mb-4">
                 <p className="inline-block text-neutral-500 text-xs font-normal antialiased">
                     Displaying{' '}
                     <span className="font-medium">

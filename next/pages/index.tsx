@@ -4,7 +4,6 @@ import { format } from 'date-fns'
 import AnalyticsContainer from '@/components/Layout/Containers/AnalyticsContainer'
 import Container from '@/components/Layout/Containers/Container'
 import ChartContainer from '@/components/Layout/Containers/ChartContainer'
-import ChartSkeleton from '@/components/ApexChart/ChartSkeleton'
 import { useRequest } from '@/util/axios'
 
 import type { NextPage } from 'next'
@@ -34,25 +33,12 @@ const Home: NextPage = () => {
     }
 
     return (
-        <Container mainTitle="Daily Analytics">
-            <div className="grid grid-cols-4 gap-2 mb-4">
+        <Container mainTitle={QUEUE_NAME}>
+            <div className="flex flex-inline flex-nowrap mb-6 h-1/6">
                 <AnalyticsContainer queueName={QUEUE_NAME} todaysData={data} />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-                <ChartContainer
-                    data={data}
-                    isLoading={isValidating}
-                    skeleton={<ChartSkeleton />}
-                    title={QUEUE_NAME}
-                    withToolbar={true}
-                />
-                <ChartContainer
-                    data={data}
-                    isLoading={isValidating}
-                    skeleton={<ChartSkeleton />}
-                    title={QUEUE_NAME}
-                    withToolbar={true}
-                />
+            <div className="h-2/3">
+                <ChartContainer data={data} isLoading={isValidating} title={QUEUE_NAME} withToolbar={true} />
             </div>
         </Container>
     )
