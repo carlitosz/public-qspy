@@ -49,11 +49,11 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
     return (
         <>
             <AnalyticsCard
-                analytic={todaysData.Count}
+                analytic={todaysData.Total}
                 border="border"
                 borderRadius="rounded-l-xl"
-                data={{ now: todaysData.Count, before: yesterdaysData.Count }}
-                meta={`from ${yesterdaysData.Count} yesterday`}
+                data={{ now: todaysData.Total, before: yesterdaysData.Total }}
+                meta={`from ${yesterdaysData.Total} yesterday`}
                 title="Total"
             />
             <AnalyticsCard
