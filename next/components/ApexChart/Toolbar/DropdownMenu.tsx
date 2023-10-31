@@ -8,13 +8,14 @@ import type { DropdownItem } from '@/components/ApexChart/Toolbar/DropdownMenuIt
 
 interface DropdownProps {
     closeIcon?: React.ReactNode
+    disabled: boolean
     menuItems: DropdownItem[]
     openIcon?: React.ReactNode
 }
 
 const iconClass = 'h-5 w-5 animate-wiggle transform-gpu'
 
-const Dropdown = ({ closeIcon, menuItems, openIcon }: DropdownProps): JSX.Element => {
+const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -41,7 +42,7 @@ const Dropdown = ({ closeIcon, menuItems, openIcon }: DropdownProps): JSX.Elemen
     return (
         <div
             aria-hidden={true}
-            className="relative inline-block cursor-pointer rounded-full"
+            className="relative inline-block rounded-full"
             onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -52,9 +53,12 @@ const Dropdown = ({ closeIcon, menuItems, openIcon }: DropdownProps): JSX.Elemen
             <button
                 className={`${
                     open ? 'bg-neutral-200' : ''
-                } p-2 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full`}
+                } p-2 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full ${
+                    disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+                }`}
                 id="menu-button"
                 type="button"
+                disabled={disabled}
             >
                 {open
                     ? closeIcon ?? <XMarkIcon className={iconClass} />

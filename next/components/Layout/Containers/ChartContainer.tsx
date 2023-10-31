@@ -6,6 +6,7 @@ import { paginate, sort } from '@/util/paginate'
 
 import ChartContainerHeader from '@/components/Layout/Containers/ChartContainerHeader'
 import BarChartSkeleton from '@/components/ApexChart/BarChartSkeleton'
+import EmptyChartMessage from '@/components/ApexChart/EmptyChartMessage'
 
 import type { SortDirection, DomainEvent, GetEventsResponse, Orientation } from 'types'
 
@@ -31,8 +32,9 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
             const sorted = sort(data.Data, 'DESC', 'count')
 
             setSorted(sorted)
-            setRange(sorted[0].count)
             setTotalResults(sorted.length)
+
+            sorted.length > 0 ? setRange(sorted && sorted[0].count) : setRange(0)
         }
     }, [data])
 
@@ -47,8 +49,16 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
 
     if (isLoading || !pages || !data) {
         return (
-            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+            <div role="status" className="flex flex-col border border-neutral-200 rounded-xl bg-neutral-50 h-max">
                 <BarChartSkeleton orientation={orientation} />
+            </div>
+        )
+    }
+
+    if (totalResults === 0) {
+        return (
+            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+                <EmptyChartMessage />
             </div>
         )
     }

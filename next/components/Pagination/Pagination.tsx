@@ -41,6 +41,10 @@ const Pagination = ({
     const unselected = `text-sm font-normal leading-none cursor-pointer text-neutral-500 hover:text-indigo-500 border-t-2 border-transparent hover:border-indigo-500 p-4 duration-150 ease-out hover:ease-in`
     const selected = `text-sm font-normal leading-none cursor-pointer text-indigo-600 hover:text-neutral-500 border-t-2 p-4 border-indigo-500 duration-150 ease-out hover:ease-in`
 
+    if (totalResults === 0) {
+        return <></>
+    }
+
     return (
         <div className="flex flex-col align-center justify-center">
             <div className="flex flex-row justify-center items-center">
@@ -78,7 +82,7 @@ const Pagination = ({
                 />
 
                 <Toolbar
-                    openIcon={<EllipsisHorizontalCircleIcon className="h-5 w-5 animate-wiggle transform-gpu" />}
+                    disabled={totalResults === 0}
                     dropdown={[
                         { title: 'Results per page' },
                         {
@@ -114,6 +118,7 @@ const Pagination = ({
                             selected: sortDirection === 'DESC'
                         }
                     ]}
+                    openIcon={<EllipsisHorizontalCircleIcon className="h-5 w-5 animate-wiggle transform-gpu" />}
                 />
             </div>
             <div className="w-full flex flex-row justify-center mb-4">

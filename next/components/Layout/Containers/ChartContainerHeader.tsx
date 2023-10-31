@@ -54,6 +54,7 @@ const ChartContainerHeader = ({
             <p className="text-neutral-500 text-sm font-medium antialiased">{title}</p>
             {withToolbar && (
                 <Toolbar
+                    disabled={data.length === 0}
                     dropdown={[
                         { title: 'Orientation' },
                         {

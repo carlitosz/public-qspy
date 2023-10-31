@@ -137,7 +137,8 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             labels: {
                 show: true,
                 maxWidth: 200
-            }
+            },
+            tickAmount: range + 1
         }
     }
 }

@@ -50,6 +50,7 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
         <>
             <AnalyticsCard
                 analytic={todaysData.Count}
+                border="border"
                 borderRadius="rounded-l-xl"
                 data={{ now: todaysData.Count, before: yesterdaysData.Count }}
                 meta={`from ${yesterdaysData.Count} yesterday`}
@@ -57,13 +58,20 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
             />
             <AnalyticsCard
                 analytic={1092}
+                border="border-y border-r"
                 data={{ now: 1092, before: 956 }}
                 meta={`from ${562} the previous week`}
                 title="Past week"
             />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
             <AnalyticsCard
                 analytic={todaysData.Date}
+                border="border-y border-r"
+                meta={todaysData.Message}
+                title="Invocation Date & Status"
+            />
+            <AnalyticsCard
+                analytic={todaysData.Date}
+                border="border-y border-r"
                 borderRadius="rounded-r-xl"
                 meta={todaysData.Message}
                 title="Invocation Date & Status"

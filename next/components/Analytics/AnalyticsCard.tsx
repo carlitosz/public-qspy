@@ -5,6 +5,7 @@ import MinusCircleIcon from '@heroicons/react/24/outline/MinusCircleIcon'
 
 interface AnalyticsCardProps {
     analytic: number | string
+    border: string
     borderRadius?: string
     data?: {
         now: number
@@ -14,13 +15,11 @@ interface AnalyticsCardProps {
     title: string
 }
 
-const AnalyticsCard = ({ analytic, borderRadius, data, meta, title }: AnalyticsCardProps): JSX.Element => {
+const AnalyticsCard = ({ analytic, border, borderRadius, data, meta, title }: AnalyticsCardProps): JSX.Element => {
     const change: number | undefined = data && ((data.now - data.before) / data.before) * 100
 
     return (
-        <div
-            className={`flex flex-col border border-neutral-200 ${borderRadius} bg-neutral-50 font-medium antialiased p-6 w-1/4`}
-        >
+        <div className={`flex flex-col ${border} ${borderRadius} bg-neutral-50 font-medium antialiased p-6 w-1/4`}>
             <p className="text-neutral-500 text-sm">{title}</p>
             <p className="text-indigo-500 text-3xl my-4">{analytic.toLocaleString()}</p>
             <div className="flex justify-start">
