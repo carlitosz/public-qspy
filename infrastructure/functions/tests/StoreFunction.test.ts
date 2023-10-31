@@ -56,11 +56,14 @@ describe('StoreFunction::handler', () => {
             data: [
                 {
                     event: 'My\\Domain\\Event\\Test',
-                    count: 23
+                    count: 23,
+                    fs: '2023-10-30 20:56:06',
+                    ls: '2023-10-30 20:56:06'
                 }
             ],
             message: SUCCESS_MSG,
-            queue: TEST_QUEUE_NAME
+            queue: TEST_QUEUE_NAME,
+            total: 1
         } as AnalyzePayload
 
         dynamoDbMock
@@ -73,7 +76,8 @@ describe('StoreFunction::handler', () => {
                     }),
                     Data: payload.data,
                     Message: payload.message,
-                    Expires: getUnixTime(addMonths(new Date(), 6))
+                    Expires: getUnixTime(addMonths(new Date(), 6)),
+                    Total: payload.total
                 })
             })
             .resolvesOnce({
@@ -102,11 +106,14 @@ describe('StoreFunction::handler', () => {
             data: [
                 {
                     event: 'My\\Domain\\Event\\Test',
-                    count: 23
+                    count: 23,
+                    fs: '2023-10-30 20:56:06',
+                    ls: '2023-10-30 20:56:06'
                 }
             ],
             message: SUCCESS_MSG,
-            queue: TEST_QUEUE_NAME
+            queue: TEST_QUEUE_NAME,
+            total: 1
         } as AnalyzePayload
 
         dynamoDbMock
@@ -114,13 +121,13 @@ describe('StoreFunction::handler', () => {
                 TableName: TEST_TABLE_NAME,
                 Item: marshall({
                     Queue: TEST_QUEUE_NAME,
-                    Count: payload.data.length,
                     Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', {
                         locale: enUS
                     }),
                     Data: payload.data,
                     Message: payload.message,
-                    Expires: getUnixTime(addMonths(new Date(), 6))
+                    Expires: getUnixTime(addMonths(new Date(), 6)),
+                    Total: payload.total
                 })
             })
             .resolves({

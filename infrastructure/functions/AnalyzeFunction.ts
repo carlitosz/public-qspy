@@ -7,7 +7,7 @@ import {
     ReceiveMessageCommand,
     ReceiveMessageCommandOutput
 } from '@aws-sdk/client-sqs'
-import { millisecondsToSeconds } from 'date-fns'
+import { millisecondsToSeconds, isAfter, isBefore } from 'date-fns'
 
 import type { Context, Handler } from 'aws-lambda'
 
@@ -30,12 +30,21 @@ export declare type LambdaEvent = { queueUrl: string }
 export declare type DomainEvent = {
     event: string
     count: number
+    fs: string
+    ls: string
 }
 
 export declare type AnalyzePayload = {
     data: [DomainEvent] | []
     message: string
     queue: string
+    total: number
+}
+
+declare type CollectionType = {
+    count: number
+    fs: string
+    ls: string
 }
 
 /**
@@ -93,17 +102,55 @@ export const receiveMessages = async (queueUrl: string): Promise<Message[] | und
 }
 
 /**
- * Returns an array of event types.
+ * Creates an array of domain event name, date of occurence.
  */
-export const getEventsFromMessages = (messages: Message[]): string[] => {
+export const getEventsFromMessages = (messages: Message[]): { name: string; occurredOn: string }[] => {
     return messages
         .filter((m: Message) => m !== undefined)
-        .map(({ Body }: Message): string => {
+        .map(({ Body }: Message): { name: string; occurredOn: string } => {
             const parsedBody = JSON.parse(Body as string)
-            const { name }: { name: string } = JSON.parse(parsedBody.Message)
+            const { name, occurredOn }: { name: string; occurredOn: string } = JSON.parse(parsedBody.Message)
 
-            return name
+            return {
+                name,
+                occurredOn
+            }
         })
+}
+
+/**
+ * Processes messages from the queue by adding them to the global collection
+ * and returns the total number of messages processed.
+ */
+export const processMessages = async (queueUrl: string, collection: Map<string, CollectionType>): Promise<number> => {
+    const messages: Message[] | undefined = await receiveMessages(queueUrl)
+    let total: number = 0
+
+    if (messages) {
+        const events: { name: string; occurredOn: string }[] = getEventsFromMessages(messages)
+
+        for (const event of events) {
+            const existing: CollectionType | undefined = collection.get(event.name)
+
+            if (existing) {
+                collection.set(event.name, {
+                    count: existing.count + 1,
+                    fs: isBefore(new Date(event.occurredOn), new Date(existing.fs)) ? event.occurredOn : existing.fs,
+                    ls: isAfter(new Date(event.occurredOn), new Date(existing.ls)) ? event.occurredOn : existing.ls
+                })
+            } else {
+                collection.set(event.name, {
+                    count: 1,
+                    fs: event.occurredOn,
+                    ls: event.occurredOn
+                })
+            }
+
+            ++total
+        }
+    }
+
+    return total
 }
 
 /**
@@ -133,54 +180,65 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
     const response: QueueAttributesType = await getNumberOfMessagesInQueue(queueUrl)
     let { numberOfMessages } = response
     const { visibilityTimeout } = response
+    let total: number = 0
 
     if (numberOfMessages === 0) {
         return {
             data: [],
             message: QUEUE_EMPTY_MSG,
-            queue
+            queue,
+            total
         }
     }
 
-    const collection = new Map<string, number>()
+    const collection = new Map<string, CollectionType>()
 
     do {
         const batches: number = Math.floor(numberOfMessages / BATCH_SIZE)
 
+        // If there are less than 10 messages, process them as the code above will resolve to 0
+        // and no batches will be processed.
+        if (numberOfMessages < BATCH_SIZE) {
+            total += await processMessages(queueUrl, collection)
+        }
+
         for (let i = 0; i < batches; i++) {
-            const messages: Message[] | undefined = await receiveMessages(queueUrl)
-
-            if (messages) {
-                const events: string[] = getEventsFromMessages(messages)
-
-                for (const event of events) {
-                    const existing: number | undefined = collection.get(event)
-                    existing ? collection.set(event, existing + 1) : collection.set(event, 1)
-                }
-            }
+            total += await processMessages(queueUrl, collection)
 
             const timeRemaining: number = remainingTime(context)
             const elapsedTime = fnTimeout - timeRemaining
 
             // The function should only process messages up to the queue visibility timeout.
             if (elapsedTime > visibilityTimeout) {
-                const data = Array.from(collection).map(([event, count]) => ({ event, count }))
+                const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
+                    event,
+                    count,
+                    fs,
+                    ls
+                }))
 
                 return {
                     data: data as [DomainEvent],
                     message: VISIBILITY_TIMEOUT_EXPIRED_MSG,
-                    queue
+                    queue,
+                    total
                 }
             }
 
             // Are we running out of time? Do not let the function timeout.
             if (timeRemaining < TIME_UNTIL_TIMEOUT) {
-                const data = Array.from(collection).map(([event, count]) => ({ event, count }))
+                const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
+                    event,
+                    count,
+                    fs,
+                    ls
+                }))
 
                 return {
                     data: data as [DomainEvent],
                     message: FUNCTION_TIMEOUT_MSG,
-                    queue
+                    queue,
+                    total
                 }
             }
         }
@@ -190,11 +248,17 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
         numberOfMessages = res.numberOfMessages
     } while (numberOfMessages > 0)
 
-    const data = Array.from(collection).map(([event, count]) => ({ event, count }))
+    const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
+        event,
+        count,
+        fs,
+        ls
+    }))
 
     return {
         data: data as [DomainEvent],
         message: SUCCESS_MSG,
-        queue
+        queue,
+        total
     }
 }

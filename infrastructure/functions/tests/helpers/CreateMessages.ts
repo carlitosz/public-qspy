@@ -17,13 +17,20 @@ export const createMessages = (numMessages: number): Message[] => {
     const messages: Message[] = []
 
     for (let i = 0; i < numMessages; i++) {
-        messages.push({
-            MessageId: uuidv4(),
-            Body: JSON.stringify({
-                Message: JSON.stringify({ name: EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)] })
-            })
-        })
+        messages.push(createMessage(EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)]))
     }
 
     return messages
+}
+
+export const createMessage = (name: string, occurredOn?: string | undefined): Message => {
+    return {
+        MessageId: uuidv4(),
+        Body: JSON.stringify({
+            Message: JSON.stringify({
+                name,
+                occurredOn: occurredOn ?? '2023-10-30 20:00:00'
+            })
+        })
+    }
 }

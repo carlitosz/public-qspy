@@ -5,7 +5,7 @@ import { formatInTimeZone } from 'date-fns-tz'
 import enUS from 'date-fns/locale/en-US'
 
 import type { Handler } from 'aws-lambda'
-import type { AnalyzePayload, DomainEvent } from './AnalyzeFunction'
+import type { AnalyzePayload } from './AnalyzeFunction'
 
 export const FAILED_TO_STORE_PAYLOAD_MSG = 'Failed to store payload with status code: '
 export const MISSING_TABLE_NAME_MSG = 'Missing environment variable: TABLE_NAME'
@@ -36,18 +36,18 @@ export const handler: Handler = async (event: LambdaEvent): Promise<void> => {
         throw new Error(BAD_PAYLOAD_MSG + responseContext.statusCode)
     }
 
-    const { data, message, queue }: { data: [DomainEvent] | []; message: string; queue: string } = responsePayload
+    const { data, message, queue, total }: AnalyzePayload = responsePayload
 
     const result: PutItemCommandOutput = await dynamodbClient.send(
         new PutItemCommand({
             TableName: env.tableName || process.env.TABLE_NAME,
             Item: marshall({
-                Queue: queue,
-                Count: data.length,
-                Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS }),
                 Data: data,
+                Date: formatInTimeZone(new Date(), 'America/New_York', 'yyyy-MM-dd', { locale: enUS }),
+                Expires: getUnixTime(addMonths(new Date(), 6)),
                 Message: message,
-                Expires: getUnixTime(addMonths(new Date(), 6))
+                Queue: queue,
+                Total: total
             })
         })
     )

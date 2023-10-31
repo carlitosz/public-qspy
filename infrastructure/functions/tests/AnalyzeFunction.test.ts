@@ -29,7 +29,7 @@ import {
     SUCCESS_MSG,
     VISIBILITY_TIMEOUT_EXPIRED_MSG
 } from '@functions/AnalyzeFunction'
-import { createMessages } from '@testHelpers/CreateMessages'
+import { createMessages, createMessage } from '@testHelpers/CreateMessages'
 
 const sqsMock: AwsClientStub<SQSClient> = mockClient(SQSClient)
 const TEST_QUEUE_URL =
@@ -177,7 +177,7 @@ describe('AnalyzeFunction::handler', () => {
          */
         timeMock.mockReturnValueOnce(8000).mockReturnValueOnce(2000)
 
-        const { data, message, queue }: AnalyzePayload = await handler(
+        const { data, message, queue, total }: AnalyzePayload = await handler(
             { queueUrl: TEST_QUEUE_URL } as LambdaEvent,
             awsContext,
             () => {}
@@ -185,6 +185,7 @@ describe('AnalyzeFunction::handler', () => {
 
         expect(message).toBe(FUNCTION_TIMEOUT_MSG)
         expect(data.length).toBeGreaterThan(0)
+        expect(total).toBeGreaterThan(0)
         expect(queue).toBe(TEST_QUEUE_NAME)
         expect(sqsMock).toHaveReceivedCommandTimes(GetQueueAttributesCommand, 1)
         expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 1)
@@ -223,7 +224,7 @@ describe('AnalyzeFunction::handler', () => {
             }
         })
 
-        const { data, message, queue }: AnalyzePayload = await handler(
+        const { data, message, queue, total }: AnalyzePayload = await handler(
             { queueUrl: TEST_QUEUE_URL } as LambdaEvent,
             { getRemainingTimeInMillis: () => 3000 } as AWSContext,
             () => {}
@@ -232,6 +233,7 @@ describe('AnalyzeFunction::handler', () => {
         expect(sqsMock).toHaveReceivedCommandTimes(GetQueueAttributesCommand, 2)
         expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 1)
         expect(data.length).toBeGreaterThan(0)
+        expect(total).toBeGreaterThan(0)
         expect(message).toEqual(SUCCESS_MSG)
         expect(queue).toEqual(TEST_QUEUE_NAME)
         data.forEach((d: DomainEvent) => {
@@ -277,7 +279,7 @@ describe('AnalyzeFunction::handler', () => {
                 }
             })
 
-        const { data, message, queue }: AnalyzePayload = await handler(
+        const { data, message, queue, total }: AnalyzePayload = await handler(
             { queueUrl: TEST_QUEUE_URL } as LambdaEvent,
             { getRemainingTimeInMillis: () => 3000 } as AWSContext,
             () => {}
@@ -286,12 +288,65 @@ describe('AnalyzeFunction::handler', () => {
         expect(sqsMock).toHaveReceivedCommandTimes(GetQueueAttributesCommand, 2)
         expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 2)
         expect(data.length).toBeGreaterThan(0)
+        expect(total).toBeGreaterThan(0)
         expect(message).toEqual(SUCCESS_MSG)
         expect(queue).toEqual(TEST_QUEUE_NAME)
         data.forEach((d: DomainEvent) => {
             expect(d).toHaveProperty('count')
             expect(d).toHaveProperty('event')
         })
+    })
+
+    it('Sets firstSeen and lastSeen dates for each captured event', async () => {
+        sqsMock
+            .on(GetQueueAttributesCommand)
+            .resolvesOnce({
+                Attributes: {
+                    ApproximateNumberOfMessages: '5',
+                    VisibilityTimeout: '300'
+                },
+                $metadata: {
+                    httpStatusCode: 200
+                }
+            })
+            .resolvesOnce({
+                Attributes: {
+                    ApproximateNumberOfMessages: '0',
+                    VisibilityTimeout: '300'
+                },
+                $metadata: {
+                    httpStatusCode: 200
+                }
+            })
+
+        sqsMock.on(ReceiveMessageCommand).resolvesOnce({
+            Messages: [
+                // firstSeen: Oct 19th, lastSeen: Oct 31st
+                createMessage('Event', '2023-10-19 20:00:00'),
+                createMessage('Event', '2023-10-30 20:00:00'),
+                createMessage('Event', '2023-10-28 20:00:00'),
+                createMessage('Event', '2023-10-27 20:00:00'),
+                createMessage('Event', '2023-10-31 20:00:00')
+            ],
+            $metadata: {
+                httpStatusCode: 200
+            }
+        })
+
+        const { data, message, queue, total }: AnalyzePayload = await handler(
+            { queueUrl: TEST_QUEUE_URL } as LambdaEvent,
+            { getRemainingTimeInMillis: () => 3000 } as AWSContext,
+            () => {}
+        )
+
+        expect(sqsMock).toHaveReceivedCommandTimes(GetQueueAttributesCommand, 2)
+        expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 1)
+        expect(data.length).toEqual(1)
+        expect(data[0]?.fs).toEqual('2023-10-19 20:00:00')
+        expect(data[0]?.ls).toEqual('2023-10-31 20:00:00')
+        expect(total).toEqual(5)
+        expect(message).toEqual(SUCCESS_MSG)
+        expect(queue).toEqual(TEST_QUEUE_NAME)
     })
 })
 
@@ -413,21 +468,34 @@ describe('AnalyzeFunction::receiveMessages', () => {
 })
 
 describe('AnalyzeFuntion::getEventsFromMessages', () => {
-    it('Returns an array of event names', () => {
+    it('Returns an array of event name and occurredOn', () => {
         const messages: Message[] = [
             {
                 MessageId: '1',
-                Body: JSON.stringify({ Message: JSON.stringify({ name: 'cool-event' }) })
+                Body: JSON.stringify({
+                    Message: JSON.stringify({
+                        name: 'cool-event',
+                        occurredOn: '2023-10-30 20:53:50'
+                    })
+                })
             },
             {
                 MessageId: '2',
-                Body: JSON.stringify({ Message: JSON.stringify({ name: 'cool-event' }) })
+                Body: JSON.stringify({
+                    Message: JSON.stringify({
+                        name: 'cool-event',
+                        occurredOn: '2023-10-30 20:53:51'
+                    })
+                })
             }
         ]
 
-        const result: string[] = getEventsFromMessages(messages)
+        const result: { name: string; occurredOn: string }[] = getEventsFromMessages(messages)
 
         expect(result).toHaveLength(2)
-        expect(result).toEqual(['cool-event', 'cool-event'])
+        expect(result).toEqual([
+            { name: 'cool-event', occurredOn: '2023-10-30 20:53:50' },
+            { name: 'cool-event', occurredOn: '2023-10-30 20:53:51' }
+        ])
     })
 })
