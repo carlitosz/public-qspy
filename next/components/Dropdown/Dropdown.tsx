@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon'
 import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 
-import DropdownMenuItem from '@/components/ApexChart/Toolbar/DropdownMenuItem'
+import DropdownMenuItem from '@/components/Dropdown/DropdownItem'
 
-import type { DropdownItem } from '@/components/ApexChart/Toolbar/DropdownMenuItem'
+import type { DropdownItem } from '@/components/Dropdown/DropdownItem'
 
 interface DropdownProps {
     closeIcon?: React.ReactNode
@@ -81,7 +81,7 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
                                     index: number
                                 ): JSX.Element => {
                                     if (divider) {
-                                        return <div className="h-1 w-full border-b" key={index} />
+                                        return <div className="h-1 w-full border-b px-2 mb-2" key={index} />
                                     }
 
                                     return (

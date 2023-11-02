@@ -38,10 +38,10 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
     if (isValidating || !yesterdaysData || !todaysData) {
         return (
             <>
-                <AnalyticsCardSkeleton borderRadius="rounded-l-xl" />
-                <AnalyticsCardSkeleton />
-                <AnalyticsCardSkeleton />
-                <AnalyticsCardSkeleton borderRadius="rounded-r-xl" />
+                <AnalyticsCardSkeleton border="border-l border-y" borderRadius="rounded-l-xl" />
+                <AnalyticsCardSkeleton border="border-y border-r" />
+                <AnalyticsCardSkeleton border="border-y border-r" />
+                <AnalyticsCardSkeleton border="border-y border-r" borderRadius="rounded-r-xl" />
             </>
         )
     }
@@ -54,14 +54,14 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
                 borderRadius="rounded-l-xl"
                 data={{ now: todaysData.Total, before: yesterdaysData.Total }}
                 meta={`from ${yesterdaysData.Total} yesterday`}
-                title="Total"
+                title="Messages in queue today"
             />
             <AnalyticsCard
                 analytic={1092}
                 border="border-y border-r"
                 data={{ now: 1092, before: 956 }}
                 meta={`from ${562} the previous week`}
-                title="Past week"
+                title="Messages in queue past week"
             />
             <AnalyticsCard
                 analytic={todaysData.Date}

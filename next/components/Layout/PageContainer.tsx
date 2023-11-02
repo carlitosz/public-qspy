@@ -10,7 +10,7 @@ const Container = ({ children, mainTitle }: ContainerProps): JSX.Element => {
         <div className="md:container mx-auto">
             <div className="flex flex-col w-full justify-start py-6">
                 <p className="text-sm text-indigo-600 antialiased">Overview</p>
-                <p className="text-xl text-neutral-700 font-semibold antialiased">{mainTitle}</p>
+                <p className="text-xl text-neutral-600 font-semibold antialiased">{mainTitle}</p>
             </div>
             {children}
         </div>

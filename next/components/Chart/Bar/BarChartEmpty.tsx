@@ -2,7 +2,7 @@ import React from 'react'
 import FaceFrownIcon from '@heroicons/react/24/outline/FaceFrownIcon'
 import FaceSmileIcon from '@heroicons/react/24/outline/FaceSmileIcon'
 
-const EmptyChartMessage = (): JSX.Element => {
+const BarChartEmpty = (): JSX.Element => {
     return (
         <>
             <div className="h-1/2 text-neutral-400">
@@ -44,4 +44,4 @@ const EmptyChartMessage = (): JSX.Element => {
     )
 }
 
-export default EmptyChartMessage
+export default BarChartEmpty

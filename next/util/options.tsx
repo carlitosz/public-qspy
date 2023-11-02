@@ -1,32 +1,10 @@
 import React from 'react'
 import ReactDomServer from 'react-dom/server'
 
-import ChartTooltip from '@/components/ApexChart/ChartTooltip'
+import Tooltip from '@/components/Tooltip/Tooltip'
 
-import { ApexOptions } from 'apexcharts'
-import { DomainEvent } from 'types'
-
-/**
- * Creates a series array of [{x: x-value, y: y-value }, { ... }]
- *
- * @param data An array of domain events
- * @param name The name of the series
- *
- * @returns ApexOptions['series']
- */
-export const createSeries = (data: DomainEvent[], name: string): ApexOptions['series'] => {
-    return [
-        {
-            name,
-            data: data.map((d: DomainEvent) => {
-                var split = d.event.split('\\')
-                const name: string = split.pop() ?? ''
-
-                return { x: name, y: d.count }
-            })
-        }
-    ]
-}
+import type { ApexOptions } from 'apexcharts'
+import type { SeriesDataPoint } from '@/util/series'
 
 /**
  * Generates custom options for a horizontal bar graph.
@@ -95,9 +73,8 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         },
         tooltip: {
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
-                return ReactDomServer.renderToString(
-                    <ChartTooltip data={w.globals.initialSeries[seriesIndex].data[dataPointIndex]} />
-                )
+                const data: SeriesDataPoint = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
+                return ReactDomServer.renderToString(<Tooltip meta={data.meta} x={data.x} y={data.y} />)
             },
             enabled: true,
             followCursor: true,
@@ -106,10 +83,10 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         },
         xaxis: {
             axisBorder: {
-                show: false
+                show: true
             },
             axisTicks: {
-                show: false
+                show: true
             },
             crosshairs: {
                 show: true,
@@ -136,7 +113,14 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             max: range + 1,
             labels: {
                 show: true,
-                maxWidth: 200
+                maxWidth: 200,
+                formatter: (val: number) => {
+                    if (typeof val === 'number') {
+                        return val.toFixed(0)
+                    }
+
+                    return val
+                }
             },
             tickAmount: range + 1
         }

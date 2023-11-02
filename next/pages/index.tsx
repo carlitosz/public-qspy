@@ -1,9 +1,9 @@
 import React from 'react'
 import { format } from 'date-fns'
 
-import AnalyticsContainer from '@/components/Layout/Containers/AnalyticsContainer'
-import Container from '@/components/Layout/Containers/Container'
-import ChartContainer from '@/components/Layout/Containers/ChartContainer'
+import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
+import ChartContainer from '@/components/Chart/Bar/BarChartContainer'
+import PageContainer from '@/components/Layout/PageContainer'
 import { useRequest } from '@/util/axios'
 
 import type { NextPage } from 'next'
@@ -26,21 +26,21 @@ const Home: NextPage = () => {
 
     if (error) {
         return (
-            <Container mainTitle="Daily Analytics">
+            <PageContainer mainTitle="Daily Analytics">
                 <></>
-            </Container>
+            </PageContainer>
         )
     }
 
     return (
-        <Container mainTitle={QUEUE_NAME}>
+        <PageContainer mainTitle={QUEUE_NAME}>
             <div className="flex flex-inline flex-nowrap mb-6 h-1/6">
                 <AnalyticsContainer queueName={QUEUE_NAME} todaysData={data} />
             </div>
             <div className="h-2/3">
                 <ChartContainer data={data} isLoading={isValidating} title={QUEUE_NAME} withToolbar={true} />
             </div>
-        </Container>
+        </PageContainer>
     )
 }
 

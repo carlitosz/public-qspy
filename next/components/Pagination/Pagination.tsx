@@ -9,7 +9,7 @@ import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIc
 import EllipsisHorizontalCircleIcon from '@heroicons/react/24/outline/EllipsisHorizontalCircleIcon'
 
 import PaginationItem from '@/components/Pagination/PaginationItem'
-import Toolbar from '../ApexChart/Toolbar/Toolbar'
+import Toolbar from '../Toolbar/Toolbar'
 import { SortDirection } from 'types'
 
 interface PaginationProps {

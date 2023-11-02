@@ -1,8 +1,8 @@
 import React from 'react'
 
-import DropdownMenu from '@/components/ApexChart/Toolbar/DropdownMenu'
+import DropdownMenu from '@/components/Dropdown/Dropdown'
 
-import type { DropdownItem } from '@/components/ApexChart/Toolbar/DropdownMenuItem'
+import type { DropdownItem } from '@/components/Dropdown/DropdownItem'
 
 interface ToolbarProps {
     closeIcon?: React.ReactNode
