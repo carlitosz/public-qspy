@@ -38,10 +38,10 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
     if (isValidating || !yesterdaysData || !todaysData) {
         return (
             <>
-                <AnalyticsCardSkeleton borderRadius="rounded-l-xl" />
-                <AnalyticsCardSkeleton />
-                <AnalyticsCardSkeleton />
-                <AnalyticsCardSkeleton borderRadius="rounded-r-xl" />
+                <AnalyticsCardSkeleton border="border-l border-y" borderRadius="rounded-l-xl" />
+                <AnalyticsCardSkeleton border="border-y border-r" />
+                <AnalyticsCardSkeleton border="border-y border-r" />
+                <AnalyticsCardSkeleton border="border-y border-r" borderRadius="rounded-r-xl" />
             </>
         )
     }
@@ -49,21 +49,29 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
     return (
         <>
             <AnalyticsCard
-                analytic={todaysData.Count}
+                analytic={todaysData.Total}
+                border="border"
                 borderRadius="rounded-l-xl"
-                data={{ now: todaysData.Count, before: yesterdaysData.Count }}
-                meta={`from ${yesterdaysData.Count} yesterday`}
-                title="Total"
+                data={{ now: todaysData.Total, before: yesterdaysData.Total }}
+                meta={`from ${yesterdaysData.Total} yesterday`}
+                title="Messages in queue today"
             />
             <AnalyticsCard
                 analytic={1092}
+                border="border-y border-r"
                 data={{ now: 1092, before: 956 }}
                 meta={`from ${562} the previous week`}
-                title="Past week"
+                title="Messages in queue past week"
             />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
             <AnalyticsCard
                 analytic={todaysData.Date}
+                border="border-y border-r"
+                meta={todaysData.Message}
+                title="Invocation Date & Status"
+            />
+            <AnalyticsCard
+                analytic={todaysData.Date}
+                border="border-y border-r"
                 borderRadius="rounded-r-xl"
                 meta={todaysData.Message}
                 title="Invocation Date & Status"

@@ -95,16 +95,16 @@ describe('ApiGetFunction::handler', () => {
         dynamoDbMock
             .on(GetItemCommand, {
                 ExpressionAttributeNames: {
-                    '#Count': 'Count',
                     '#Data': 'Data',
                     '#Date': 'Date',
-                    '#Message': 'Message'
+                    '#Message': 'Message',
+                    '#Total': 'Total'
                 },
                 Key: marshall({
                     Queue: TEST_QUEUE_NAME,
                     Date: today
                 }),
-                ProjectionExpression: '#Count, #Data, #Date, #Message',
+                ProjectionExpression: '#Data, #Date, #Message, #Total',
                 TableName: TEST_TABLE_NAME
             } as GetItemCommandInput)
             .resolves({
@@ -142,36 +142,36 @@ describe('ApiGetFunction::handler', () => {
                 })
 
                 const responsePayload = {
-                    Count: 0,
                     Data: [],
                     Date: today,
-                    Message: QUEUE_EMPTY_MSG
+                    Message: QUEUE_EMPTY_MSG,
+                    Total: 0
                 }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
                         ExpressionAttributeNames: {
-                            '#Count': 'Count',
                             '#Data': 'Data',
                             '#Date': 'Date',
-                            '#Message': 'Message'
+                            '#Message': 'Message',
+                            '#Total': 'Total'
                         },
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
                             Date: today
                         }),
-                        ProjectionExpression: '#Count, #Data, #Date, #Message'
+                        ProjectionExpression: '#Data, #Date, #Message, #Total'
                     })
                     .resolvesOnce({
                         $metadata: {
                             httpStatusCode: 200
                         },
                         Item: marshall({
-                            Count: responsePayload.Data.length,
                             Data: responsePayload.Data,
                             Date: today,
-                            Message: responsePayload.Message
+                            Message: responsePayload.Message,
+                            Total: responsePayload.Data.length
                         })
                     })
 
@@ -203,33 +203,34 @@ describe('ApiGetFunction::handler', () => {
                         }
                     ],
                     Date: '2023-10-01',
-                    Message: SUCCESS_MSG
+                    Message: SUCCESS_MSG,
+                    Total: 1
                 }
 
                 dynamoDbMock
                     .on(GetItemCommand, {
                         ExpressionAttributeNames: {
-                            '#Count': 'Count',
                             '#Data': 'Data',
                             '#Date': 'Date',
-                            '#Message': 'Message'
+                            '#Message': 'Message',
+                            '#Total': 'Total'
                         },
                         TableName: TEST_TABLE_NAME,
                         Key: marshall({
                             Queue: TEST_QUEUE_NAME,
                             Date: format(new Date('2023-01-01'), 'yyyy-MM-dd')
                         }),
-                        ProjectionExpression: '#Count, #Data, #Date, #Message'
+                        ProjectionExpression: '#Data, #Date, #Message, #Total'
                     } as GetItemCommandInput)
                     .resolvesOnce({
                         $metadata: {
                             httpStatusCode: 200
                         },
                         Item: marshall({
-                            Count: responsePayload.Data.length,
                             Data: responsePayload.Data,
                             Date: responsePayload.Date,
-                            Message: responsePayload.Message
+                            Message: responsePayload.Message,
+                            Total: responsePayload.Data.length
                         })
                     } as GetItemCommandOutput)
 

@@ -6,15 +6,16 @@ type DropdownItemHtmlProps = { id: string; role: string; tabIndex: number }
 export type DropdownItem = {
     divider?: boolean
     icon?: React.ReactElement
-    label?: string | number
+    label?: string | number | React.ReactNode
     onClick?: () => void
     selected?: boolean
-    title?: string
+    title?: string | React.ReactNode
+    titleColor?: string
 }
 
-const paddings = 'px-2 py-3'
+const paddings = 'p-2'
 
-const DropdownMenuItem = ({
+const DropdownItem = ({
     id,
     icon,
     label,
@@ -22,13 +23,23 @@ const DropdownMenuItem = ({
     role,
     selected = false,
     tabIndex,
-    title
+    title,
+    titleColor
 }: DropdownItem & DropdownItemHtmlProps): JSX.Element => {
+    if (React.isValidElement(label)) {
+        return (
+            <li className={`inline flex items-center text-neutral-400 w-full cursor-auto ${paddings}`}>
+                {icon && icon}
+                {label}
+            </li>
+        )
+    }
+
     if (title) {
         return (
             <li className={`inline flex items-center text-neutral-400 w-full cursor-auto ${paddings}`}>
                 {icon && icon}
-                <span className="text-xs font-medium uppercase antialiased">{title}</span>
+                <span className={`text-xs font-medium uppercase antialiased ${titleColor ?? ''}`}>{title}</span>
             </li>
         )
     }
@@ -36,7 +47,7 @@ const DropdownMenuItem = ({
     return (
         <li
             aria-hidden="true"
-            className={`flex flex-row justify-between align-center items-center rounded text-neutral-600 bg-neutral-50 hover:text-indigo-600 hover:bg-neutral-200 w-full px-2 py-3 transition duration-150 ease-out hover:ease-in cursor-pointer ${paddings}`}
+            className={`flex flex-row justify-between align-center items-center rounded text-neutral-700 bg-neutral-50 hover:text-indigo-600 hover:bg-neutral-200 w-full px-2 py-3 transition duration-150 ease-out hover:ease-in cursor-pointer`}
             data-value={label}
             id={id}
             onClick={onClick}
@@ -52,4 +63,4 @@ const DropdownMenuItem = ({
     )
 }
 
-export default DropdownMenuItem
+export default DropdownItem

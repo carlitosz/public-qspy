@@ -1,11 +1,11 @@
 import ApexCharts from 'apexcharts'
-import React from 'react'
 import ArrowsUpDownIcon from '@heroicons/react/24/outline/ArrowsUpDownIcon'
 import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon'
 import ClipboardDocumentListIcon from '@heroicons/react/24/outline/ClipboardDocumentListIcon'
 import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon'
+import React from 'react'
 
-import Toolbar from '@/components/ApexChart/Toolbar/Toolbar'
+import Toolbar from '@/components/Toolbar/Toolbar'
 import { formattedJSONArray } from '@/util/paginate'
 
 import { DomainEvent, Orientation } from 'types'
@@ -32,7 +32,7 @@ declare global {
     }
 }
 
-interface ChartContainerHeaderProps {
+interface BarChartContainerHeaderProps {
     data: DomainEvent[] | []
     changeOrientation?: (desiredOrientation: Orientation) => void
     orientation: Orientation
@@ -42,18 +42,19 @@ interface ChartContainerHeaderProps {
 
 const iconClass = 'h-5 w-5 mr-3 antialiased'
 
-const ChartContainerHeader = ({
+const BarChartContainerHeader = ({
     changeOrientation,
     data,
     orientation,
     title,
     withToolbar
-}: ChartContainerHeaderProps): JSX.Element => {
+}: BarChartContainerHeaderProps): JSX.Element => {
     return (
         <div className="flex flex-row justify-between items-center border-b px-4 py-2">
-            <p className="text-neutral-500 text-sm font-medium antialiased">{title}</p>
+            <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
             {withToolbar && (
                 <Toolbar
+                    disabled={data.length === 0}
                     dropdown={[
                         { title: 'Orientation' },
                         {
@@ -107,4 +108,4 @@ const ChartContainerHeader = ({
     )
 }
 
-export default ChartContainerHeader
+export default BarChartContainerHeader

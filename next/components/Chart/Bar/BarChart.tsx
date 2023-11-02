@@ -5,7 +5,8 @@ import type { ApexOptions } from 'apexcharts'
 import type { Props } from 'react-apexcharts'
 import type { DomainEvent } from 'types'
 
-import { createSeries, horizontalBarGraphOptions } from '@/util/chart'
+import { createSeries } from '@/util/series'
+import { horizontalBarGraphOptions } from '@/util/options'
 
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 

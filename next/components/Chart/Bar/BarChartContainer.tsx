@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import BarChart from '@/components/ApexChart/BarChart'
+import BarChart from '@/components/Chart/Bar/BarChart'
 import Pagination from '@/components/Pagination/Pagination'
 import { paginate, sort } from '@/util/paginate'
 
-import ChartContainerHeader from '@/components/Layout/Containers/ChartContainerHeader'
-import BarChartSkeleton from '@/components/ApexChart/BarChartSkeleton'
+import BarChartContainerHeader from '@/components/Chart/Bar/BarChartContainerHeader'
+import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
+import BarChartEmpty from '@/components/Chart/Bar/BarChartEmpty'
 
 import type { SortDirection, DomainEvent, GetEventsResponse, Orientation } from 'types'
 
@@ -16,7 +17,7 @@ interface ChartContainerProps {
     withToolbar?: boolean
 }
 
-const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartContainerProps): JSX.Element => {
+const BarChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartContainerProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [orientation, setOrientation] = useState<Orientation>('vertical')
     const [range, setRange] = useState<number>(0)
@@ -31,8 +32,9 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
             const sorted = sort(data.Data, 'DESC', 'count')
 
             setSorted(sorted)
-            setRange(sorted[0].count)
             setTotalResults(sorted.length)
+
+            sorted.length > 0 ? setRange(sorted && sorted[0].count) : setRange(0)
         }
     }, [data])
 
@@ -47,15 +49,26 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
 
     if (isLoading || !pages || !data) {
         return (
-            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+            <div
+                role="status"
+                className="flex flex-col border border-neutral-200 shadow-md rounded-xl bg-neutral-50 h-max"
+            >
                 <BarChartSkeleton orientation={orientation} />
             </div>
         )
     }
 
+    if (totalResults === 0 && !data && !pages && !isLoading) {
+        return (
+            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+                <BarChartEmpty />
+            </div>
+        )
+    }
+
     return (
-        <div className="flex flex-col border border-neutral-200 rounded-xl bg-neutral-50 h-full">
-            <ChartContainerHeader
+        <div className="flex flex-col border border-neutral-200 shadow-md rounded-xl bg-neutral-50 h-full">
+            <BarChartContainerHeader
                 data={sorted}
                 changeOrientation={(desiredOrientation: Orientation) => {
                     if (desiredOrientation === orientation) {
@@ -109,4 +122,4 @@ const ChartContainer = ({ data, isLoading, title, withToolbar = false }: ChartCo
     )
 }
 
-export default ChartContainer
+export default BarChartContainer
