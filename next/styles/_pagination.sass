@@ -1,0 +1,31 @@
+.pagination-container
+    @apply flex items-center justify-between p-4 h-full w-full
+
+    .results
+        @apply flex items-center justify-start w-1/3 h-full
+
+    .pagination
+        @apply flex items-center justify-center w-1/3 h-full
+
+        &-previous, &-next
+            @apply flex items-center justify-center hover:text-primary cursor-pointer text-dark text-sm
+
+        &-previous
+            @apply mr-5
+        &-next
+            @apply ml-5
+
+        &-item
+            @apply text-center text-sm font-medium leading-none cursor-pointer text-dark hover:text-primary p-4 h-full w-10 hover:bg-superlight rounded-md mr-1
+
+            &:last-child
+                @apply mr-0
+
+            &.selected
+                @apply text-sm font-medium leading-none cursor-pointer text-primary bg-superlight ring-1 ring-extralight rounded-md p-4 h-full
+
+        &-numbers
+            @apply sm:flex hidden
+
+    .dropdown
+        @apply flex items-center justify-end w-1/3 h-full

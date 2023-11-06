@@ -8,69 +8,83 @@ interface BarChartSkeletonProps {
 
 const BarChartSkeleton = ({ orientation }: BarChartSkeletonProps): JSX.Element => {
     return (
-        <div className="animate-pulse h-full">
-            <div className="flex flex-row justify-between items-center border-b px-4 py-2">
-                <div className="w-1/3 h-4 bg-neutral-200 rounded-lg" />
-                <div className="w-6 h-6 bg-neutral-200 rounded-full" />
+        <>
+            <div className="h-16 w-full">
+                <div className="flex justify-between items-center border-b border-b-extralight h-full p-4">
+                    <div className="w-1/4 h-4 bg-extralight rounded-full" />
+                    <div className="w-8 h-8 bg-extralight rounded-full" />
+                </div>
             </div>
 
-            <div className="flex flex-col align-center justify-center">
-                <div className="flex flex-row justify-center items-center">
-                    <div className="w-96 h-6 rounded-lg bg-neutral-200 mr-4" />
-                    <div className="w-6 h-6 bg-neutral-200 rounded-full" />
-                </div>
-                <div className="w-full flex flex-row justify-center my-6">
-                    <div className="inline-block text-neutral-500 text-xs font-normal antialiased">
-                        <div className="w-72 h-2 bg-neutral-200 rounded-full" />
+            <div className="h-full w-full">
+                {orientation === 'vertical' ? (
+                    <div className={orientation}>
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                        <div className="bar" />
+                    </div>
+                ) : (
+                    <div className={orientation}>
+                        <div className="labels">
+                            <div className="label" />
+                        </div>
+                        <div className="bars">
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                            <div className="bar" />
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className="h-16 w-full">
+                <div className="border-t border-t-extralight h-full">
+                    <div className="pagination-container h-full">
+                        <div className="h-full w-1/3 flex items-center justify-start">
+                            <div className="h-4 w-36 bg-extralight rounded-full" />
+                        </div>
+                        <div className="h-full w-1/3 flex items-center justify-center">
+                            <div className="h-8 w-96 bg-extralight rounded-full" />
+                        </div>
+                        <div className="h-full w-1/3 flex items-center justify-end">
+                            <div className="h-8 w-8 bg-extralight rounded-full" />
+                        </div>
                     </div>
                 </div>
             </div>
-
-            {orientation === 'horizontal' ? (
-                <div className="flex flex-col items-baseline space-y-2 h-full">
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                    <div className="w-48 h-4 bg-neutral-200 rounded-md dark:bg-neutral-700" />
-                </div>
-            ) : (
-                <div className="flex flex-row items-end space-x-2 w-full h-full p-4">
-                    <div className="w-36 h-96 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-24 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-36 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-[32rem] bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                </div>
-            )}
             <span className="sr-only">Loading...</span>
-        </div>
+        </>
     )
 }
 

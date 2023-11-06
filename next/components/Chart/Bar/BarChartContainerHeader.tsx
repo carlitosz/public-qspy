@@ -40,8 +40,6 @@ interface BarChartContainerHeaderProps {
     withToolbar: boolean
 }
 
-const iconClass = 'h-5 w-5 mr-3 antialiased'
-
 const BarChartContainerHeader = ({
     changeOrientation,
     data,
@@ -50,21 +48,22 @@ const BarChartContainerHeader = ({
     withToolbar
 }: BarChartContainerHeaderProps): JSX.Element => {
     return (
-        <div className="flex flex-row justify-between items-center border-b px-4 py-2">
-            <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
+        <div className="flex justify-between items-center border-b border-extralight h-full p-4">
+            <p className="text-dark text-sm">{title}</p>
             {withToolbar && (
                 <Toolbar
+                    direction="down"
                     disabled={data.length === 0}
                     dropdown={[
                         { title: 'Orientation' },
                         {
-                            icon: <ArrowsUpDownIcon className={iconClass} />,
+                            icon: <ArrowsUpDownIcon className="menu-icon-sm" />,
                             label: 'Vertical',
                             selected: orientation === 'vertical',
                             onClick: () => changeOrientation && changeOrientation('vertical')
                         },
                         {
-                            icon: <ArrowsRightLeftIcon className={iconClass} />,
+                            icon: <ArrowsRightLeftIcon className="menu-icon-sm" />,
                             label: 'Horizontal',
                             selected: orientation === 'horizontal',
                             onClick: () => changeOrientation && changeOrientation('horizontal')
@@ -72,14 +71,14 @@ const BarChartContainerHeader = ({
                         { divider: true },
                         { title: 'Data' },
                         {
-                            icon: <ClipboardDocumentListIcon className={iconClass} />,
+                            icon: <ClipboardDocumentListIcon className="menu-icon-sm" />,
                             label: 'Copy JSON',
                             onClick: () => navigator.clipboard.writeText(formattedJSONArray(data))
                         },
                         { divider: true },
                         { title: 'Save as image' },
                         {
-                            icon: <PhotoIcon className={iconClass} />,
+                            icon: <PhotoIcon className="menu-icon-sm" />,
                             label: 'PNG',
                             onClick: async () => {
                                 const chartInstance: ChartInstance | undefined = window.Apex._chartInstances.find(

@@ -1,21 +1,29 @@
 import React from 'react'
 
-import DropdownMenu from '@/components/Dropdown/Dropdown'
+import Dropdown from '@/components/Dropdown/Dropdown'
 
-import type { DropdownItem } from '@/components/Dropdown/DropdownItem'
+import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 
 interface ToolbarProps {
     closeIcon?: React.ReactNode
+    direction: DropdownDirection
     disabled: boolean
-    dropdown: DropdownItem[]
+    dropdown: DropdownItemType[]
     openIcon?: React.ReactNode
 }
 
-const Toolbar = ({ closeIcon, disabled, dropdown, openIcon }: ToolbarProps): JSX.Element => {
+const Toolbar = ({ closeIcon, direction, disabled, dropdown, openIcon }: ToolbarProps): JSX.Element => {
     return (
         <div className="inline-flex" role="group">
             {dropdown && (
-                <DropdownMenu closeIcon={closeIcon} disabled={disabled} menuItems={dropdown} openIcon={openIcon} />
+                <Dropdown
+                    closeIcon={closeIcon}
+                    direction={direction}
+                    disabled={disabled}
+                    menuItems={dropdown}
+                    openIcon={openIcon}
+                />
             )}
         </div>
     )

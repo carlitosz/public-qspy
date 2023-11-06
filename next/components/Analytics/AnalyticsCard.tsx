@@ -5,8 +5,6 @@ import MinusCircleIcon from '@heroicons/react/24/outline/MinusCircleIcon'
 
 interface AnalyticsCardProps {
     analytic: number | string
-    border: string
-    borderRadius?: string
     data?: {
         now: number
         before: number
@@ -15,41 +13,33 @@ interface AnalyticsCardProps {
     title: string
 }
 
-const AnalyticsCard = ({ analytic, border, borderRadius, data, meta, title }: AnalyticsCardProps): JSX.Element => {
+const AnalyticsCard = ({ analytic, data, meta, title }: AnalyticsCardProps): JSX.Element => {
     const change: number | undefined = data && ((data.now - data.before) / data.before) * 100
 
     return (
-        <div
-            className={`flex flex-col shadow-sm justify-center ${border} ${borderRadius} bg-neutral-50 font-medium antialiased p-4 w-1/4 h-full`}
-        >
-            <p className="text-neutral-600 text-sm">{title}</p>
-            <p className="text-indigo-500 text-3xl my-4">{analytic.toLocaleString()}</p>
-            <div className="flex justify-start">
-                {change !== undefined && (
-                    <div className="flex items-end mr-2">
-                        {change === 0 && (
-                            <>
-                                <MinusCircleIcon className="h-5 w-5 text-neutral-500 mr-1" />
-                                <span className="text-sm text-neutral-600">0%</span>
-                            </>
-                        )}
-                        {change > 0 && (
-                            <>
-                                <ArrowLongUpIcon className="h-5 w-5 text-red-500 mr-1" />
-                                <span className="text-sm text-red-600">{change.toFixed(2)}%</span>
-                            </>
-                        )}
-                        {change < 0 && (
-                            <>
-                                <ArrowLongDownIcon className="h-5 w-5 text-emerald-500 mr-1" />
-                                <span className="text-sm text-emerald-600">{change.toFixed(2)}%</span>
-                            </>
-                        )}
-                    </div>
+        <div className="flex flex-col justify-center border border-extralight rounded-md p-6 bg-white h-full w-full">
+            <p className="text-sm text-dark font-medium antialiased">{title}</p>
+            <p className="text-primary text-4xl my-5">{analytic.toLocaleString()}</p>
+            <div className="flex items-center text-sm">
+                {typeof change === 'number' && change === 0 && (
+                    <>
+                        <MinusCircleIcon className="analytics-icon-sm text-light" />
+                        <span className="text-light mr-2">0%</span>
+                    </>
                 )}
-                <div className="flex items-end">
-                    <span className="text-neutral-400 text-sm">{meta}</span>
-                </div>
+                {typeof change === 'number' && change > 0 && (
+                    <>
+                        <ArrowLongUpIcon className="analytics-icon-sm text-red-500" />
+                        <span className="text-red-600 mr-2">{change.toFixed(2)}%</span>
+                    </>
+                )}
+                {typeof change === 'number' && change < 0 && (
+                    <>
+                        <ArrowLongDownIcon className="analytics-icon-sm text-emerald-500" />
+                        <span className="text-emerald-600 mr-2">{change.toFixed(2)}%</span>
+                    </>
+                )}
+                <span className="text-sm text-dark antialiased">{meta}</span>
             </div>
         </div>
     )

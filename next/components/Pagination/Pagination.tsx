@@ -1,14 +1,10 @@
 import React from 'react'
+import ArrowLongLeftIcon from '@heroicons/react/24/outline/ArrowLongLeftIcon'
+import ArrowLongRightIcon from '@heroicons/react/24/outline/ArrowLongRightIcon'
 import BarsArrowDownIcon from '@heroicons/react/24/outline/BarsArrowDownIcon'
 import BarsArrowUpIcon from '@heroicons/react/24/outline/BarsArrowUpIcon'
-import ChevronLeftIcon from '@heroicons/react/24/solid/ChevronLeftIcon'
-import ChevronDoubleLeftIcon from '@heroicons/react/24/solid/ChevronDoubleLeftIcon'
-import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon'
-import ChevronDoubleRightIcon from '@heroicons/react/24/solid/ChevronDoubleRightIcon'
 import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIcon'
-import EllipsisHorizontalCircleIcon from '@heroicons/react/24/outline/EllipsisHorizontalCircleIcon'
 
-import PaginationItem from '@/components/Pagination/PaginationItem'
 import Toolbar from '../Toolbar/Toolbar'
 import { SortDirection } from 'types'
 
@@ -24,8 +20,6 @@ interface PaginationProps {
     totalResults: number
 }
 
-const iconClass = 'h-5 w-5 mr-3'
-
 const Pagination = ({
     changeResultsPerPage,
     changeSortDirection,
@@ -38,67 +32,67 @@ const Pagination = ({
     totalResults
 }: PaginationProps): JSX.Element => {
     const pageNumbers = Array(numPages).fill('x', 0, numPages)
-    const unselected = `text-sm font-normal leading-none cursor-pointer text-neutral-500 hover:text-indigo-500 border-t-2 border-transparent hover:border-indigo-500 p-4 duration-150 ease-out hover:ease-in`
-    const selected = `text-sm font-normal leading-none cursor-pointer text-indigo-600 hover:text-neutral-500 border-t-2 p-4 border-indigo-500 duration-150 ease-out hover:ease-in`
 
     if (totalResults === 0) {
         return <></>
     }
 
     return (
-        <div className="flex flex-col align-center justify-center">
-            <div className="flex flex-row justify-center items-center">
-                <PaginationItem
-                    icon={<ChevronDoubleLeftIcon className="h-5 w-5" />}
-                    klass={unselected}
-                    onClick={() => goToPage(0)}
-                />
-                <PaginationItem
-                    icon={<ChevronLeftIcon className="h-5 w-5" />}
-                    klass={unselected}
-                    onClick={() => goToPage(currentPage - 1)}
-                />
+        <div className="pagination-container">
+            <div className="results">
+                <p className="text-dark text-xs antialiased">
+                    <span className="">Showing </span>
+                    <span className="font-medium">
+                        {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
+                    </span>{' '}
+                    of <span className="font-medium">{totalResults}</span>
+                    <span className=""> results</span>
+                </p>
+            </div>
+            <div className="pagination">
+                <div aria-hidden="true" className="pagination-previous" onClick={() => goToPage(currentPage - 1)}>
+                    <ArrowLongLeftIcon className="icon-sm" />
+                    <p className="ml-2">Previous</p>
+                </div>
 
-                <div className="sm:flex hidden">
+                <div className="pagination-numbers">
                     {pageNumbers.map((value: string, index: number) => (
-                        <PaginationItem
+                        <p
+                            className={`pagination-item ${currentPage === index ? 'selected' : ''}`}
                             key={index}
-                            klass={currentPage === index ? selected : unselected}
                             onClick={() => goToPage(index)}
-                            text={`${index + 1}`}
-                        />
+                            aria-hidden="true"
+                        >
+                            {index + 1}
+                        </p>
                     ))}
                 </div>
 
-                <PaginationItem
-                    icon={<ChevronRightIcon className="h-5 w-5" />}
-                    klass={unselected}
-                    onClick={() => goToPage(currentPage + 1)}
-                />
-                <PaginationItem
-                    icon={<ChevronDoubleRightIcon className="h-5 w-5" />}
-                    klass={unselected}
-                    onClick={() => goToPage(numPages - 1)}
-                />
-
+                <div aria-hidden="true" className="pagination-next" onClick={() => goToPage(currentPage + 1)}>
+                    <p className="mr-2">Next</p>
+                    <ArrowLongRightIcon className="icon-sm" />
+                </div>
+            </div>
+            <div className="dropdown">
                 <Toolbar
+                    direction="up"
                     disabled={totalResults === 0}
                     dropdown={[
                         { title: 'Results per page' },
                         {
-                            icon: <DocumentChartBarIcon className={iconClass} />,
+                            icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: 20,
                             onClick: () => changeResultsPerPage(20),
                             selected: resultsPerPage === 20
                         },
                         {
-                            icon: <DocumentChartBarIcon className={iconClass} />,
+                            icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: 40,
                             onClick: () => changeResultsPerPage(40),
                             selected: resultsPerPage === 40
                         },
                         {
-                            icon: <DocumentChartBarIcon className={iconClass} />,
+                            icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: `All (${totalResults})`,
                             onClick: () => changeResultsPerPage(totalResults),
                             selected: resultsPerPage === totalResults
@@ -106,29 +100,19 @@ const Pagination = ({
                         { divider: true },
                         { title: 'Sort' },
                         {
-                            icon: <BarsArrowUpIcon className={iconClass} />,
+                            icon: <BarsArrowUpIcon className="menu-icon-sm" />,
                             label: 'Ascending',
                             onClick: () => changeSortDirection('ASC'),
                             selected: sortDirection === 'ASC'
                         },
                         {
-                            icon: <BarsArrowDownIcon className={iconClass} />,
+                            icon: <BarsArrowDownIcon className="menu-icon-sm" />,
                             label: 'Descending',
                             onClick: () => changeSortDirection('DESC'),
                             selected: sortDirection === 'DESC'
                         }
                     ]}
-                    openIcon={<EllipsisHorizontalCircleIcon className="h-5 w-5 animate-wiggle transform-gpu" />}
                 />
-            </div>
-            <div className="w-full flex flex-row justify-center mb-4">
-                <p className="inline-block text-neutral-500 text-xs font-normal antialiased">
-                    Displaying{' '}
-                    <span className="font-medium">
-                        {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
-                    </span>{' '}
-                    of <span className="font-medium">{totalResults}</span> results
-                </p>
             </div>
         </div>
     )

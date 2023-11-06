@@ -1,0 +1,29 @@
+.dropdown-container
+    @apply relative inline-block rounded-full
+
+    .dropdown-btn
+        @apply p-2 text-dark hover:text-primary hover:bg-extralight transition duration-150 ease-out hover:ease-in rounded-full focus:outline-none
+
+        &:disabled
+            @apply cursor-not-allowed
+
+    .dropdown-menu
+        @apply absolute p-2 z-10 w-48 rounded-md bg-white shadow-lg ring-1 ring-extralight
+
+        &.up
+            @apply bottom-10 right-0 origin-bottom-right
+
+        &.down
+            @apply right-0 origin-top-right
+
+.dropdown-item
+    @apply flex flex-row justify-between items-center rounded text-dark hover:bg-superlight hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
+
+    &.selected
+        @apply bg-superlight ring-1 ring-extralight text-primary
+
+.dropdown-title
+    @apply inline flex items-center text-light w-full h-full cursor-auto p-2
+
+.dropdown-label
+    @apply inline flex items-center text-neutral-400 w-full h-full cursor-auto p-2

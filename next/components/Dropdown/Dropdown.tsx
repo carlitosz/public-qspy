@@ -4,18 +4,19 @@ import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 
 import DropdownMenuItem from '@/components/Dropdown/DropdownItem'
 
-import type { DropdownItem } from '@/components/Dropdown/DropdownItem'
+import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+
+export type DropdownDirection = 'up' | 'down'
 
 interface DropdownProps {
     closeIcon?: React.ReactNode
+    direction: DropdownDirection
     disabled: boolean
-    menuItems: DropdownItem[]
+    menuItems: DropdownItemType[]
     openIcon?: React.ReactNode
 }
 
-const iconClass = 'h-5 w-5 animate-wiggle transform-gpu'
-
-const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): JSX.Element => {
+const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -42,7 +43,7 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
     return (
         <div
             aria-hidden={true}
-            className="relative inline-block rounded-full"
+            className="dropdown-container"
             onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -50,24 +51,15 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
             }}
             ref={menuRef}
         >
-            <button
-                className={`${
-                    open ? 'bg-neutral-200' : ''
-                } p-2 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full ${
-                    disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-                }`}
-                id="menu-button"
-                type="button"
-                disabled={disabled}
-            >
+            <button className="dropdown-btn" id="menu-button" type="button" disabled={disabled}>
                 {open
-                    ? closeIcon ?? <XMarkIcon className={iconClass} />
-                    : openIcon ?? <EllipsisVerticalIcon className={iconClass} />}
+                    ? closeIcon ?? <XMarkIcon className="icon-sm animate-wiggle transform-gpu" />
+                    : openIcon ?? <EllipsisVerticalIcon className="icon-sm animate-wiggle transform-gpu" />}
             </button>
 
             {open && (
                 <div
-                    className="absolute p-2 right-0 z-10 origin-top-right w-48 rounded-md bg-neutral-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className={`dropdown-menu ${direction}`}
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="menu-button"
@@ -77,11 +69,11 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
                         {menuItems &&
                             menuItems.map(
                                 (
-                                    { divider, label, icon, onClick, selected, title }: DropdownItem,
+                                    { divider, label, icon, onClick, selected, title }: DropdownItemType,
                                     index: number
                                 ): JSX.Element => {
                                     if (divider) {
-                                        return <div className="h-1 w-full border-b px-2 mb-2" key={index} />
+                                        return <div className="h-1 w-full border-b px-2 my-2" key={index} />
                                     }
 
                                     return (

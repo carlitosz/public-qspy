@@ -1,0 +1,50 @@
+.chart
+    @apply flex flex-col h-full w-full border border-extralight rounded-md bg-white
+
+    // Skeleton only
+    .horizontal
+        @apply flex flex-row h-full w-full overflow-hidden px-4 pt-2
+
+        .bars
+            @apply w-5/6 space-y-2 ml-4
+
+            .bar
+                @apply h-9 bg-neutral-200 self-start rounded-r-md w-1/2
+
+                &:nth-child(2n + 1)
+                    @apply w-1/4
+                &:nth-child(3n + 1)
+                    @apply w-1/5
+                &:nth-child(4n)
+                    @apply w-2/3
+
+        .labels
+            @apply w-1/6 bg-neutral-200 p-4
+
+            .label
+                @apply h-full rounded-md
+
+    // Skeleton only
+    .vertical
+        @apply flex inline-flex space-x-2 p-8 w-full items-baseline h-full
+
+        .bar
+            @apply w-36 bg-neutral-200 self-end rounded-t-md h-24
+
+            &:nth-child(2n)
+                @apply h-56
+
+            &:nth-child(3n)
+                @apply h-44
+
+            &:nth-child(4n)
+                @apply h-72
+
+            &:nth-child(5n)
+                @apply h-96
+
+            &:nth-child(6)
+                @apply h-36
+
+            &:nth-child(10n)
+                @apply h-48
