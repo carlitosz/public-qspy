@@ -37,7 +37,7 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
 
     if (isValidating || !yesterdaysData || !todaysData) {
         return (
-            <div className="columns-4">
+            <div className="columns-4 h-full">
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
@@ -47,7 +47,7 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
     }
 
     return (
-        <div className="columns-4">
+        <div className="columns-4 h-full">
             <AnalyticsCard
                 analytic={todaysData.Total}
                 data={{ now: todaysData.Total, before: yesterdaysData.Total }}

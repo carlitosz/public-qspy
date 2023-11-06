@@ -3,14 +3,8 @@ import ArrowLongLeftIcon from '@heroicons/react/24/outline/ArrowLongLeftIcon'
 import ArrowLongRightIcon from '@heroicons/react/24/outline/ArrowLongRightIcon'
 import BarsArrowDownIcon from '@heroicons/react/24/outline/BarsArrowDownIcon'
 import BarsArrowUpIcon from '@heroicons/react/24/outline/BarsArrowUpIcon'
-import ChevronLeftIcon from '@heroicons/react/24/solid/ChevronLeftIcon'
-import ChevronDoubleLeftIcon from '@heroicons/react/24/solid/ChevronDoubleLeftIcon'
-import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon'
-import ChevronDoubleRightIcon from '@heroicons/react/24/solid/ChevronDoubleRightIcon'
 import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIcon'
-import EllipsisHorizontalCircleIcon from '@heroicons/react/24/outline/EllipsisHorizontalCircleIcon'
 
-import PaginationItem from '@/components/Pagination/PaginationItem'
 import Toolbar from '../Toolbar/Toolbar'
 import { SortDirection } from 'types'
 
@@ -47,17 +41,18 @@ const Pagination = ({
         <div className="pagination-container">
             <div className="results">
                 <p className="text-dark text-xs antialiased">
-                    Displaying{' '}
+                    <span className="">Showing </span>
                     <span className="font-medium">
                         {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
                     </span>{' '}
-                    of <span className="font-medium">{totalResults}</span> results
+                    of <span className="font-medium">{totalResults}</span>
+                    <span className=""> results</span>
                 </p>
             </div>
             <div className="pagination">
-                <div aria-hidden="true" className="pagination-previous mr-10" onClick={() => goToPage(currentPage - 1)}>
-                    <ArrowLongLeftIcon className="icon-sm mr-3" />
-                    <p className="text-xs">Previous</p>
+                <div aria-hidden="true" className="pagination-previous" onClick={() => goToPage(currentPage - 1)}>
+                    <ArrowLongLeftIcon className="icon-sm" />
+                    <p className="ml-2">Previous</p>
                 </div>
 
                 <div className="pagination-numbers">
@@ -73,13 +68,14 @@ const Pagination = ({
                     ))}
                 </div>
 
-                <div aria-hidden="true" className="pagination-next ml-10" onClick={() => goToPage(currentPage + 1)}>
-                    <p className="text-xs">Next</p>
-                    <ArrowLongRightIcon className="icon-sm ml-3" />
+                <div aria-hidden="true" className="pagination-next" onClick={() => goToPage(currentPage + 1)}>
+                    <p className="mr-2">Next</p>
+                    <ArrowLongRightIcon className="icon-sm" />
                 </div>
             </div>
             <div className="dropdown">
                 <Toolbar
+                    direction="up"
                     disabled={totalResults === 0}
                     dropdown={[
                         { title: 'Results per page' },

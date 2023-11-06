@@ -17,14 +17,14 @@ const AnalyticsCard = ({ analytic, data, meta, title }: AnalyticsCardProps): JSX
     const change: number | undefined = data && ((data.now - data.before) / data.before) * 100
 
     return (
-        <div className="block border border-extralight rounded-md p-6 bg-white h-full w-full">
-            <p className="text-dark font-medium antialiased">{title}</p>
-            <p className="text-primary text-3xl my-5">{analytic.toLocaleString()}</p>
+        <div className="flex flex-col justify-center border border-extralight rounded-md p-6 bg-white h-full w-full">
+            <p className="text-sm text-dark font-medium antialiased">{title}</p>
+            <p className="text-primary text-4xl my-5">{analytic.toLocaleString()}</p>
             <div className="flex items-center text-sm">
                 {typeof change === 'number' && change === 0 && (
                     <>
-                        <MinusCircleIcon className="analytics-icon-sm text-neutral-500" />
-                        <span className="text-neutral-600 mr-2">0%</span>
+                        <MinusCircleIcon className="analytics-icon-sm text-light" />
+                        <span className="text-light mr-2">0%</span>
                     </>
                 )}
                 {typeof change === 'number' && change > 0 && (
@@ -39,7 +39,7 @@ const AnalyticsCard = ({ analytic, data, meta, title }: AnalyticsCardProps): JSX
                         <span className="text-emerald-600 mr-2">{change.toFixed(2)}%</span>
                     </>
                 )}
-                <span className="text-dark antialiased">{meta}</span>
+                <span className="text-sm text-dark antialiased">{meta}</span>
             </div>
         </div>
     )

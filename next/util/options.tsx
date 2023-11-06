@@ -51,6 +51,11 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             opacity: 1
         },
         grid: {
+            borderColor: getComputedStyle(document.body).getPropertyValue('--color-extralight'),
+            padding: {
+                bottom: horizontal ? 15 : -33,
+                right: horizontal ? 20 : 20
+            },
             position: 'back',
             yaxis: {
                 lines: {
@@ -70,8 +75,8 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             bar: {
                 barHeight: '60%', // Horizontal
                 borderRadius: 2,
-                columnWidth: '80%', // Vertical
                 borderRadiusApplication: 'end',
+                columnWidth: '70%', // Vertical
                 distributed: true,
                 horizontal: horizontal
             }
@@ -88,38 +93,33 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         },
         xaxis: {
             axisBorder: {
-                show: true
+                show: false,
+                color: getComputedStyle(document.body).getPropertyValue('--color-light')
             },
             axisTicks: {
-                show: true
-            },
-            crosshairs: {
-                show: true,
-                width: 1,
-                opacity: 1
+                show: false
             },
             labels: {
-                show: horizontal
+                show: false
             },
-            tickAmount: range + 1
+            tickAmount: range
         },
         yaxis: {
             axisBorder: {
-                show: true
-            },
-            crosshairs: {
-                show: true,
-                position: 'front',
-                stroke: {
-                    width: 1
-                }
+                show: false
             },
             min: 0,
-            max: range + 1,
+            max: range,
             labels: {
                 show: true,
-                maxWidth: 200,
+                offsetY: horizontal ? 0 : -3,
+                minWidth: horizontal ? 200 : 25,
+                maxWidth: horizontal ? 350 : 25,
                 formatter: (val: number) => {
+                    if (val === 0) {
+                        return ''
+                    }
+
                     if (typeof val === 'number') {
                         return val.toFixed(0)
                     }
@@ -127,7 +127,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                     return val
                 }
             },
-            tickAmount: range + 1
+            tickAmount: range
         }
     }
 }

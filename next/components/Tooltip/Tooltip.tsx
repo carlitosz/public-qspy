@@ -1,17 +1,17 @@
 import React from 'react'
 import { formatDistance } from 'date-fns'
 
-import DropdownMenuItem from '@/components/Dropdown/DropdownItem'
+import DropdownItem from '@/components/Dropdown/DropdownItem'
 
-import type { DropdownItem } from '@/components/Dropdown/DropdownItem'
-import type { SeriesDataPoint } from '@/util/options'
+import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+import type { SeriesDataPoint } from '@/util/series'
 
 const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
     if (!x || !y || !meta) {
         return <></>
     }
 
-    const items: DropdownItem[] = [
+    const items: DropdownItemType[] = [
         {
             divider: true
         },
@@ -30,17 +30,17 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
     ]
 
     return (
-        <div className="block p-2 w-auto rounded-md bg-neutral-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="p-2 w-full rounded-md bg-white shadow-lg ring-1 ring-extralight">
             <div className="flex flex-col justify-center items-center px-2 pb-2">
-                <p className="text-lg font-semibold text-indigo-500">{y}</p>
-                <p className="text-xs font-normal text-neutral-400">{meta.path}</p>
-                <p className="text-sm font-normal text-indigo-500">{x}</p>
+                <p className="text-2xl font-semibold text-primary">{y}</p>
+                <p className="text-xs text-light">{meta.path}</p>
+                <p className="text-md text-primary">{x}</p>
             </div>
             <ul className="flex flex-col">
                 {items &&
                     items.map(
                         (
-                            { divider, icon, onClick, label, title, titleColor, selected }: DropdownItem,
+                            { divider, icon, onClick, label, title, selected }: DropdownItemType,
                             index: number
                         ): JSX.Element => {
                             if (divider) {
@@ -48,7 +48,7 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
                             }
 
                             return (
-                                <DropdownMenuItem
+                                <DropdownItem
                                     id={`toolbar-${index}`}
                                     icon={icon}
                                     onClick={onClick}
@@ -57,7 +57,6 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
                                     label={label}
                                     tabIndex={-1}
                                     title={title}
-                                    titleColor={titleColor}
                                     selected={selected}
                                 />
                             )

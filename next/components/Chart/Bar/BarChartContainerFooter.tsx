@@ -27,7 +27,7 @@ const BarChartContainerFooter = ({
     totalResults
 }: BarChartContainerFooterProps): JSX.Element => {
     return (
-        <div className="border-t border-t-extralight">
+        <div className="border-t border-t-extralight h-full">
             <Pagination
                 changeResultsPerPage={changeResultsPerPage}
                 changeSortDirection={changeSortDirection}

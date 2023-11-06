@@ -10,9 +10,9 @@ const BarChartSkeleton = ({ orientation }: BarChartSkeletonProps): JSX.Element =
     return (
         <>
             <div className="h-16 w-full">
-                <div className="flex justify-between items-center border-b border-b-extralight h-full px-4">
-                    <div className="w-1/4 h-4 bg-extralight rounded-lg" />
-                    <div className="w-6 h-6 bg-extralight rounded-full" />
+                <div className="flex justify-between items-center border-b border-b-extralight h-full p-4">
+                    <div className="w-1/4 h-4 bg-extralight rounded-full" />
+                    <div className="w-8 h-8 bg-extralight rounded-full" />
                 </div>
             </div>
 
@@ -72,13 +72,13 @@ const BarChartSkeleton = ({ orientation }: BarChartSkeletonProps): JSX.Element =
                 <div className="border-t border-t-extralight h-full">
                     <div className="pagination-container h-full">
                         <div className="h-full w-1/3 flex items-center justify-start">
-                            <div className="h-4 w-36 bg-extralight rounded-lg" />
+                            <div className="h-4 w-36 bg-extralight rounded-full" />
                         </div>
                         <div className="h-full w-1/3 flex items-center justify-center">
-                            <div className="h-8 w-96 bg-extralight rounded-lg" />
+                            <div className="h-8 w-96 bg-extralight rounded-full" />
                         </div>
                         <div className="h-full w-1/3 flex items-center justify-end">
-                            <div className="h-6 w-6 bg-extralight rounded-full" />
+                            <div className="h-8 w-8 bg-extralight rounded-full" />
                         </div>
                     </div>
                 </div>

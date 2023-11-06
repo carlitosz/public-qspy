@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 import BarChart from '@/components/Chart/Bar/BarChart'
-import Pagination from '@/components/Pagination/Pagination'
 import { paginate, sort } from '@/util/paginate'
 
 import BarChartContainerHeader from '@/components/Chart/Bar/BarChartContainerHeader'
