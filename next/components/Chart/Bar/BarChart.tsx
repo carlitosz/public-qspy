@@ -31,7 +31,7 @@ const BarChart = ({ data, horizontal, name, range, type }: BarChartProps): JSX.E
     }, [name, range, horizontal])
 
     return (
-        <div className="h-full px-4">
+        <div className="h-full px-4 pt-2">
             <ApexChart options={options} series={series} type={type} height="100%" />
         </div>
     )

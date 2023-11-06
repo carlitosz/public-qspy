@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap')
+
+@tailwind base
+@tailwind components
+@tailwind utilities
+@tailwind colors
+
+@layer base
+    :root
+        // Primary theme colors
+        --color-primary: theme(colors.indigo.600)
+        --color-secondary: theme(colors.indigo.400)
+
+        // Neutral theme colors
+        --color-black: theme(colors.neutral.900)
+        --color-superdark: theme(colors.neutral.800)
+        --color-extradark: theme(colors.neutral.700)
+        --color-dark: theme(colors.neutral.600)
+        --color-light: theme(colors.neutral.400)
+        --color-extralight: theme(colors.neutral.200)
+        --color-superlight: theme(colors.neutral.100)
+        --color-white: theme(colors.neutral.50)
+
+@layer components
+    @import chart
+    @import icon
+    @import pagination

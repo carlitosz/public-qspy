@@ -13,8 +13,6 @@ interface DropdownProps {
     openIcon?: React.ReactNode
 }
 
-const iconClass = 'h-5 w-5 animate-wiggle transform-gpu'
-
 const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
@@ -52,8 +50,8 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
         >
             <button
                 className={`${
-                    open ? 'bg-neutral-200' : ''
-                } p-2 text-neutral-500 hover:text-indigo-600 hover:bg-neutral-200 transition duration-150 focus:outline-none ease-out hover:ease-in rounded-full ${
+                    open ? 'bg-extralight' : ''
+                } p-2 text-dark hover:text-primary hover:bg-extralight transition duration-150 ease-out hover:ease-in rounded-full ${
                     disabled ? 'cursor-not-allowed' : 'cursor-pointer'
                 }`}
                 id="menu-button"
@@ -61,13 +59,13 @@ const Dropdown = ({ closeIcon, disabled, menuItems, openIcon }: DropdownProps): 
                 disabled={disabled}
             >
                 {open
-                    ? closeIcon ?? <XMarkIcon className={iconClass} />
-                    : openIcon ?? <EllipsisVerticalIcon className={iconClass} />}
+                    ? closeIcon ?? <XMarkIcon className="icon-sm animate-wiggle transform-gpu" />
+                    : openIcon ?? <EllipsisVerticalIcon className="icon-sm animate-wiggle transform-gpu" />}
             </button>
 
             {open && (
                 <div
-                    className="absolute p-2 right-0 z-10 origin-top-right w-48 rounded-md bg-neutral-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute p-2 right-0 z-10 origin-top-right w-48 rounded-md bg-white shadow-lg ring-1 ring-extralight"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="menu-button"

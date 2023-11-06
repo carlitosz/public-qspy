@@ -50,8 +50,8 @@ const BarChartContainerHeader = ({
     withToolbar
 }: BarChartContainerHeaderProps): JSX.Element => {
     return (
-        <div className="flex flex-row justify-between items-center border-b px-4 py-2">
-            <p className="text-neutral-600 text-sm font-medium antialiased">{title}</p>
+        <div className="flex justify-between items-center border-b border-extralight h-full px-4">
+            <p className="text-dark text-xs">{title}</p>
             {withToolbar && (
                 <Toolbar
                     disabled={data.length === 0}

@@ -37,7 +37,7 @@ const DropdownItem = ({
 
     if (title) {
         return (
-            <li className={`inline flex items-center text-neutral-400 w-full cursor-auto ${paddings}`}>
+            <li className={`inline flex items-center text-light w-full cursor-auto ${paddings}`}>
                 {icon && icon}
                 <span className={`text-xs font-medium uppercase antialiased ${titleColor ?? ''}`}>{title}</span>
             </li>
@@ -47,7 +47,7 @@ const DropdownItem = ({
     return (
         <li
             aria-hidden="true"
-            className={`flex flex-row justify-between align-center items-center rounded text-neutral-700 bg-neutral-50 hover:text-indigo-600 hover:bg-neutral-200 w-full px-2 py-3 transition duration-150 ease-out hover:ease-in cursor-pointer`}
+            className={`flex flex-row justify-between align-center items-center rounded text-dark hover:bg-extralight hover:text-primary w-full px-2 py-3 transition duration-150 ease-out hover:ease-in cursor-pointer`}
             data-value={label}
             id={id}
             onClick={onClick}
@@ -58,7 +58,7 @@ const DropdownItem = ({
                 {icon && icon}
                 <span className="text-xs font-medium antialiased">{label && label}</span>
             </div>
-            {selected && <CheckCircleIcon className="h-5 w-5 text-indigo-600" />}
+            {selected && <CheckCircleIcon className="icon-sm text-primary" />}
         </li>
     )
 }

@@ -2,8 +2,7 @@ import React from 'react'
 import { format } from 'date-fns'
 
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
-import ChartContainer from '@/components/Chart/Bar/BarChartContainer'
-import PageContainer from '@/components/Layout/PageContainer'
+import BarChartContainer from '@/components/Chart/Bar/BarChartContainer'
 import { useRequest } from '@/util/axios'
 
 import type { NextPage } from 'next'
@@ -25,22 +24,22 @@ const Home: NextPage = () => {
     )
 
     if (error) {
-        return (
-            <PageContainer mainTitle="Daily Analytics">
-                <></>
-            </PageContainer>
-        )
+        return <></>
     }
 
     return (
-        <PageContainer mainTitle={QUEUE_NAME}>
-            <div className="flex flex-inline flex-nowrap mb-6 h-1/6">
+        <div className="lg:container mx-auto">
+            <div className="block py-4 h-24">
+                <p className="text-primary text-sm antialiased">Overview</p>
+                <p className="text-dark text-lg font-semibold antialised">{QUEUE_NAME}</p>
+            </div>
+            <div className="w-full rounded-md h-48">
                 <AnalyticsContainer queueName={QUEUE_NAME} todaysData={data} />
             </div>
-            <div className="h-2/3">
-                <ChartContainer data={data} isLoading={isValidating} title={QUEUE_NAME} withToolbar={true} />
+            <div className="w-full rounded-md h-4/6">
+                <BarChartContainer data={data} isLoading={isValidating} title={QUEUE_NAME} withToolbar={true} />
             </div>
-        </PageContainer>
+        </div>
     )
 }
 

@@ -9,6 +9,7 @@ import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
 import BarChartEmpty from '@/components/Chart/Bar/BarChartEmpty'
 
 import type { SortDirection, DomainEvent, GetEventsResponse, Orientation } from 'types'
+import BarChartContainerFooter from './BarChartContainerFooter'
 
 interface ChartContainerProps {
     data: GetEventsResponse | undefined
@@ -49,10 +50,7 @@ const BarChartContainer = ({ data, isLoading, title, withToolbar = false }: Char
 
     if (isLoading || !pages || !data) {
         return (
-            <div
-                role="status"
-                className="flex flex-col border border-neutral-200 shadow-md rounded-xl bg-neutral-50 h-max"
-            >
+            <div role="status" className="chart animate-pulse">
                 <BarChartSkeleton orientation={orientation} />
             </div>
         )
@@ -60,64 +58,70 @@ const BarChartContainer = ({ data, isLoading, title, withToolbar = false }: Char
 
     if (totalResults === 0 && !data && !pages && !isLoading) {
         return (
-            <div className="border border-neutral-200 rounded-xl bg-neutral-50 h-full">
+            <div className="chart">
                 <BarChartEmpty />
             </div>
         )
     }
 
     return (
-        <div className="flex flex-col border border-neutral-200 shadow-md rounded-xl bg-neutral-50 h-full">
-            <BarChartContainerHeader
-                data={sorted}
-                changeOrientation={(desiredOrientation: Orientation) => {
-                    if (desiredOrientation === orientation) {
-                        return
-                    }
+        <div className="chart">
+            <div className="h-16 w-full">
+                <BarChartContainerHeader
+                    data={sorted}
+                    changeOrientation={(desiredOrientation: Orientation) => {
+                        if (desiredOrientation === orientation) {
+                            return
+                        }
 
-                    setOrientation(desiredOrientation)
-                }}
-                orientation={orientation}
-                title={title}
-                withToolbar={withToolbar}
-            />
-            <Pagination
-                changeResultsPerPage={(desiredResultsPerPage: number) => {
-                    if (desiredResultsPerPage === resultsPerPage) {
-                        return
-                    }
+                        setOrientation(desiredOrientation)
+                    }}
+                    orientation={orientation}
+                    title={title}
+                    withToolbar={withToolbar}
+                />
+            </div>
+            <div className="h-full w-full">
+                <BarChart
+                    data={pages[currentPage]}
+                    horizontal={orientation === 'horizontal'}
+                    name={title}
+                    range={range}
+                    type="bar"
+                />
+            </div>
+            <div className="h-16 w-full">
+                <BarChartContainerFooter
+                    changeResultsPerPage={(desiredResultsPerPage: number) => {
+                        if (desiredResultsPerPage === resultsPerPage) {
+                            return
+                        }
 
-                    setResultsPerPage(desiredResultsPerPage)
-                }}
-                changeSortDirection={(desiredSortDirection: SortDirection) => {
-                    if (desiredSortDirection === sortDirection) {
-                        return
-                    }
+                        setResultsPerPage(desiredResultsPerPage)
+                    }}
+                    changeSortDirection={(desiredSortDirection: SortDirection) => {
+                        if (desiredSortDirection === sortDirection) {
+                            return
+                        }
 
-                    setPages(paginate(sorted.reverse(), resultsPerPage))
-                    setSortDirection(desiredSortDirection)
-                }}
-                currentPage={currentPage}
-                currentPageTotal={pages[currentPage].length}
-                goToPage={(desiredPage: number) => {
-                    if (desiredPage < 0 || desiredPage >= pages.length) {
-                        return
-                    }
+                        setPages(paginate(sorted.reverse(), resultsPerPage))
+                        setSortDirection(desiredSortDirection)
+                    }}
+                    currentPage={currentPage}
+                    currentPageTotal={pages[currentPage].length}
+                    goToPage={(desiredPage: number) => {
+                        if (desiredPage < 0 || desiredPage >= pages.length) {
+                            return
+                        }
 
-                    setCurrentPage(desiredPage)
-                }}
-                numPages={pages.length}
-                resultsPerPage={resultsPerPage}
-                sortDirection={sortDirection}
-                totalResults={totalResults}
-            />
-            <BarChart
-                data={pages[currentPage]}
-                horizontal={orientation === 'horizontal'}
-                name={title}
-                range={range}
-                type="bar"
-            />
+                        setCurrentPage(desiredPage)
+                    }}
+                    numPages={pages.length}
+                    resultsPerPage={resultsPerPage}
+                    sortDirection={sortDirection}
+                    totalResults={totalResults}
+                />
+            </div>
         </div>
     )
 }

@@ -14,8 +14,13 @@ import type { SeriesDataPoint } from '@/util/series'
  * @returns ApexOptions
  */
 export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
+    const colors = [
+        getComputedStyle(document.body).getPropertyValue('--color-primary'),
+        getComputedStyle(document.body).getPropertyValue('--color-secondary')
+    ] as ApexOptions['colors']
+
     return {
-        colors: ['#4f46e5', '#818cf8'],
+        colors,
         chart: {
             id,
             animations: {
@@ -43,7 +48,7 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             textAnchor: 'middle'
         },
         fill: {
-            opacity: 0.9
+            opacity: 1
         },
         grid: {
             position: 'back',

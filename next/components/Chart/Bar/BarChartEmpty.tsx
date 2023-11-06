@@ -8,8 +8,8 @@ const BarChartEmpty = (): JSX.Element => {
             <div className="h-1/2 text-neutral-400">
                 <div className="flex flex-col h-full items-center justify-center">
                     <div className="inline-flex justify-center">
-                        <FaceFrownIcon className="h-10 w-10" />
-                        <FaceSmileIcon className="h-10 w-10" />
+                        <FaceFrownIcon className="icon-lg" />
+                        <FaceSmileIcon className="icon-lg" />
                     </div>
                     <p className="text-3xl font-medium my-10">No data available</p>
                     <p className="text-normal font-normal">The queue is empty or has not been processed</p>
