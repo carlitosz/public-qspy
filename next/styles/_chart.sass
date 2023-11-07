@@ -1,6 +1,14 @@
 .chart
     @apply flex flex-col h-full w-full border border-extralight rounded-md bg-white
 
+    .header, .footer
+        @apply flex justify-between items-center h-full p-4
+
+    .header
+        @apply border-b border-extralight
+    .footer
+        @apply border-t border-extralight
+
     // Skeleton only
     .horizontal
         @apply flex flex-row h-full w-full overflow-hidden px-4 pt-2

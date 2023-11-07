@@ -1,14 +1,11 @@
 .pagination-container
-    @apply flex items-center justify-between p-4 h-full w-full
-
-    .results
-        @apply flex items-center justify-start w-1/3 h-full
+    @apply flex items-center justify-center  h-full w-full
 
     .pagination
         @apply flex items-center justify-center w-1/3 h-full
 
         &-previous, &-next
-            @apply flex items-center justify-center hover:text-primary cursor-pointer text-dark text-sm
+            @apply flex items-center justify-center hover:text-primary cursor-pointer text-dark text-sm p-3 rounded-md hover:bg-superlight active:ring-1 active:ring-extralight transition duration-300 ease-in-out
 
         &-previous
             @apply mr-5
@@ -16,7 +13,7 @@
             @apply ml-5
 
         &-item
-            @apply text-center text-sm font-medium leading-none cursor-pointer text-dark hover:text-primary p-4 h-full w-10 hover:bg-superlight rounded-md mr-1
+            @apply text-center text-sm font-medium leading-none cursor-pointer text-dark hover:text-primary p-4 h-full w-10 hover:bg-superlight rounded-md mr-1 transition duration-300 ease-in-out
 
             &:last-child
                 @apply mr-0
@@ -26,6 +23,3 @@
 
         &-numbers
             @apply sm:flex hidden
-
-    .dropdown
-        @apply flex items-center justify-end w-1/3 h-full
