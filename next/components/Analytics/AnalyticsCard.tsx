@@ -17,7 +17,7 @@ const AnalyticsCard = ({ analytic, data, meta, title }: AnalyticsCardProps): JSX
     const change: number | undefined = data && ((data.now - data.before) / data.before) * 100
 
     return (
-        <div className="flex flex-col justify-center border border-extralight rounded-md p-6 bg-white h-full w-full">
+        <div className="card">
             <p className="text-sm text-dark font-medium antialiased">{title}</p>
             <p className="text-primary text-4xl my-5">{analytic.toLocaleString()}</p>
             <div className="flex items-center text-sm">

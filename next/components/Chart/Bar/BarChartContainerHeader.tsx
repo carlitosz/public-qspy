@@ -48,7 +48,7 @@ const BarChartContainerHeader = ({
     withToolbar
 }: BarChartContainerHeaderProps): JSX.Element => {
     return (
-        <div className="flex justify-between items-center border-b border-extralight h-full p-4">
+        <div className="header">
             <p className="text-dark text-sm">{title}</p>
             {withToolbar && (
                 <Toolbar

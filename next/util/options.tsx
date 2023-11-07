@@ -53,8 +53,10 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         grid: {
             borderColor: getComputedStyle(document.body).getPropertyValue('--color-extralight'),
             padding: {
-                bottom: horizontal ? 15 : -33,
-                right: horizontal ? 20 : 20
+                bottom: horizontal ? -15 : -33,
+                right: horizontal ? 20 : 0,
+                top: horizontal ? -30 : 0,
+                left: horizontal ? 20 : -25
             },
             position: 'back',
             yaxis: {
@@ -100,19 +102,24 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 show: false
             },
             labels: {
-                show: false
+                show: false,
+                style: {
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-primary')],
+                    fontWeight: 500
+                }
             },
-            tickAmount: range
+            tickAmount: range + 1
         },
         yaxis: {
             axisBorder: {
                 show: false
             },
             min: 0,
-            max: range,
+            max: range + 1,
             labels: {
-                show: true,
-                offsetY: horizontal ? 0 : -3,
+                show: horizontal,
+                offsetY: horizontal ? 2 : -3,
+                offsetX: horizontal ? 5 : -3,
                 minWidth: horizontal ? 200 : 25,
                 maxWidth: horizontal ? 350 : 25,
                 formatter: (val: number) => {
@@ -125,9 +132,15 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                     }
 
                     return val
-                }
+                },
+                style: horizontal
+                    ? {}
+                    : {
+                          colors: [getComputedStyle(document.body).getPropertyValue('--color-primary')],
+                          fontWeight: 500
+                      }
             },
-            tickAmount: range
+            tickAmount: range + 1
         }
     }
 }
