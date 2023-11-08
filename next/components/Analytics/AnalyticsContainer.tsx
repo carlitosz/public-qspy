@@ -1,41 +1,25 @@
 import React from 'react'
-import { subDays } from 'date-fns'
-import { format } from 'date-fns-tz'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
 
-import { GetEventsResponse } from 'types'
-import { useRequest } from '@/util/axios'
+import type { GetEventsResponse } from 'types'
 
 interface AnalyticsContainerProps {
-    queueName: string
-    todaysData: GetEventsResponse | undefined
+    data: {
+        today: GetEventsResponse | undefined
+        yesterday: GetEventsResponse | undefined
+    }
 }
 
-const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps): JSX.Element => {
-    const DATE = format(subDays(new Date(), 1), 'yyyy-MM-dd')
+const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
+    const { today, yesterday } = data
 
-    const {
-        isValidating,
-        error,
-        data: yesterdaysData
-    } = useRequest<GetEventsResponse>(
-        {
-            url: `/events?queue=${encodeURIComponent(queueName)}&date=${encodeURIComponent(DATE)}`,
-            method: 'GET'
-        },
-        {
-            revalidateOnFocus: false,
-            shouldRetryOnError: false
-        }
-    )
-
-    if (error) {
+    if (today.error || yesterday.error) {
         return <>Error occurred.</>
     }
 
-    if (isValidating || !yesterdaysData || !todaysData) {
+    if (today.isValidating || yesterday.isValidating || !today || !yesterday) {
         return (
             <div className="columns-4 h-full">
                 <AnalyticsCardSkeleton />
@@ -46,21 +30,24 @@ const AnalyticsContainer = ({ todaysData, queueName }: AnalyticsContainerProps):
         )
     }
 
+    const todaysData: GetEventsResponse = today.data
+    const yesterdaysData: GetEventsResponse = yesterday.data
+
     return (
         <div className="columns-4 h-full">
             <AnalyticsCard
                 analytic={todaysData.Total}
-                data={{ now: todaysData.Total, before: yesterdaysData.Total }}
+                data={{ today: todaysData.Total, yesterday: yesterdaysData.Total }}
                 meta={`from ${yesterdaysData.Total} yesterday`}
                 title="Today"
             />
             <AnalyticsCard
                 analytic={1092}
-                data={{ now: 1092, before: 956 }}
+                data={{ today: 1092, yesterday: 956 }}
                 meta={`from ${562} the previous week`}
                 title="Past week"
             />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
+            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Date & Status" />
             <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
         </div>
     )

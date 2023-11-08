@@ -6,7 +6,7 @@ import PhotoIcon from '@heroicons/react/24/outline/PhotoIcon'
 import React from 'react'
 
 import Toolbar from '@/components/Toolbar/Toolbar'
-import { formattedJSONArray } from '@/util/paginate'
+import { formattedJSONArray } from '@/util/data'
 
 import { DomainEvent, Orientation } from 'types'
 

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 
 import type { ApexOptions } from 'apexcharts'
 import type { Props } from 'react-apexcharts'
-import type { DomainEvent } from 'types'
+import type { DomainEventSeriesData } from 'types'
 
 import { createSeries } from '@/util/series'
 import { horizontalBarGraphOptions } from '@/util/options'
@@ -11,7 +11,7 @@ import { horizontalBarGraphOptions } from '@/util/options'
 const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.default), { ssr: false })
 
 interface BarChartProps {
-    data: DomainEvent[] | []
+    data: DomainEventSeriesData[]
     horizontal: boolean
     name: string
     range: number

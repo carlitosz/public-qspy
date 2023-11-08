@@ -2,6 +2,7 @@ import React from 'react'
 import { formatDistance } from 'date-fns'
 
 import DropdownItem from '@/components/Dropdown/DropdownItem'
+import AnalyticsMeta from '@/components/Analytics/AnalyticsMeta'
 
 import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
 import type { SeriesDataPoint } from '@/util/series'
@@ -31,10 +32,15 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
 
     return (
         <div className="p-2 w-full rounded-md bg-white shadow-lg ring-1 ring-extralight">
-            <div className="flex flex-col justify-center items-center px-2 pb-2">
-                <p className="text-2xl font-semibold text-primary">{y}</p>
+            <div className="flex flex-col justify-center items-center p-2">
                 <p className="text-xs text-light">{meta.path}</p>
-                <p className="text-md text-primary">{x}</p>
+                <p className="text-xs text-primary">{x}</p>
+                <p className="text-2xl font-semibold text-primary my-2">{y}</p>
+                <AnalyticsMeta
+                    change={meta.diff.change}
+                    message={`from ${meta.diff.eventsYesterday} yesterday`}
+                    size="text-xs"
+                />
             </div>
             <ul className="flex flex-col">
                 {items &&
@@ -49,7 +55,7 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
 
                             return (
                                 <DropdownItem
-                                    id={`toolbar-${index}`}
+                                    id={`item-${index}`}
                                     icon={icon}
                                     onClick={onClick}
                                     role="none"

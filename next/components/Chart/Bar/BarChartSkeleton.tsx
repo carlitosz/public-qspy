@@ -69,7 +69,7 @@ const BarChartSkeleton = ({ orientation }: BarChartSkeletonProps): JSX.Element =
             </div>
 
             <div className="h-16 w-full">
-                <div className="border-t border-t-extralight h-full">
+                <div className="border-t border-t-extralight h-full p-4">
                     <div className="pagination-container h-full">
                         <div className="h-full w-1/3 flex items-center justify-start">
                             <div className="h-4 w-36 bg-extralight rounded-full" />
