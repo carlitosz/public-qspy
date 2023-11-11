@@ -2,14 +2,14 @@ import React from 'react'
 
 import type { AppProps } from 'next/app'
 
-import LayoutWithSidebar from '@/components/Layout/LayoutWithSidebar'
+import Layout from '@/components/Layout/Layout'
 
 import '@/styles/globals.sass'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <LayoutWithSidebar>
+        <Layout>
             <Component {...pageProps} />
-        </LayoutWithSidebar>
+        </Layout>
     )
 }

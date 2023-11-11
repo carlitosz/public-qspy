@@ -1,5 +1,6 @@
 import React from 'react'
 import { format } from 'date-fns'
+import { subDays } from 'date-fns'
 
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
 import BarChartContainer from '@/components/Chart/Bar/BarChartContainer'
@@ -10,11 +11,12 @@ import type { GetEventsResponse } from 'types'
 
 const Home: NextPage = () => {
     const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-    const DATE = format(new Date(), 'yyyy-MM-dd')
+    const DATE_TODAY = format(new Date(), 'yyyy-MM-dd')
+    const DATE_YESTERDAY = format(subDays(new Date(), 1), 'yyyy-MM-dd')
 
-    const { isValidating, error, data } = useRequest<GetEventsResponse>(
+    const today: GetEventsResponse = useRequest<GetEventsResponse>(
         {
-            url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE)}`,
+            url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_TODAY)}`,
             method: 'GET'
         },
         {
@@ -23,7 +25,18 @@ const Home: NextPage = () => {
         }
     )
 
-    if (error) {
+    const yesterday: GetEventsResponse = useRequest<GetEventsResponse>(
+        {
+            url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_YESTERDAY)}`,
+            method: 'GET'
+        },
+        {
+            revalidateOnFocus: false,
+            shouldRetryOnError: false
+        }
+    )
+
+    if (today.error || yesterday.error) {
         return <></>
     }
 
@@ -34,10 +47,10 @@ const Home: NextPage = () => {
                 <p className="text-dark text-lg font-semibold antialised">{QUEUE_NAME}</p>
             </div>
             <div className="w-full rounded-md h-40 mb-6">
-                <AnalyticsContainer queueName={QUEUE_NAME} todaysData={data} />
+                <AnalyticsContainer data={{ today, yesterday }} />
             </div>
             <div className="w-full rounded-md h-4/6">
-                <BarChartContainer data={data} isLoading={isValidating} title={QUEUE_NAME} withToolbar={true} />
+                <BarChartContainer data={{ today, yesterday }} title={QUEUE_NAME} withToolbar={true} />
             </div>
         </div>
     )

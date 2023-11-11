@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Router from 'next/router'
 
-interface MenuItemProps {
+export interface MenuItemProps {
+    href: string
     icon: React.ReactNode
-    label: string
+    label?: string
 }
 
-const MenuItem = ({ icon, label }: MenuItemProps): JSX.Element => {
+const MenuItem = ({ href, icon, label }: MenuItemProps): JSX.Element => {
+    const [selected, setSelected] = useState<boolean>(false)
+
+    useEffect(() => setSelected(Router.pathname === href), [href])
+
     return (
-        <li className="my-px">
-            <a href="#" className="flex flex-row items-center h-10 px-3 rounded-lg">
-                <span className="flex items-center justify-center">{icon}</span>
-                <span className="ml-3 text-sm">{label}</span>
-            </a>
+        <li aria-hidden="true" className={`menu-item ${selected ? 'selected' : ''}`} onClick={() => Router.push(href)}>
+            {icon}
+            {label && <span className="text-xs uppercase">{label}</span>}
         </li>
     )
 }

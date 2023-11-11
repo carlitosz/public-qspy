@@ -5,7 +5,7 @@ interface LayoutProps {
     children: React.ReactNode
 }
 
-const LayoutWithSidebar = ({ children }: LayoutProps): JSX.Element => {
+const Layout = ({ children }: LayoutProps): JSX.Element => {
     return (
         <div className="flex flex-row h-screen bg-superlight">
             <Sidebar />
@@ -14,4 +14,4 @@ const LayoutWithSidebar = ({ children }: LayoutProps): JSX.Element => {
     )
 }
 
-export default LayoutWithSidebar
+export default Layout

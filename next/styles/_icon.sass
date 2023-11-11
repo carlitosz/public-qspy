@@ -1,6 +1,8 @@
 .icon
+    &-xs
+        @apply h-4 w-4
     &-sm
-        @apply h-full w-5
+        @apply h-5 w-5
     &-md
         @apply h-7 w-7
     &-lg
@@ -18,12 +20,20 @@
         @apply mr-3
 
 .analytics-icon
+    &-xs
+        @extend .icon-xs
+        @apply mr-0.5
     &-sm
         @extend .icon-sm
-        @apply mr-1
+        @apply mr-0.5
     &-md
         @extend .icon-md
-        @apply mr-1
+        @apply mr-0.5
     &-lg
         @extend .icon-lg
-        @apply mr-1
+        @apply mr-0.5
+
+.sidebar-icon
+    &-md
+        @extend .icon-md
+        @apply mb-1

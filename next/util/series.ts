@@ -1,7 +1,7 @@
-import type { DomainEvent } from 'types'
+import type { DomainEventSeriesData, DomainEventDiff } from 'types'
 import type { ApexOptions } from 'apexcharts'
 
-export declare type SeriesMeta = { path: string; firstSeen: string; lastSeen: string }
+export declare type SeriesMeta = { path: string; firstSeen: string; lastSeen: string } & DomainEventDiff
 export declare type SeriesDataPoint = { x: string; y: number; meta: SeriesMeta }
 
 /**
@@ -12,11 +12,11 @@ export declare type SeriesDataPoint = { x: string; y: number; meta: SeriesMeta }
  *
  * @returns ApexOptions['series']
  */
-export const createSeries = (data: DomainEvent[], name: string): ApexOptions['series'] => {
+export const createSeries = (data: DomainEventSeriesData[], name: string): ApexOptions['series'] => {
     return [
         {
             name,
-            data: data.map((d: DomainEvent): SeriesDataPoint => {
+            data: data.map((d: DomainEventSeriesData): SeriesDataPoint => {
                 var split = d.event.split('\\')
                 const name: string = split.pop() ?? ''
 
@@ -26,7 +26,8 @@ export const createSeries = (data: DomainEvent[], name: string): ApexOptions['se
                     meta: {
                         path: split.join('\\'),
                         firstSeen: d.fs,
-                        lastSeen: d.ls
+                        lastSeen: d.ls,
+                        diff: d.diff
                     }
                 }
             })
