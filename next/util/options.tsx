@@ -12,10 +12,16 @@ import type { SeriesDataPoint } from '@/util/series'
  * @param id            Unique id/name for the chart
  * @param range         The maximum value of the y axis
  * @param horizontal    Boolean indicating horizontal orientation
+ * @param results       Number of results per page
  *
  * @returns ApexOptions
  */
-export const horizontalBarGraphOptions = (id: string, range: number, horizontal: boolean): ApexOptions => {
+export const horizontalBarGraphOptions = (
+    id: string,
+    range: number,
+    horizontal: boolean,
+    results: number
+): ApexOptions => {
     const colors = [
         getComputedStyle(document.body).getPropertyValue('--color-primary'),
         getComputedStyle(document.body).getPropertyValue('--color-secondary')
@@ -53,17 +59,25 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             textAnchor: 'middle'
         },
         fill: {
-            opacity: 1
+            opacity: 0.85
         },
         grid: {
-            borderColor: getComputedStyle(document.body).getPropertyValue('--color-extralight'),
+            borderColor: getComputedStyle(document.body).getPropertyValue('--color-border'),
+            column: {
+                colors: [getComputedStyle(document.body).getPropertyValue('--color-component')],
+                opacity: 0.1
+            },
             padding: {
                 bottom: horizontal ? -15 : -33,
                 right: horizontal ? 20 : 0,
                 top: horizontal ? -30 : -31,
-                left: horizontal ? 20 : -25
+                left: horizontal ? 20 : 0
             },
             position: 'back',
+            row: {
+                colors: [getComputedStyle(document.body).getPropertyValue('--color-page')],
+                opacity: 0.1
+            },
             yaxis: {
                 lines: {
                     show: !horizontal
@@ -100,15 +114,17 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 const data: SeriesDataPoint = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
                 return ReactDOMServer.renderToString(<Tooltip meta={data.meta} x={data.x} y={data.y} />)
             },
+            cssClass: 'custom-tooltip',
             enabled: true,
             followCursor: true,
             intersect: true,
-            shared: false
+            shared: false,
+            theme: false
         },
         xaxis: {
             axisBorder: {
                 show: false,
-                color: getComputedStyle(document.body).getPropertyValue('--color-light')
+                color: getComputedStyle(document.body).getPropertyValue('--color-title')
             },
             axisTicks: {
                 show: false
@@ -116,24 +132,23 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
             labels: {
                 show: false,
                 style: {
-                    colors: [getComputedStyle(document.body).getPropertyValue('--color-primary')],
-                    fontWeight: 500
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
-            tickAmount: range + 1
+            tickAmount: results
         },
         yaxis: {
             axisBorder: {
                 show: false
             },
             min: 0,
-            max: range + 1,
+            max: range + 2,
             labels: {
-                show: horizontal,
+                show: true,
                 offsetY: horizontal ? 2 : -3,
-                offsetX: horizontal ? 5 : -3,
+                offsetX: horizontal ? 5 : -5,
                 minWidth: horizontal ? 200 : 25,
-                maxWidth: horizontal ? 350 : 25,
+                maxWidth: horizontal ? 350 : 20,
                 formatter: (val: number) => {
                     if (val === 0) {
                         return ''
@@ -145,14 +160,12 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
 
                     return val
                 },
-                style: horizontal
-                    ? {}
-                    : {
-                          colors: [getComputedStyle(document.body).getPropertyValue('--color-primary')],
-                          fontWeight: 500
-                      }
+                style: {
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')],
+                    fontWeight: 500
+                }
             },
-            tickAmount: range + 1
+            tickAmount: range + 2
         }
     }
 }

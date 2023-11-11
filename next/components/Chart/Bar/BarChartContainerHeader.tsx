@@ -49,7 +49,7 @@ const BarChartContainerHeader = ({
 }: BarChartContainerHeaderProps): JSX.Element => {
     return (
         <div className="header">
-            <p className="text-dark text-sm">{title}</p>
+            <p className="text-title text-sm">{title}</p>
             {withToolbar && (
                 <Toolbar
                     direction="down"

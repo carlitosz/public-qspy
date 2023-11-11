@@ -44,7 +44,7 @@ const Home: NextPage = () => {
         <div className="lg:container mx-auto">
             <div className="my-6 h-12">
                 <p className="text-primary text-sm antialiased">Overview</p>
-                <p className="text-dark text-lg font-semibold antialised">{QUEUE_NAME}</p>
+                <p className="text-title text-lg font-semibold antialised">{QUEUE_NAME}</p>
             </div>
             <div className="w-full rounded-md h-40 mb-6">
                 <AnalyticsContainer data={{ today, yesterday }} />

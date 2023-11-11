@@ -2,10 +2,10 @@
     @apply flex flex-col items-center justify-center h-full w-full py-6
 
     .menu-item
-        @apply flex flex-col items-center justify-center w-16 h-auto text-dark hover:text-primary p-2 my-1 rounded-md hover:bg-superlight transition ease-in-out duration-300 hover:cursor-pointer
+        @apply flex flex-col items-center justify-center w-16 h-auto text-secondary hover:text-primary p-2 my-1 rounded-md hover:bg-hover transition ease-in-out duration-300 hover:cursor-pointer
 
         &:active
-            @apply ring-1 ring-extralight
+            @apply ring-1 ring-border
 
         &.selected
-            @apply text-primary bg-superlight ring-1 ring-extralight
+            @apply text-secondary bg-hover ring-1 ring-border

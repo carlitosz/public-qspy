@@ -8,7 +8,7 @@ import MenuItem from '@/components/Layout/MenuItem'
 
 const Sidebar = (): JSX.Element => {
     return (
-        <aside className="sidebar w-20 h-screen shadow-md border-r border-extralight bg-white">
+        <aside className="sidebar w-20 h-screen shadow-md border-r border-border bg-component">
             <div className="flex flex-col items-center justify-center h-full">
                 <span className="text-primary text-xl font-extrabold uppercase py-5">QSPY</span>
                 <Menu>

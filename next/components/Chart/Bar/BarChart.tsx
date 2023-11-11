@@ -15,11 +15,14 @@ interface BarChartProps {
     horizontal: boolean
     name: string
     range: number
+    resultsPerPage: number
     type: Props['type']
 }
 
-const BarChart = ({ data, horizontal, name, range, type }: BarChartProps): JSX.Element => {
-    const [options, setOptions] = useState<ApexOptions>(horizontalBarGraphOptions(name, range, horizontal))
+const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarChartProps): JSX.Element => {
+    const [options, setOptions] = useState<ApexOptions>(
+        horizontalBarGraphOptions(name, range, horizontal, resultsPerPage)
+    )
     const [series, setSeries] = useState<ApexOptions['series']>(createSeries(data, name))
 
     useEffect(() => {
@@ -27,8 +30,8 @@ const BarChart = ({ data, horizontal, name, range, type }: BarChartProps): JSX.E
     }, [data, name])
 
     useEffect(() => {
-        setOptions(horizontalBarGraphOptions(name, range, horizontal))
-    }, [name, range, horizontal])
+        setOptions(horizontalBarGraphOptions(name, range, horizontal, resultsPerPage))
+    }, [name, range, horizontal, resultsPerPage])
 
     return (
         <div className="h-full">

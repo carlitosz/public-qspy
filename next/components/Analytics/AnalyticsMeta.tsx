@@ -13,7 +13,7 @@ const AnalyticsMeta = ({ change, message, size = 'text-sm' }: AnalyticsMetaProps
         <div className="flex items-center justify-start">
             {typeof change === 'number' && change === 0 && (
                 <>
-                    <span className={`${size} text-light mr-1`}>0%</span>
+                    <span className={`${size} text-text mr-1`}>0%</span>
                 </>
             )}
             {typeof change === 'number' && change > 0 && (
@@ -28,7 +28,7 @@ const AnalyticsMeta = ({ change, message, size = 'text-sm' }: AnalyticsMetaProps
                     <span className={`${size} text-emerald-600 mr-1`}>{change.toFixed(0)}%</span>
                 </>
             )}
-            <span className={`${size} text-dark antialiased`}>{message}</span>
+            <span className={`${size} text-title antialiased`}>{message}</span>
         </div>
     )
 }
