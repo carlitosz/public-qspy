@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDomServer from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server'
 
 import Tooltip from '@/components/Tooltip/Tooltip'
 
@@ -36,11 +36,11 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
                 }
             },
             events: {
-                dataPointMouseEnter: function (event) {
-                    event.target.style.cursor = 'pointer'
-                },
-                selection: (e) => {
-                    console.log(e)
+                dataPointMouseEnter: (event: MouseEvent): void => {
+                    if (event.target) {
+                        const target = event.target as HTMLElement
+                        target.style.cursor = 'pointer'
+                    }
                 }
             },
             fontFamily: 'Poppins',
@@ -81,17 +81,24 @@ export const horizontalBarGraphOptions = (id: string, range: number, horizontal:
         plotOptions: {
             bar: {
                 barHeight: '60%', // Horizontal
-                borderRadius: 2,
+                borderRadius: 3,
                 borderRadiusApplication: 'end',
                 columnWidth: '70%', // Vertical
                 distributed: true,
                 horizontal: horizontal
             }
         },
+        states: {
+            hover: {
+                filter: {
+                    type: 'none'
+                }
+            }
+        },
         tooltip: {
             custom: ({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: any }) => {
                 const data: SeriesDataPoint = w.globals.initialSeries[seriesIndex].data[dataPointIndex]
-                return ReactDomServer.renderToString(<Tooltip meta={data.meta} x={data.x} y={data.y} />)
+                return ReactDOMServer.renderToString(<Tooltip meta={data.meta} x={data.x} y={data.y} />)
             },
             enabled: true,
             followCursor: true,

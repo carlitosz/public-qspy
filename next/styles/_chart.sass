@@ -34,10 +34,10 @@
 
     // Skeleton only
     .vertical
-        @apply flex inline-flex space-x-2 p-8 w-full items-baseline h-full
+        @apply flex inline-flex space-x-2 px-2 w-full items-baseline h-full
 
         .bar
-            @apply w-36 bg-neutral-200 self-end rounded-t-md h-24
+            @apply w-36 bg-neutral-200 self-end rounded-t-md h-64
 
             &:nth-child(2n)
                 @apply h-56
@@ -51,7 +51,7 @@
             &:nth-child(5n)
                 @apply h-96
 
-            &:nth-child(6)
+            &:nth-child(6n)
                 @apply h-36
 
             &:nth-child(10n)

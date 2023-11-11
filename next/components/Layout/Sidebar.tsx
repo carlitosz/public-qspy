@@ -10,7 +10,7 @@ const Sidebar = (): JSX.Element => {
     return (
         <aside className="sidebar w-20 h-screen shadow-md border-r border-extralight bg-white">
             <div className="flex flex-col items-center justify-center h-full">
-                <span className="text-dark text-xl font-extrabold uppercase py-6">QSPY</span>
+                <span className="text-primary text-xl font-extrabold uppercase py-5">QSPY</span>
                 <Menu>
                     <div className="flex flex-col h-full justify-start items-center">
                         <MenuItem href="/" icon={<HomeIcon className="sidebar-icon-md" />} label="Home" />
