@@ -17,16 +17,15 @@
         --color-title: theme(colors.neutral.700)
 
     // System preference
-    @media (prefers-color-scheme:dark)
-        :root
-            --color-border: theme(colors.neutral.700)
-            --color-component: theme(colors.neutral.800)
-            --color-hover: theme(colors.neutral.900)
-            --color-page: theme(colors.neutral.900)
-            --color-primary: theme(colors.indigo.400)
-            --color-secondary: theme(colors.indigo.100)
-            --color-text: theme(colors.neutral.500)
-            --color-title: theme(colors.neutral.300)
+    :root[data-theme="dark"]
+        --color-border: theme(colors.neutral.700)
+        --color-component: theme(colors.neutral.800)
+        --color-hover: theme(colors.neutral.900)
+        --color-page: theme(colors.neutral.900)
+        --color-primary: theme(colors.indigo.400)
+        --color-secondary: theme(colors.indigo.100)
+        --color-text: theme(colors.neutral.500)
+        --color-title: theme(colors.neutral.300)
 
 @layer components
     @import card

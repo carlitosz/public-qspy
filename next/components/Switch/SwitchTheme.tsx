@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { useTheme } from '@/util/theme'
+import type { Theme } from '@/util/theme'
 
 interface SwitchProps {
     icons: {
@@ -7,8 +10,13 @@ interface SwitchProps {
     }
 }
 
-const Switch = ({ icons }: SwitchProps) => {
-    const [checked, setChecked] = useState(false)
+const SwitchTheme = ({ icons }: SwitchProps) => {
+    const theme: Theme = useTheme()
+    const [checked, setChecked] = useState<boolean>(typeof window !== 'undefined' && theme.getTheme() === 'dark')
+
+    useEffect(() => {
+        checked ? theme.setTheme('dark') : theme.setTheme('light')
+    }, [checked, theme])
 
     return (
         <div className="flex items-center justify-center w-full">
@@ -29,4 +37,4 @@ const Switch = ({ icons }: SwitchProps) => {
     )
 }
 
-export default Switch
+export default SwitchTheme

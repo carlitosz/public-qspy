@@ -6,7 +6,7 @@ import SunIcon from '@heroicons/react/24/outline/SunIcon'
 
 import Menu from '@/components/Layout/Menu'
 import MenuItem from '@/components/Layout/MenuItem'
-import Switch from '@/components/Switch/Switch'
+import SwitchTheme from '@/components/Switch/SwitchTheme'
 
 const Sidebar = (): JSX.Element => {
     return (
@@ -19,7 +19,7 @@ const Sidebar = (): JSX.Element => {
                         <MenuItem href="#" icon={<QueueListIcon className="sidebar-icon-md" />} label="Queues" />
                     </div>
                     <div className="flex flex-col h-auto justify-end">
-                        <Switch
+                        <SwitchTheme
                             icons={{
                                 checked: <MoonIcon className="icon-sm" />,
                                 unchecked: <SunIcon className="icon-sm" />
