@@ -1,0 +1,18 @@
+.switch
+    @apply sr-only
+
+    &:checked ~ .dot
+        transform: translateX(100%)
+        background-color: bg-primary transition ease-in-out duration-500
+
+.pane
+    @apply block items-center w-14 h-8 rounded-full
+
+    &.unchecked
+        @apply bg-page transition ease-in-out duration-500
+
+    &.checked
+        @apply bg-primary transition ease-in-out duration-500
+
+.dot
+    @apply absolute text-primary flex items-center justify-center left-1 top-1 bg-white w-6 h-6 rounded-full transition ease-in-out duration-500

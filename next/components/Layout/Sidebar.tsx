@@ -1,10 +1,12 @@
 import React from 'react'
 import HomeIcon from '@heroicons/react/24/outline/HomeIcon'
-import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon'
+import MoonIcon from '@heroicons/react/24/outline/MoonIcon'
 import QueueListIcon from '@heroicons/react/24/outline/QueueListIcon'
+import SunIcon from '@heroicons/react/24/outline/SunIcon'
 
 import Menu from '@/components/Layout/Menu'
 import MenuItem from '@/components/Layout/MenuItem'
+import Switch from '@/components/Switch/Switch'
 
 const Sidebar = (): JSX.Element => {
     return (
@@ -17,7 +19,12 @@ const Sidebar = (): JSX.Element => {
                         <MenuItem href="#" icon={<QueueListIcon className="sidebar-icon-md" />} label="Queues" />
                     </div>
                     <div className="flex flex-col h-auto justify-end">
-                        <MenuItem href="#" icon={<Cog6ToothIcon className="sidebar-icon-md" />} label="Settings" />
+                        <Switch
+                            icons={{
+                                checked: <MoonIcon className="icon-sm" />,
+                                unchecked: <SunIcon className="icon-sm" />
+                            }}
+                        />
                     </div>
                 </Menu>
             </div>
