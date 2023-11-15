@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { QSpyTheme } from 'types'
 
 export declare type Theme = {
-    currentTheme: QSpyTheme
+    currentTheme?: QSpyTheme
     getTheme: () => QSpyTheme
     setTheme: (newTheme: QSpyTheme) => void
 }
@@ -27,7 +27,13 @@ export const useTheme = (): React.ContextType<typeof ThemeContext> => {
 }
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
-    const [currentTheme, setCurrentTheme] = useState<QSpyTheme>('light')
+    const [currentTheme, setCurrentTheme] = useState<QSpyTheme>(() => {
+        if (typeof window !== 'undefined' && 'theme' in localStorage) {
+            return localStorage.theme
+        }
+
+        return 'light'
+    })
 
     useEffect(() => {
         if (!('theme' in localStorage)) {
@@ -47,7 +53,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }): JSX.
     }, [currentTheme])
 
     const setTheme = (newTheme: QSpyTheme) => setCurrentTheme(newTheme)
-    const getTheme = (): QSpyTheme => localStorage.theme
+    const getTheme = (): QSpyTheme => currentTheme
 
     return <ThemeContext.Provider value={{ currentTheme, getTheme, setTheme }}>{children}</ThemeContext.Provider>
 }

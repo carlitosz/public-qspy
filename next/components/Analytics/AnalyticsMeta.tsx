@@ -19,13 +19,13 @@ const AnalyticsMeta = ({ change, message, size = 'text-sm' }: AnalyticsMetaProps
             {typeof change === 'number' && change > 0 && (
                 <>
                     <PlusSmallIcon className="analytics-icon-xs text-red-600" />
-                    <span className={`${size} font-medium text-red-600 mr-1`}>{change.toFixed(0)}%</span>
+                    <span className={`${size} font-medium text-red-600 mr-1`}>{Math.abs(change).toFixed(0)}%</span>
                 </>
             )}
             {typeof change === 'number' && change < 0 && (
                 <>
                     <MinusSmallIcon className="analytics-icon-xs text-emerald-600" />
-                    <span className={`${size} text-emerald-600 mr-1`}>{change.toFixed(0)}%</span>
+                    <span className={`${size} text-emerald-600 mr-1`}>{Math.abs(change).toFixed(0)}%</span>
                 </>
             )}
             <span className={`${size} text-title antialiased`}>{message}</span>

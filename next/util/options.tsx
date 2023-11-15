@@ -35,10 +35,11 @@ export const horizontalBarGraphOptions = (
                 easing: 'easeinout',
                 speed: 200,
                 dynamicAnimation: {
+                    enabled: true,
                     speed: 200
                 },
                 animateGradually: {
-                    enabled: true
+                    enabled: false
                 }
             },
             events: {
@@ -50,13 +51,14 @@ export const horizontalBarGraphOptions = (
                 }
             },
             fontFamily: 'Poppins',
+            redrawOnWindowResize: true,
+            redrawOnParentResize: true,
             toolbar: {
                 show: false
             }
         },
         dataLabels: {
-            enabled: false,
-            textAnchor: 'middle'
+            enabled: false
         },
         fill: {
             opacity: 0.85
@@ -130,10 +132,7 @@ export const horizontalBarGraphOptions = (
                 show: false
             },
             labels: {
-                show: false,
-                style: {
-                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
-                }
+                show: false
             },
             tickAmount: results
         },
@@ -161,8 +160,7 @@ export const horizontalBarGraphOptions = (
                     return val
                 },
                 style: {
-                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')],
-                    fontWeight: 500
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
             tickAmount: range + 2

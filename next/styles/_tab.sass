@@ -1,0 +1,20 @@
+.tabs
+    @apply flex
+
+    .tabs-list
+        @apply flex-col space-y-4 mr-4 mb-4
+
+        .tab
+            @apply mr-4 text-sm
+
+            button
+                @apply inline-flex items-center px-4 py-3 text-primary bg-component rounded-md w-full transition ease-in-out duration-150 ring-1 ring-border
+
+                &.selected
+                    @apply bg-primary text-page ring-0
+
+    .tabs-content
+        @apply h-full w-full rounded-md ring-1 ring-border
+
+        .content
+            @apply p-6 bg-component text-title rounded-md w-full

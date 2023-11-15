@@ -1,4 +1,3 @@
-import ApexCharts from 'apexcharts'
 import ArrowsUpDownIcon from '@heroicons/react/24/outline/ArrowsUpDownIcon'
 import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon'
 import ClipboardDocumentListIcon from '@heroicons/react/24/outline/ClipboardDocumentListIcon'
@@ -9,28 +8,6 @@ import Toolbar from '@/components/Toolbar/Toolbar'
 import { formattedJSONArray } from '@/util/data'
 
 import { DomainEvent, Orientation } from 'types'
-
-interface ImgUri {
-    imgURI: string
-}
-
-interface blob {
-    blob: Blob
-}
-
-interface ChartInstance {
-    chart: ApexCharts
-    group: string
-    id: string
-}
-
-declare global {
-    interface Window {
-        Apex: {
-            _chartInstances: [ChartInstance]
-        }
-    }
-}
 
 interface BarChartContainerHeaderProps {
     data: DomainEvent[] | []
@@ -80,25 +57,7 @@ const BarChartContainerHeader = ({
                         {
                             icon: <PhotoIcon className="menu-icon-sm" />,
                             label: 'PNG',
-                            onClick: async () => {
-                                const chartInstance: ChartInstance | undefined = window.Apex._chartInstances.find(
-                                    (chart: ApexChart | undefined) => {
-                                        if (chart && chart.id === title) return chart
-                                    }
-                                )
-
-                                if (!chartInstance) {
-                                    return
-                                }
-
-                                const { chart }: { chart: ChartInstance['chart'] } = chartInstance
-                                const data: ImgUri | blob = await chart.dataURI()
-
-                                const a = document.createElement('a')
-                                a.download = title + '.png'
-                                a.href = (data as ImgUri).imgURI
-                                a.click()
-                            }
+                            onClick: async () => {}
                         }
                     ]}
                 />

@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 
 import { createSeries } from '@/util/series'
 import { horizontalBarGraphOptions } from '@/util/options'
-import { Theme, useTheme } from '@/util/theme'
 
 import type { ApexOptions } from 'apexcharts'
 import type { Props } from 'react-apexcharts'

@@ -12,7 +12,7 @@ interface SwitchProps {
 
 const SwitchTheme = ({ icons }: SwitchProps) => {
     const theme: Theme = useTheme()
-    const [checked, setChecked] = useState<boolean>(typeof window !== 'undefined' && theme.getTheme() === 'dark')
+    const [checked, setChecked] = useState<boolean>(typeof window !== 'undefined' && theme.currentTheme === 'dark')
 
     useEffect(() => {
         checked ? theme.setTheme('dark') : theme.setTheme('light')
