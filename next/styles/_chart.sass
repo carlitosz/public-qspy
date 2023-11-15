@@ -1,13 +1,13 @@
 .chart
-    @apply flex flex-col h-full w-full border border-extralight rounded-md bg-white
+    @apply flex flex-col h-full w-full border border-border rounded-md bg-component
 
     .header, .footer
         @apply flex justify-between items-center h-full p-4
 
     .header
-        @apply border-b border-extralight
+        @apply border-b border-border
     .footer
-        @apply border-t border-extralight
+        @apply border-t border-border
 
     // Skeleton only
     .horizontal
@@ -17,7 +17,7 @@
             @apply w-5/6 space-y-2 ml-4
 
             .bar
-                @apply h-9 bg-neutral-200 self-start rounded-r-md w-1/2
+                @apply h-9 bg-border self-start rounded-r-md w-1/2
 
                 &:nth-child(2n + 1)
                     @apply w-1/4
@@ -27,7 +27,7 @@
                     @apply w-2/3
 
         .labels
-            @apply w-1/6 bg-neutral-200 p-4
+            @apply w-1/6 bg-border p-4
 
             .label
                 @apply h-full rounded-md
@@ -37,7 +37,7 @@
         @apply flex inline-flex space-x-2 px-2 w-full items-baseline h-full
 
         .bar
-            @apply w-36 bg-neutral-200 self-end rounded-t-md h-64
+            @apply w-36 bg-border self-end rounded-t-md h-64
 
             &:nth-child(2n)
                 @apply h-56

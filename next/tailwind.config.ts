@@ -7,16 +7,14 @@ export default {
     theme: {
         extend: {
             colors: {
-                black: 'var(--color-black)',
-                dark: 'var(--color-dark)',
-                extradark: 'var(--color-extradark)',
-                extralight: 'var(--color-extralight)',
-                light: 'var(--color-light)',
+                border: 'var(--color-border)',
+                component: 'var(--color-component)',
+                hover: 'var(--color-hover)',
+                page: 'var(--color-page)',
                 primary: 'var(--color-primary)',
                 secondary: 'var(--color-secondary)',
-                superdark: 'var(--color-superdark)',
-                superlight: 'var(--color-superlight)',
-                white: 'var(--color-white)'
+                text: 'var(--color-text)',
+                title: 'var(--color-title)'
             },
             fontFamily: {
                 sans: ['Poppins', 'sans-serif']

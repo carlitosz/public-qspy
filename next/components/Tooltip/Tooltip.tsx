@@ -33,7 +33,7 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
     return (
         <div className="tooltip">
             <div className="flex flex-col justify-center items-center p-2">
-                <p className="text-xs text-light">{meta.path}</p>
+                <p className="text-xs text-text">{meta.path}</p>
                 <p className="text-xs text-primary">{x}</p>
                 <p className="text-2xl font-semibold text-primary my-2">{y}</p>
                 <AnalyticsMeta

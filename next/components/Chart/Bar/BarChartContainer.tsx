@@ -92,6 +92,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                     horizontal={orientation === 'horizontal'}
                     name={title}
                     range={range}
+                    resultsPerPage={resultsPerPage}
                     type="bar"
                 />
             </div>

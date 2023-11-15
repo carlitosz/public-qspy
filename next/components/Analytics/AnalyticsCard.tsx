@@ -16,7 +16,7 @@ const AnalyticsCard = ({ analytic, data, meta, title }: AnalyticsCardProps): JSX
 
     return (
         <div className="card">
-            <p className="text-md text-dark antialiased">{title}</p>
+            <p className="text-md text-title antialiased">{title}</p>
             <p className="text-primary font-medium text-4xl my-5 antialiased">{analytic.toLocaleString()}</p>
             <AnalyticsMeta change={change} message={meta} size="text-sm" />
         </div>

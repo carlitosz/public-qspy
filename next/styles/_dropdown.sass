@@ -2,13 +2,13 @@
     @apply relative inline-block rounded-full
 
     .dropdown-btn
-        @apply p-2 text-dark hover:text-primary hover:bg-superlight rounded-full focus:outline-none active:ring-1 active:ring-extralight transition duration-300 ease-in-out
+        @apply p-2 text-title hover:text-primary hover:bg-hover rounded-full focus:outline-none active:ring-1 active:ring-border transition duration-150 ease-in-out
 
         &:disabled
             @apply cursor-not-allowed
 
     .dropdown-menu
-        @apply absolute p-2 z-10 w-48 rounded-md bg-white shadow-lg ring-1 ring-extralight
+        @apply absolute p-2 z-10 w-48 rounded-md bg-component shadow-lg ring-1 ring-border
 
         &.up
             @apply bottom-10 right-0 origin-bottom-right
@@ -17,13 +17,13 @@
             @apply right-0 origin-top-right
 
 .dropdown-item
-    @apply flex flex-row justify-between items-center rounded text-dark hover:bg-superlight hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
+    @apply flex flex-row justify-between items-center rounded text-title hover:bg-page hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
 
     &.selected
-        @apply bg-superlight ring-1 ring-extralight text-primary
+        @apply bg-page ring-1 ring-border text-primary
 
 .dropdown-title
-    @apply inline flex items-center text-light w-full h-full cursor-auto p-2
+    @apply inline flex items-center text-text w-full h-full cursor-auto p-2
 
 .dropdown-label
-    @apply inline flex items-center text-light w-full h-full cursor-auto p-2
+    @apply inline flex items-center text-text w-full h-full cursor-auto p-2

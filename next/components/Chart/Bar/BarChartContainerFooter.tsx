@@ -32,7 +32,7 @@ const BarChartContainerFooter = ({
 }: BarChartContainerFooterProps): JSX.Element => {
     return (
         <div className="footer">
-            <p className="text-dark text-xs antialiased">
+            <p className="text-title text-xs antialiased">
                 <span className="">Showing </span>
                 <span className="font-medium">
                     {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
@@ -47,7 +47,7 @@ const BarChartContainerFooter = ({
                     numPages={numPages}
                     totalResults={totalResults}
                 />
-                <div className="h-8 w-1 mx-4 border-r border-r-extralight" />
+                <div className="h-8 w-1 mx-4 border-r border-r-border" />
                 <Toolbar
                     direction="up"
                     disabled={totalResults === 0}
