@@ -7,7 +7,7 @@ import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
 import BarChartEmpty from '@/components/Chart/Bar/BarChartEmpty'
 import { diff, paginate, sort } from '@/util/data'
 
-import type { SortDirection, DomainEventSeriesData, GetEventsResponse, Orientation } from 'types'
+import type { SortDirection, DomainEventSeriesData, GetEventsResponse, Orientation, DomainEvent } from 'types'
 
 interface ChartContainerProps {
     data: {
@@ -22,38 +22,40 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [orientation, setOrientation] = useState<Orientation>('vertical')
     const [range, setRange] = useState<number>(0)
-    const [pages, setPages] = useState<[DomainEventSeriesData[] | []]>([[]])
+    const [pages, setPages] = useState<[DomainEvent[]] | [[]]>([[]])
     const [resultsPerPage, setResultsPerPage] = useState<number>(20)
-    const [sorted, setSorted] = useState<DomainEventSeriesData[]>([])
     const [sortDirection, setSortDirection] = useState<SortDirection>('DESC')
     const [totalResults, setTotalResults] = useState<number>(0)
 
-    const { data: todaysData, isValidating: todayValidating, error: todayError } = data.today
-    const { data: yesterdaysData, isValidating: yesterdayValidating } = data.yesterday
+    const { isValidating: tValidating, error: tError, data: tData } = data.today
+    const { isValidating: yValidating, error: yError, data: yData } = data.yesterday
 
-    // Sort the data and calculate diffs
     useEffect(() => {
-        if (todaysData && yesterdaysData) {
-            const sorted = diff(sort(todaysData.Data, 'DESC', 'count'), yesterdaysData.Data)
+        if (tData) {
+            setPages(paginate(tData.Data))
+            setTotalResults(tData.Data.length)
 
-            setSorted(sorted)
-            setTotalResults(sorted.length)
-
-            sorted.length > 0 ? setRange(sorted && sorted[0].count) : setRange(0)
+            if (tData.Data.length > 0) {
+                setRange(tData.Data[0].count)
+            }
         }
-    }, [todaysData, yesterdaysData])
+    }, [tData])
 
-    // Paginate the sorted data
     useEffect(() => {
-        if (sorted.length > 0) {
-            setPages(paginate(sorted, resultsPerPage))
+        if (tData) {
+            setPages(paginate(tData.Data, resultsPerPage))
         }
-    }, [sorted, resultsPerPage])
+    }, [tData, resultsPerPage])
 
-    // Go back to the first page when resultsPerPage or sortDirection changes
+    useEffect(() => {
+        if (orientation === 'horizontal') {
+            setResultsPerPage(20)
+        }
+    }, [orientation])
+
     useEffect(() => setCurrentPage(0), [resultsPerPage, sortDirection])
 
-    if (todayValidating || yesterdayValidating || !todaysData || !yesterdaysData) {
+    if (tValidating || yValidating) {
         return (
             <div role="status" className="chart animate-pulse">
                 <BarChartSkeleton orientation={orientation} />
@@ -61,7 +63,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
         )
     }
 
-    if (todaysData.Total === 0 || todayError) {
+    if (tError || yError || tData.Data.length === 0) {
         return (
             <div className="chart">
                 <BarChartEmpty />
@@ -69,11 +71,15 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
         )
     }
 
+    // This is done on the current page instead of on the entire data set
+    // to reduce scripting during initial page load and improve page performance.
+    const page: DomainEventSeriesData[] = diff(pages[currentPage], yData.Data)
+
     return (
         <div className="chart">
             <div className="h-16 w-full">
                 <BarChartContainerHeader
-                    data={sorted}
+                    data={tData.Data}
                     changeOrientation={(desiredOrientation: Orientation) => {
                         if (desiredOrientation === orientation) {
                             return
@@ -88,7 +94,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
             </div>
             <div className="h-full w-full">
                 <BarChart
-                    data={pages[currentPage]}
+                    data={page}
                     horizontal={orientation === 'horizontal'}
                     name={title}
                     range={range}
@@ -110,7 +116,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                             return
                         }
 
-                        setPages(paginate(sorted.reverse(), resultsPerPage))
+                        setPages(paginate(tData.Data.reverse(), resultsPerPage))
                         setSortDirection(desiredSortDirection)
                     }}
                     currentPage={currentPage}
@@ -123,6 +129,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                         setCurrentPage(desiredPage)
                     }}
                     numPages={pages.length}
+                    orientation={orientation}
                     resultsPerPage={resultsPerPage}
                     sortDirection={sortDirection}
                     totalResults={totalResults}

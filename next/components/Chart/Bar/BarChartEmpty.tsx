@@ -17,27 +17,27 @@ const BarChartEmpty = (): JSX.Element => {
             </div>
             <div className="h-1/2 text-neutral-400 p-4">
                 <div className="flex inline-flex items-end space-x-2 w-full h-full">
-                    <div className="w-36 h-96 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-24 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-56 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-36 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-48 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-[32rem] bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-80 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
-                    <div className="w-36 h-72 bg-neutral-200 rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-96 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-24 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-56 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-48 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-56 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-72 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-56 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-72 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-48 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-36 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-72 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-72 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-48 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-[32rem] bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-80 bg-border rounded-t-md dark:bg-neutral-700" />
+                    <div className="w-36 h-72 bg-border rounded-t-md dark:bg-neutral-700" />
                 </div>
             </div>
         </>

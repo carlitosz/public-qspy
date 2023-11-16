@@ -7,7 +7,7 @@ import type { ApexOptions } from 'apexcharts'
 import type { SeriesDataPoint } from '@/util/series'
 
 /**
- * Generates custom options for a horizontal bar graph.
+ * Generates custom options for a bar graph.
  *
  * @param id            Unique id/name for the chart
  * @param range         The maximum value of the y axis
@@ -58,7 +58,10 @@ export const horizontalBarGraphOptions = (
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: false,
+            style: {
+                colors: [getComputedStyle(document.body).getPropertyValue('--color-page')]
+            }
         },
         fill: {
             opacity: 0.85

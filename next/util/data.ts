@@ -24,6 +24,10 @@ export const sort = (
 }
 
 /**
+ * Compares today's data with yesterday's data and calculate's a difference in
+ * events. The end result is a union between DomainEvent & DomainEventDiff
+ * called DomainEventSeriesData.
+ *
  * Returns an array of DomainEventSeriesData plot data.
  *
  * @param today     Today's data of DomainEvent[]
@@ -64,8 +68,8 @@ export const diff = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): 
  *
  * @returns         An array of arrays of size perChunk
  */
-export const paginate = (data: DomainEventSeriesData[] | [], perChunk: number): [DomainEventSeriesData[]] | [[]] => {
-    let chunks: [DomainEventSeriesData[]] = [[]]
+export const paginate = (data: DomainEvent[] | [], perChunk: number = 20): [DomainEvent[]] | [[]] => {
+    let chunks: [DomainEvent[]] = [[]]
     chunks.shift()
 
     for (let i: number = 0; i < data.length; i += perChunk) {

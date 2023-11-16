@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 
 import { QSpyTheme } from 'types'
 
+// Main type definition for Theme.
 export declare type Theme = {
     currentTheme?: QSpyTheme
     getTheme: () => QSpyTheme
     setTheme: (newTheme: QSpyTheme) => void
 }
 
+// Theme definition defaults.
 const ThemeContextDefaults: Theme = {
     currentTheme: 'light',
     getTheme: () => 'light',
@@ -16,6 +18,7 @@ const ThemeContextDefaults: Theme = {
 
 const ThemeContext: React.Context<Theme> = React.createContext<Theme>(ThemeContextDefaults)
 
+// Hook to get Theme from within a component.
 export const useTheme = (): React.ContextType<typeof ThemeContext> => {
     const context = React.useContext(ThemeContext)
 
@@ -26,6 +29,7 @@ export const useTheme = (): React.ContextType<typeof ThemeContext> => {
     return context
 }
 
+// Provider that wraps around the application to provide the Theme to any component.
 export const ThemeProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [currentTheme, setCurrentTheme] = useState<QSpyTheme>(() => {
         if (typeof window !== 'undefined' && 'theme' in localStorage) {
