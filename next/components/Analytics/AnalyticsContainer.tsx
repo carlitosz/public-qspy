@@ -2,8 +2,9 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
+import { calculatePercentChange, getExpiredEvents, getNewEvents } from '@/util/data'
 
-import type { GetEventsResponse } from 'types'
+import type { DomainEvent, GetEventsResponse } from 'types'
 
 interface AnalyticsContainerProps {
     data: {
@@ -33,22 +34,48 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     const todaysData: GetEventsResponse = today.data
     const yesterdaysData: GetEventsResponse = yesterday.data
 
+    // Secondary metrics, today vs yesterday.
+    const totals: number = calculatePercentChange(todaysData.Total, yesterdaysData.Total)
+
+    // What events expired? (in the queue today, but not yesterday)
+    const expiredEvents: DomainEvent[] | [] = getExpiredEvents(todaysData.Data, yesterdaysData.Data)
+
+    // What events are new? (not in the queue yesterday)
+    const newEvents: DomainEvent[] | [] = getNewEvents(todaysData.Data, yesterdaysData.Data)
+
+    const sumEvents = (events: DomainEvent[] | []): number => {
+        return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
+    }
+
     return (
         <div className="columns-4 h-full">
             <AnalyticsCard
-                analytic={todaysData.Total}
-                data={{ today: todaysData.Total, yesterday: yesterdaysData.Total }}
-                meta={`from ${yesterdaysData.Total} yesterday`}
-                title="Today"
+                primaryMetric={todaysData.Total}
+                secondaryMetric={totals}
+                secondaryMetricColor={totals > 0 ? 'text-danger' : 'text-success'}
+                secondaryMetricType="percent"
+                subtext={`from ${yesterdaysData.Total} yesterday`}
+                title="Messages currently in queue"
             />
             <AnalyticsCard
-                analytic={1092}
-                data={{ today: 1092, yesterday: 956 }}
-                meta={`from ${562} the previous week`}
-                title="Past week"
+                primaryMetric={expiredEvents.length}
+                subtext="Messages no longer in the queue"
+                title="Expired Messages"
             />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Date & Status" />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
+            <AnalyticsCard
+                primaryMetric={1092}
+                secondaryMetric={5}
+                secondaryMetricColor="text-danger"
+                secondaryMetricType="percent"
+                subtext={`from ${562} the previous week`}
+                title="Expired Events"
+            />
+            <AnalyticsCard
+                primaryMetric={newEvents.length}
+                secondaryMetric={undefined}
+                subtext={`There are ${sumEvents(newEvents)} that showed up today`}
+                title="New events"
+            />
         </div>
     )
 }

@@ -10,7 +10,7 @@ import type { SeriesDataPoint } from '@/util/series'
  * Generates custom options for a bar graph.
  *
  * @param id            Unique id/name for the chart
- * @param range         The maximum value of the y axis
+ * @param max         The maximum value of the y axis
  * @param horizontal    Boolean indicating horizontal orientation
  * @param results       Number of results per page
  *
@@ -18,7 +18,7 @@ import type { SeriesDataPoint } from '@/util/series'
  */
 export const horizontalBarGraphOptions = (
     id: string,
-    range: number,
+    max: number,
     horizontal: boolean,
     results: number
 ): ApexOptions => {
@@ -26,6 +26,8 @@ export const horizontalBarGraphOptions = (
         getComputedStyle(document.body).getPropertyValue('--color-primary'),
         getComputedStyle(document.body).getPropertyValue('--color-secondary')
     ] as ApexOptions['colors']
+
+    var optimalColumnWidthPercent = 20 + 60 / (1 + 30 * Math.exp(-results / 3))
 
     return {
         colors,
@@ -55,6 +57,22 @@ export const horizontalBarGraphOptions = (
             redrawOnParentResize: true,
             toolbar: {
                 show: false
+            },
+            zoom: {
+                enabled: true,
+                type: 'x',
+                autoScaleYaxis: false,
+                zoomedArea: {
+                    fill: {
+                        color: '#90CAF9',
+                        opacity: 0.4
+                    },
+                    stroke: {
+                        color: '#0D47A1',
+                        opacity: 0.4,
+                        width: 1
+                    }
+                }
             }
         },
         dataLabels: {
@@ -102,9 +120,10 @@ export const horizontalBarGraphOptions = (
                 barHeight: '60%', // Horizontal
                 borderRadius: 3,
                 borderRadiusApplication: 'end',
-                columnWidth: '70%', // Vertical
+                // columnWidth: '70%', // Vertical
                 distributed: true,
-                horizontal: horizontal
+                horizontal: horizontal,
+                columnWidth: optimalColumnWidthPercent + '%'
             }
         },
         states: {
@@ -134,8 +153,22 @@ export const horizontalBarGraphOptions = (
             axisTicks: {
                 show: false
             },
+            min: 0,
+            max: max,
             labels: {
-                show: false
+                show: false,
+                formatter: (val: string) => {
+                    const value = parseInt(val)
+
+                    if (value === 0) {
+                        return ''
+                    }
+
+                    return value.toFixed(0)
+                },
+                style: {
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
+                }
             },
             tickAmount: results
         },
@@ -144,7 +177,7 @@ export const horizontalBarGraphOptions = (
                 show: false
             },
             min: 0,
-            max: range + 2,
+            max: max + 5,
             labels: {
                 show: true,
                 offsetY: horizontal ? 2 : -3,
@@ -166,7 +199,7 @@ export const horizontalBarGraphOptions = (
                     colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
-            tickAmount: range + 2
+            tickAmount: horizontal ? max : undefined
         }
     }
 }

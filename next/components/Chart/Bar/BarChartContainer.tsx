@@ -5,7 +5,7 @@ import BarChartContainerFooter from '@/components/Chart/Bar/BarChartContainerFoo
 import BarChartContainerHeader from '@/components/Chart/Bar/BarChartContainerHeader'
 import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
 import BarChartEmpty from '@/components/Chart/Bar/BarChartEmpty'
-import { diff, paginate, sort } from '@/util/data'
+import { createSeriesData, paginate } from '@/util/data'
 
 import type { SortDirection, DomainEventSeriesData, GetEventsResponse, Orientation, DomainEvent } from 'types'
 
@@ -20,8 +20,8 @@ interface ChartContainerProps {
 
 const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
+    const [max, setMax] = useState<number>(0)
     const [orientation, setOrientation] = useState<Orientation>('vertical')
-    const [range, setRange] = useState<number>(0)
     const [pages, setPages] = useState<[DomainEvent[]] | [[]]>([[]])
     const [resultsPerPage, setResultsPerPage] = useState<number>(20)
     const [sortDirection, setSortDirection] = useState<SortDirection>('DESC')
@@ -36,7 +36,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
             setTotalResults(tData.Data.length)
 
             if (tData.Data.length > 0) {
-                setRange(tData.Data[0].count)
+                setMax(tData.Data[0].count)
             }
         }
     }, [tData])
@@ -52,6 +52,13 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
             setResultsPerPage(20)
         }
     }, [orientation])
+
+    useEffect(() => {
+        if (pages.length > 0 && pages[currentPage].length > 0) {
+            const page = pages[currentPage]
+            setMax(page[0].count)
+        }
+    }, [pages, currentPage])
 
     useEffect(() => setCurrentPage(0), [resultsPerPage, sortDirection])
 
@@ -73,7 +80,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
 
     // This is done on the current page instead of on the entire data set
     // to reduce scripting during initial page load and improve page performance.
-    const page: DomainEventSeriesData[] = diff(pages[currentPage], yData.Data)
+    const page: DomainEventSeriesData[] = createSeriesData(pages[currentPage], yData.Data)
 
     return (
         <div className="chart">
@@ -96,8 +103,8 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                 <BarChart
                     data={page}
                     horizontal={orientation === 'horizontal'}
+                    max={max}
                     name={title}
-                    range={range}
                     resultsPerPage={resultsPerPage}
                     type="bar"
                 />

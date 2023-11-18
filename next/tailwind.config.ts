@@ -9,10 +9,12 @@ export default {
             colors: {
                 border: 'var(--color-border)',
                 component: 'var(--color-component)',
+                danger: 'var(--color-danger)',
                 hover: 'var(--color-hover)',
                 page: 'var(--color-page)',
                 primary: 'var(--color-primary)',
                 secondary: 'var(--color-secondary)',
+                success: 'var(--color-success)',
                 text: 'var(--color-text)',
                 title: 'var(--color-title)'
             },

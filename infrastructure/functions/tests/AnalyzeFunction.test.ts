@@ -348,6 +348,58 @@ describe('AnalyzeFunction::handler', () => {
         expect(message).toEqual(SUCCESS_MSG)
         expect(queue).toEqual(TEST_QUEUE_NAME)
     })
+
+    it('Returns sorted data in descending order (e.g. 9 -> 1) by count', async () => {
+        sqsMock
+            .on(GetQueueAttributesCommand)
+            .resolvesOnce({
+                Attributes: {
+                    ApproximateNumberOfMessages: '5',
+                    VisibilityTimeout: '300'
+                },
+                $metadata: {
+                    httpStatusCode: 200
+                }
+            })
+            .resolvesOnce({
+                Attributes: {
+                    ApproximateNumberOfMessages: '0',
+                    VisibilityTimeout: '300'
+                },
+                $metadata: {
+                    httpStatusCode: 200
+                }
+            })
+
+        sqsMock.on(ReceiveMessageCommand).resolvesOnce({
+            Messages: [
+                createMessage('Event1'),
+                createMessage('Event1'),
+                createMessage('Event1'),
+                createMessage('Event2'),
+                createMessage('Event2')
+            ],
+            $metadata: {
+                httpStatusCode: 200
+            }
+        })
+
+        const { data }: AnalyzePayload = await handler(
+            { queueUrl: TEST_QUEUE_URL } as LambdaEvent,
+            { getRemainingTimeInMillis: () => 3000 } as AWSContext,
+            () => {}
+        )
+
+        expect(data.length).toEqual(2)
+
+        const lastEvent: DomainEvent | undefined = data.pop()
+        expect(lastEvent?.event).toEqual('Event2')
+        expect(lastEvent?.count).toEqual(2)
+
+        const firstEvent: DomainEvent | undefined = data.pop()
+        expect(firstEvent?.event).toEqual('Event1')
+        expect(firstEvent?.count).toEqual(3)
+    })
 })
 
 describe('AnalyzeFunction::remainingTime', () => {
