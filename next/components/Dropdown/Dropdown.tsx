@@ -11,7 +11,7 @@ export type DropdownDirection = 'up' | 'down'
 interface DropdownProps {
     closeIcon?: React.ReactNode
     direction: DropdownDirection
-    disabled: boolean
+    disabled?: boolean
     menuItems: DropdownItemType[]
     openIcon?: React.ReactNode
 }
@@ -69,7 +69,7 @@ const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon }: Dropd
                         {menuItems &&
                             menuItems.map(
                                 (
-                                    { divider, label, icon, onClick, selected, title }: DropdownItemType,
+                                    { disabled, divider, label, icon, onClick, selected, title }: DropdownItemType,
                                     index: number
                                 ): JSX.Element => {
                                     if (divider) {
@@ -78,6 +78,7 @@ const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon }: Dropd
 
                                     return (
                                         <DropdownMenuItem
+                                            disabled={disabled}
                                             id={`menu-item-${index}`}
                                             icon={icon}
                                             onClick={onClick}

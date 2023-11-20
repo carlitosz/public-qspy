@@ -1,29 +1,50 @@
 import { DomainEvent, DomainEventSeriesData } from 'types'
 
 /**
- * Sorts data in the provided direction and by a DomainEvent key.
+ * Calculates the % change in yesterday vs today.
  *
- * @param data      An array of DomainEvents
- * @param direction The direction to sort
- * @param property  The key to sort by
+ * @param today         Number of events today
+ * @param yesterday     Number of events yesterday
  *
- * @returns         A sorted array of DomainEvents
+ * @returns             Percent change (+/-) or undefined
  */
-export const sort = (
-    data: DomainEvent[] | [],
-    direction: 'ASC' | 'DESC',
-    key: keyof DomainEvent
-): DomainEvent[] | [] => {
-    return data.sort((a: DomainEvent, b: DomainEvent) => {
-        if (typeof a[key] === 'string') {
-            return direction === 'ASC' ? b.event.localeCompare(a.event) : a.event.localeCompare(b.event)
-        }
-
-        return direction === 'ASC' ? a.count - b.count : b.count - a.count
-    })
+export const calculatePercentChange = (today: number, yesterday: number): number => {
+    return ((today - yesterday) / yesterday) * 100
 }
 
 /**
+ *
+ */
+export const getNewMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
+    const events: DomainEvent[] | [] = today.filter(
+        (t: DomainEvent) => !yesterday.some((y: DomainEvent) => t.event === y.event)
+    )
+
+    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
+}
+
+/**
+ * Finds expired events by comparing yesterday/today, then sums up the number of events
+ * that have expired and returns the total.
+ *
+ * @param today     Today's data of DomainEvent[]
+ * @param yesterday Yesterday's data of DomainEvent[]
+ *
+ * @returns         Total sum of count of expired events
+ */
+export const getExpiredMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
+    const events: DomainEvent[] | [] = yesterday.filter(
+        (y: DomainEvent) => !today.some((t: DomainEvent) => t.event === y.event)
+    )
+
+    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
+}
+
+/**
+ * Compares today's data with yesterday's data and calculate's a difference in
+ * events. The end result is a union between DomainEvent & DomainEventDiff
+ * called DomainEventSeriesData.
+ *
  * Returns an array of DomainEventSeriesData plot data.
  *
  * @param today     Today's data of DomainEvent[]
@@ -31,7 +52,7 @@ export const sort = (
  *
  * @returns         An array of DomainEventSeriesData ready for plotting
  */
-export const diff = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventSeriesData[] => {
+export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventSeriesData[] => {
     return today.map((t: DomainEvent) => {
         const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
 
@@ -64,8 +85,8 @@ export const diff = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): 
  *
  * @returns         An array of arrays of size perChunk
  */
-export const paginate = (data: DomainEventSeriesData[] | [], perChunk: number): [DomainEventSeriesData[]] | [[]] => {
-    let chunks: [DomainEventSeriesData[]] = [[]]
+export const paginate = (data: DomainEvent[] | [], perChunk: number = 20): [DomainEvent[]] | [[]] => {
+    let chunks: [DomainEvent[]] = [[]]
     chunks.shift()
 
     for (let i: number = 0; i < data.length; i += perChunk) {

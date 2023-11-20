@@ -2,6 +2,7 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
+import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/util/data'
 
 import type { GetEventsResponse } from 'types'
 
@@ -33,22 +34,44 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     const todaysData: GetEventsResponse = today.data
     const yesterdaysData: GetEventsResponse = yesterday.data
 
+    // Today vs yesterday.
+    const totalMessagesPercent: number = calculatePercentChange(todaysData.Total, yesterdaysData.Total)
+
+    // How many messages expired since yesterday?
+    const expiredMessagesCount: number = getExpiredMessageCount(todaysData.Data, yesterdaysData.Data)
+    const expiredMessagesPercent: number = calculatePercentChange(todaysData.Data.length, yesterdaysData.Data.length)
+
+    // How many events did we receive since yesterday?
+    const newMessagesCount: number = getNewMessageCount(todaysData.Data, yesterdaysData.Data)
+    const newMessagesPercent: number = calculatePercentChange(todaysData.Data.length, yesterdaysData.Data.length)
+
     return (
-        <div className="columns-4 h-full">
+        <div className="flex h-full gap-x-8">
             <AnalyticsCard
-                analytic={todaysData.Total}
-                data={{ today: todaysData.Total, yesterday: yesterdaysData.Total }}
-                meta={`from ${yesterdaysData.Total} yesterday`}
-                title="Today"
+                difference={{
+                    metric: totalMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={todaysData.Total}
+                title="Messages in queue"
             />
             <AnalyticsCard
-                analytic={1092}
-                data={{ today: 1092, yesterday: 956 }}
-                meta={`from ${562} the previous week`}
-                title="Past week"
+                difference={{
+                    metric: newMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={newMessagesCount}
+                title="New messages"
             />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Date & Status" />
-            <AnalyticsCard analytic={todaysData.Date} meta={todaysData.Message} title="Invocation Date & Status" />
+            <AnalyticsCard
+                difference={{
+                    metric: expiredMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={expiredMessagesCount}
+                title="Expired messages"
+            />
+            <AnalyticsCard metric={1092} title="Expired events" />
         </div>
     )
 }

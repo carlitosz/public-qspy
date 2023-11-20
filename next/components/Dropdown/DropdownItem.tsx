@@ -4,6 +4,7 @@ import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon'
 
 type DropdownItemHtmlProps = { id: string; role: string; tabIndex: number }
 export type DropdownItemType = {
+    disabled?: boolean
     divider?: boolean
     icon?: React.ReactElement
     label?: string | number | React.ReactNode
@@ -13,6 +14,7 @@ export type DropdownItemType = {
 }
 
 const DropdownItem = ({
+    disabled,
     id,
     icon,
     label,
@@ -44,7 +46,7 @@ const DropdownItem = ({
     return (
         <li
             aria-hidden="true"
-            className={`dropdown-item ${selected ? 'selected' : ''}`}
+            className={`dropdown-item ${selected ? ' selected' : ''} ${disabled ? ' disabled' : ''}`}
             data-value={label}
             id={id}
             onClick={onClick}

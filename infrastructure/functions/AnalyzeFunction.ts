@@ -210,12 +210,16 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
 
             // The function should only process messages up to the queue visibility timeout.
             if (elapsedTime > visibilityTimeout) {
-                const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
-                    event,
-                    count,
-                    fs,
-                    ls
-                }))
+                const data = Array.from(collection)
+                    .map(([event, { count, fs, ls }]) => ({
+                        event,
+                        count,
+                        fs,
+                        ls
+                    }))
+                    .sort((a, b) => {
+                        return b.count - a.count
+                    })
 
                 return {
                     data: data as [DomainEvent],
@@ -227,12 +231,16 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
 
             // Are we running out of time? Do not let the function timeout.
             if (timeRemaining < TIME_UNTIL_TIMEOUT) {
-                const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
-                    event,
-                    count,
-                    fs,
-                    ls
-                }))
+                const data = Array.from(collection)
+                    .map(([event, { count, fs, ls }]) => ({
+                        event,
+                        count,
+                        fs,
+                        ls
+                    }))
+                    .sort((a, b) => {
+                        return b.count - a.count
+                    })
 
                 return {
                     data: data as [DomainEvent],
@@ -248,12 +256,16 @@ export const handler: Handler = async (event: LambdaEvent, context: Context): Pr
         numberOfMessages = res.numberOfMessages
     } while (numberOfMessages > 0)
 
-    const data = Array.from(collection).map(([event, { count, fs, ls }]) => ({
-        event,
-        count,
-        fs,
-        ls
-    }))
+    const data = Array.from(collection)
+        .map(([event, { count, fs, ls }]) => ({
+            event,
+            count,
+            fs,
+            ls
+        }))
+        .sort((a, b) => {
+            return b.count - a.count
+        })
 
     return {
         data: data as [DomainEvent],

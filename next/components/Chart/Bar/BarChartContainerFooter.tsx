@@ -5,7 +5,7 @@ import DocumentChartBarIcon from '@heroicons/react/24/outline/DocumentChartBarIc
 
 import Pagination from '@/components/Pagination/Pagination'
 import Toolbar from '@/components/Toolbar/Toolbar'
-import { SortDirection } from 'types'
+import { Orientation, SortDirection } from 'types'
 
 interface BarChartContainerFooterProps {
     changeResultsPerPage: (desiredResultsPerPage: number) => void
@@ -14,6 +14,7 @@ interface BarChartContainerFooterProps {
     currentPageTotal: number
     goToPage: (desiredPage: number) => void
     numPages: number
+    orientation: Orientation
     resultsPerPage: number
     sortDirection: SortDirection
     totalResults: number
@@ -26,6 +27,7 @@ const BarChartContainerFooter = ({
     currentPageTotal,
     goToPage,
     numPages,
+    orientation,
     resultsPerPage,
     sortDirection,
     totalResults
@@ -51,7 +53,7 @@ const BarChartContainerFooter = ({
                 <Toolbar
                     direction="up"
                     disabled={totalResults === 0}
-                    dropdown={[
+                    items={[
                         { title: 'Results per page' },
                         {
                             icon: <DocumentChartBarIcon className="menu-icon-sm" />,
@@ -60,15 +62,17 @@ const BarChartContainerFooter = ({
                             selected: resultsPerPage === 20
                         },
                         {
+                            disabled: orientation === 'horizontal',
                             icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: 40,
-                            onClick: () => changeResultsPerPage(40),
+                            onClick: orientation === 'horizontal' ? () => {} : () => changeResultsPerPage(40),
                             selected: resultsPerPage === 40
                         },
                         {
+                            disabled: orientation === 'horizontal',
                             icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: `All (${totalResults})`,
-                            onClick: () => changeResultsPerPage(totalResults),
+                            onClick: orientation === 'horizontal' ? () => {} : () => changeResultsPerPage(totalResults),
                             selected: resultsPerPage === totalResults
                         },
                         { divider: true },

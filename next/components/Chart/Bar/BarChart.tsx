@@ -13,15 +13,15 @@ const ApexChart = dynamic(() => import('react-apexcharts').then((res) => res.def
 interface BarChartProps {
     data: DomainEventSeriesData[]
     horizontal: boolean
+    max: number
     name: string
-    range: number
     resultsPerPage: number
     type: Props['type']
 }
 
-const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarChartProps): JSX.Element => {
+const BarChart = ({ data, horizontal, max, name, resultsPerPage, type }: BarChartProps): JSX.Element => {
     const [options, setOptions] = useState<ApexOptions>(
-        horizontalBarGraphOptions(name, range, horizontal, resultsPerPage)
+        horizontalBarGraphOptions(name, max, horizontal, resultsPerPage)
     )
     const [series, setSeries] = useState<ApexOptions['series']>(createSeries(data, name))
 
@@ -30,8 +30,8 @@ const BarChart = ({ data, horizontal, name, range, resultsPerPage, type }: BarCh
     }, [data, name])
 
     useEffect(() => {
-        setOptions(horizontalBarGraphOptions(name, range, horizontal, resultsPerPage))
-    }, [name, range, horizontal, resultsPerPage])
+        setOptions(horizontalBarGraphOptions(name, max, horizontal, resultsPerPage))
+    }, [name, max, horizontal, resultsPerPage])
 
     return (
         <div className="h-full">

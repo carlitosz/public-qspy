@@ -31,7 +31,7 @@ const BarChartContainerHeader = ({
                 <Toolbar
                     direction="down"
                     disabled={data.length === 0}
-                    dropdown={[
+                    items={[
                         { title: 'Orientation' },
                         {
                             icon: <ArrowsUpDownIcon className="menu-icon-sm" />,

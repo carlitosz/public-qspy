@@ -7,10 +7,10 @@ import type { ApexOptions } from 'apexcharts'
 import type { SeriesDataPoint } from '@/util/series'
 
 /**
- * Generates custom options for a horizontal bar graph.
+ * Generates custom options for a bar graph.
  *
  * @param id            Unique id/name for the chart
- * @param range         The maximum value of the y axis
+ * @param max         The maximum value of the y axis
  * @param horizontal    Boolean indicating horizontal orientation
  * @param results       Number of results per page
  *
@@ -18,7 +18,7 @@ import type { SeriesDataPoint } from '@/util/series'
  */
 export const horizontalBarGraphOptions = (
     id: string,
-    range: number,
+    max: number,
     horizontal: boolean,
     results: number
 ): ApexOptions => {
@@ -55,10 +55,29 @@ export const horizontalBarGraphOptions = (
             redrawOnParentResize: true,
             toolbar: {
                 show: false
+            },
+            zoom: {
+                enabled: true,
+                type: 'x',
+                autoScaleYaxis: false,
+                zoomedArea: {
+                    fill: {
+                        color: '#90CAF9',
+                        opacity: 0.4
+                    },
+                    stroke: {
+                        color: '#0D47A1',
+                        opacity: 0.4,
+                        width: 1
+                    }
+                }
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: false,
+            style: {
+                colors: [getComputedStyle(document.body).getPropertyValue('--color-page')]
+            }
         },
         fill: {
             opacity: 0.85
@@ -70,10 +89,10 @@ export const horizontalBarGraphOptions = (
                 opacity: 0.1
             },
             padding: {
-                bottom: horizontal ? -15 : -33,
+                bottom: horizontal ? -10 : -43,
                 right: horizontal ? 20 : 0,
                 top: horizontal ? -30 : -31,
-                left: horizontal ? 20 : 0
+                left: horizontal ? 20 : 13
             },
             position: 'back',
             row: {
@@ -125,14 +144,28 @@ export const horizontalBarGraphOptions = (
         },
         xaxis: {
             axisBorder: {
-                show: false,
-                color: getComputedStyle(document.body).getPropertyValue('--color-title')
+                show: false
             },
             axisTicks: {
                 show: false
             },
+            min: 0,
+            max: max + 10,
             labels: {
-                show: false
+                show: true,
+                offsetX: -5,
+                formatter: (val: string) => {
+                    const value = parseInt(val)
+
+                    if (value === 0) {
+                        return ''
+                    }
+
+                    return value.toFixed(0)
+                },
+                style: {
+                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
+                }
             },
             tickAmount: results
         },
@@ -141,13 +174,13 @@ export const horizontalBarGraphOptions = (
                 show: false
             },
             min: 0,
-            max: range + 2,
+            max: max + 10,
             labels: {
                 show: true,
                 offsetY: horizontal ? 2 : -3,
-                offsetX: horizontal ? 5 : -5,
+                offsetX: horizontal ? 5 : 0,
                 minWidth: horizontal ? 200 : 25,
-                maxWidth: horizontal ? 350 : 20,
+                maxWidth: horizontal ? 200 : 20,
                 formatter: (val: number) => {
                     if (val === 0) {
                         return ''
@@ -163,7 +196,7 @@ export const horizontalBarGraphOptions = (
                     colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
-            tickAmount: range + 2
+            tickAmount: horizontal ? max : undefined
         }
     }
 }
