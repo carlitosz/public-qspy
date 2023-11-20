@@ -1,31 +1,33 @@
 import React from 'react'
 import ArrowLongDownIcon from '@heroicons/react/24/outline/ArrowLongDownIcon'
 import ArrowLongUpIcon from '@heroicons/react/24/outline/ArrowLongUpIcon'
+import MinusSmallIcon from '@heroicons/react/24/outline/MinusSmallIcon'
 
 interface AnalyticsPercentProps {
-    metric: number
-    metricColor?: 'text-danger' | 'text-success'
+    percent: number
+    color?: 'danger' | 'success' | 'neutral' | undefined
 }
 
-const AnalyticsPercent = ({ metric, metricColor }: AnalyticsPercentProps): JSX.Element => {
+const AnalyticsPercent = ({ percent, color }: AnalyticsPercentProps): JSX.Element => {
     return (
         <>
-            {metric === 0 && (
-                <>
-                    <span className="text-text mr-2">0%</span>
-                </>
+            {percent === 0 && (
+                <div className={`pill ${color ?? 'neutral'}`}>
+                    <MinusSmallIcon className="analytics-icon-xs" />
+                    <span className="p-1">0%</span>
+                </div>
             )}
-            {metric > 0 && (
-                <>
-                    <ArrowLongUpIcon className={`analytics-icon-sm text-danger`} />
-                    <span className="font-medium text-red-600 mr-1">{Math.abs(metric).toFixed(0)}%</span>
-                </>
+            {percent > 0 && (
+                <div className={`pill ${color ?? 'danger'}`}>
+                    <ArrowLongUpIcon className="analytics-icon-xs" />
+                    <span className="p-1">{Math.abs(percent).toFixed(0)}%</span>
+                </div>
             )}
-            {metric < 0 && (
-                <>
-                    <ArrowLongDownIcon className={`analytics-icon-sm ${metricColor}`} />
-                    <span className="text-emerald-600 mr-1">{Math.abs(metric).toFixed(0)}%</span>
-                </>
+            {percent < 0 && (
+                <div className={`pill ${color ?? 'success'}`}>
+                    <ArrowLongDownIcon className="analytics-icon-xs" />
+                    <span className="p-1">{Math.abs(percent).toFixed(0)}%</span>
+                </div>
             )}
         </>
     )

@@ -27,8 +27,6 @@ export const horizontalBarGraphOptions = (
         getComputedStyle(document.body).getPropertyValue('--color-secondary')
     ] as ApexOptions['colors']
 
-    var optimalColumnWidthPercent = 20 + 60 / (1 + 30 * Math.exp(-results / 3))
-
     return {
         colors,
         chart: {
@@ -91,10 +89,10 @@ export const horizontalBarGraphOptions = (
                 opacity: 0.1
             },
             padding: {
-                bottom: horizontal ? -15 : -33,
+                bottom: horizontal ? -10 : -43,
                 right: horizontal ? 20 : 0,
                 top: horizontal ? -30 : -31,
-                left: horizontal ? 20 : 0
+                left: horizontal ? 20 : 13
             },
             position: 'back',
             row: {
@@ -120,10 +118,9 @@ export const horizontalBarGraphOptions = (
                 barHeight: '60%', // Horizontal
                 borderRadius: 3,
                 borderRadiusApplication: 'end',
-                // columnWidth: '70%', // Vertical
+                columnWidth: '70%', // Vertical
                 distributed: true,
-                horizontal: horizontal,
-                columnWidth: optimalColumnWidthPercent + '%'
+                horizontal: horizontal
             }
         },
         states: {
@@ -147,16 +144,16 @@ export const horizontalBarGraphOptions = (
         },
         xaxis: {
             axisBorder: {
-                show: false,
-                color: getComputedStyle(document.body).getPropertyValue('--color-title')
+                show: false
             },
             axisTicks: {
                 show: false
             },
             min: 0,
-            max: max,
+            max: max + 10,
             labels: {
-                show: false,
+                show: true,
+                offsetX: -5,
                 formatter: (val: string) => {
                     const value = parseInt(val)
 
@@ -177,13 +174,13 @@ export const horizontalBarGraphOptions = (
                 show: false
             },
             min: 0,
-            max: max + 5,
+            max: max + 10,
             labels: {
                 show: true,
                 offsetY: horizontal ? 2 : -3,
-                offsetX: horizontal ? 5 : -5,
+                offsetX: horizontal ? 5 : 0,
                 minWidth: horizontal ? 200 : 25,
-                maxWidth: horizontal ? 350 : 20,
+                maxWidth: horizontal ? 200 : 20,
                 formatter: (val: number) => {
                     if (val === 0) {
                         return ''

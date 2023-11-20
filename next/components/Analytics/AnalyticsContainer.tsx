@@ -2,9 +2,9 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
-import { calculatePercentChange, getExpiredEvents, getNewEvents } from '@/util/data'
+import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/util/data'
 
-import type { DomainEvent, GetEventsResponse } from 'types'
+import type { GetEventsResponse } from 'types'
 
 interface AnalyticsContainerProps {
     data: {
@@ -34,48 +34,44 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     const todaysData: GetEventsResponse = today.data
     const yesterdaysData: GetEventsResponse = yesterday.data
 
-    // Secondary metrics, today vs yesterday.
-    const totals: number = calculatePercentChange(todaysData.Total, yesterdaysData.Total)
+    // Today vs yesterday.
+    const totalMessagesPercent: number = calculatePercentChange(todaysData.Total, yesterdaysData.Total)
 
-    // What events expired? (in the queue today, but not yesterday)
-    const expiredEvents: DomainEvent[] | [] = getExpiredEvents(todaysData.Data, yesterdaysData.Data)
+    // How many messages expired since yesterday?
+    const expiredMessagesCount: number = getExpiredMessageCount(todaysData.Data, yesterdaysData.Data)
+    const expiredMessagesPercent: number = calculatePercentChange(todaysData.Data.length, yesterdaysData.Data.length)
 
-    // What events are new? (not in the queue yesterday)
-    const newEvents: DomainEvent[] | [] = getNewEvents(todaysData.Data, yesterdaysData.Data)
-
-    const sumEvents = (events: DomainEvent[] | []): number => {
-        return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
-    }
+    // How many events did we receive since yesterday?
+    const newMessagesCount: number = getNewMessageCount(todaysData.Data, yesterdaysData.Data)
+    const newMessagesPercent: number = calculatePercentChange(todaysData.Data.length, yesterdaysData.Data.length)
 
     return (
-        <div className="columns-4 h-full">
+        <div className="flex h-full gap-x-8">
             <AnalyticsCard
-                primaryMetric={todaysData.Total}
-                secondaryMetric={totals}
-                secondaryMetricColor={totals > 0 ? 'text-danger' : 'text-success'}
-                secondaryMetricType="percent"
-                subtext={`from ${yesterdaysData.Total} yesterday`}
-                title="Messages currently in queue"
+                difference={{
+                    metric: totalMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={todaysData.Total}
+                title="Messages in queue"
             />
             <AnalyticsCard
-                primaryMetric={expiredEvents.length}
-                subtext="Messages no longer in the queue"
-                title="Expired Messages"
+                difference={{
+                    metric: newMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={newMessagesCount}
+                title="New messages"
             />
             <AnalyticsCard
-                primaryMetric={1092}
-                secondaryMetric={5}
-                secondaryMetricColor="text-danger"
-                secondaryMetricType="percent"
-                subtext={`from ${562} the previous week`}
-                title="Expired Events"
+                difference={{
+                    metric: expiredMessagesPercent,
+                    type: 'percent'
+                }}
+                metric={expiredMessagesCount}
+                title="Expired messages"
             />
-            <AnalyticsCard
-                primaryMetric={newEvents.length}
-                secondaryMetric={undefined}
-                subtext={`There are ${sumEvents(newEvents)} that showed up today`}
-                title="New events"
-            />
+            <AnalyticsCard metric={1092} title="Expired events" />
         </div>
     )
 }

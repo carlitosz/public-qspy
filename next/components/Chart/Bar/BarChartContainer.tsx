@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import BarChart from '@/components/Chart/Bar/BarChart'
 import BarChartContainerFooter from '@/components/Chart/Bar/BarChartContainerFooter'
 import BarChartContainerHeader from '@/components/Chart/Bar/BarChartContainerHeader'
-import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
 import BarChartEmpty from '@/components/Chart/Bar/BarChartEmpty'
+import BarChartSkeleton from '@/components/Chart/Bar/BarChartSkeleton'
 import { createSeriesData, paginate } from '@/util/data'
 
 import type { SortDirection, DomainEventSeriesData, GetEventsResponse, Orientation, DomainEvent } from 'types'
@@ -52,13 +52,6 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
             setResultsPerPage(20)
         }
     }, [orientation])
-
-    useEffect(() => {
-        if (pages.length > 0 && pages[currentPage].length > 0) {
-            const page = pages[currentPage]
-            setMax(page[0].count)
-        }
-    }, [pages, currentPage])
 
     useEffect(() => setCurrentPage(0), [resultsPerPage, sortDirection])
 

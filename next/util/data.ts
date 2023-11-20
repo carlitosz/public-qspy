@@ -15,12 +15,12 @@ export const calculatePercentChange = (today: number, yesterday: number): number
 /**
  *
  */
-export const getNewEvents = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEvent[] | [] => {
-    const newEvents: DomainEvent[] | [] = today.filter(
+export const getNewMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
+    const events: DomainEvent[] | [] = today.filter(
         (t: DomainEvent) => !yesterday.some((y: DomainEvent) => t.event === y.event)
     )
 
-    return newEvents
+    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
 }
 
 /**
@@ -32,12 +32,12 @@ export const getNewEvents = (today: DomainEvent[] | [], yesterday: DomainEvent[]
  *
  * @returns         Total sum of count of expired events
  */
-export const getExpiredEvents = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEvent[] | [] => {
-    const expired: DomainEvent[] | [] = yesterday.filter(
+export const getExpiredMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
+    const events: DomainEvent[] | [] = yesterday.filter(
         (y: DomainEvent) => !today.some((t: DomainEvent) => t.event === y.event)
     )
 
-    return expired
+    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
 }
 
 /**

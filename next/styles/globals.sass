@@ -6,17 +6,17 @@
 @tailwind colors
 
 @layer base
-    :root
+    :root[data-theme="light"]
         --color-border: theme(colors.neutral.200)
         --color-component: theme(colors.neutral.50)
-        --color-danger: theme(colors.rose.600)
+        --color-danger: theme(colors.rose.500)
         --color-hover: theme(colors.neutral.200)
         --color-page: theme(colors.neutral.100)
         --color-primary: theme(colors.indigo.500)
         --color-secondary: theme(colors.indigo.200)
         --color-text: theme(colors.neutral.400)
-        --color-success: theme(colors.emerald.600)
-        --color-title: theme(colors.neutral.700)
+        --color-success: theme(colors.emerald.500)
+        --color-title: theme(colors.neutral.600)
 
     :root[data-theme="dark"]
         --color-border: theme(colors.neutral.700)
@@ -31,12 +31,12 @@
         --color-title: theme(colors.neutral.300)
 
 @layer components
-    @import card
     @import chart
     @import dropdown
     @import icon
     @import menu
     @import pagination
+    @import pill
     @import tab
     @import tooltip
     @import switch
