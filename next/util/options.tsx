@@ -10,7 +10,7 @@ import type { SeriesDataPoint } from '@/util/series'
  * Generates custom options for a bar graph.
  *
  * @param id            Unique id/name for the chart
- * @param max           The maximum value of the y axis
+ * @param max           The maximum value in the series
  * @param horizontal    Boolean indicating horizontal orientation
  * @param seriesLength  The length of the series on the chart
  *
