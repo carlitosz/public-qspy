@@ -22,7 +22,8 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
 
     if (today.isValidating || yesterday.isValidating || !today || !yesterday) {
         return (
-            <div className="columns-4 h-full">
+            <div className="flex h-full gap-x-6">
+                <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
@@ -43,26 +44,18 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
 
     // How many events did we receive since yesterday?
     const newMessagesCount: number = getNewMessageCount(todaysData.Data, yesterdaysData.Data)
-    const newMessagesPercent: number = calculatePercentChange(todaysData.Data.length, yesterdaysData.Data.length)
 
     return (
-        <div className="flex h-full gap-x-8">
+        <div className="flex h-full gap-x-6">
             <AnalyticsCard
                 difference={{
                     metric: totalMessagesPercent,
                     type: 'percent'
                 }}
                 metric={todaysData.Total}
-                title="Messages in queue"
+                title="Total Messages"
             />
-            <AnalyticsCard
-                difference={{
-                    metric: newMessagesPercent,
-                    type: 'percent'
-                }}
-                metric={newMessagesCount}
-                title="New messages"
-            />
+            <AnalyticsCard metric={newMessagesCount} title="New messages" />
             <AnalyticsCard
                 difference={{
                     metric: expiredMessagesPercent,
@@ -71,6 +64,7 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
                 metric={expiredMessagesCount}
                 title="Expired messages"
             />
+            <AnalyticsCard metric={1092} title="Expired events" />
             <AnalyticsCard metric={1092} title="Expired events" />
         </div>
     )

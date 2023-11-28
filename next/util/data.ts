@@ -6,7 +6,7 @@ import { DomainEvent, DomainEventSeriesData } from 'types'
  * @param today         Number of events today
  * @param yesterday     Number of events yesterday
  *
- * @returns             Percent change (+/-) or undefined
+ * @returns             Percent change (+/-)
  */
 export const calculatePercentChange = (today: number, yesterday: number): number => {
     return ((today - yesterday) / yesterday) * 100

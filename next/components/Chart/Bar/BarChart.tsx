@@ -16,22 +16,21 @@ interface BarChartProps {
     max: number
     name: string
     resultsPerPage: number
+    seriesLength: number
     type: Props['type']
 }
 
-const BarChart = ({ data, horizontal, max, name, resultsPerPage, type }: BarChartProps): JSX.Element => {
-    const [options, setOptions] = useState<ApexOptions>(
-        horizontalBarGraphOptions(name, max, horizontal, resultsPerPage)
-    )
-    const [series, setSeries] = useState<ApexOptions['series']>(createSeries(data, name))
+const BarChart = ({ data, horizontal, max, name, resultsPerPage, seriesLength, type }: BarChartProps): JSX.Element => {
+    const [options, setOptions] = useState<ApexOptions>(horizontalBarGraphOptions(name, max, horizontal, seriesLength))
+    const [series, setSeries] = useState<ApexOptions['series']>(createSeries(data, name, resultsPerPage))
 
     useEffect(() => {
-        setSeries(createSeries(data, name))
-    }, [data, name])
+        setSeries(createSeries(data, name, resultsPerPage))
+    }, [data, name, resultsPerPage])
 
     useEffect(() => {
-        setOptions(horizontalBarGraphOptions(name, max, horizontal, resultsPerPage))
-    }, [name, max, horizontal, resultsPerPage])
+        setOptions(horizontalBarGraphOptions(name, max, horizontal, seriesLength))
+    }, [name, max, horizontal, seriesLength])
 
     return (
         <div className="h-full">

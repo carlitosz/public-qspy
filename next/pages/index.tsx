@@ -46,8 +46,8 @@ const Home: NextPage = (): JSX.Element => {
             <div className="w-full rounded-md h-auto mb-6">
                 <AnalyticsContainer data={{ today, yesterday }} />
             </div>
-            <div className="w-full rounded-md h-4/6">
-                <BarChartContainer data={{ today, yesterday }} title={QUEUE_NAME} withToolbar={true} />
+            <div className="w-full rounded-md h-3/5">
+                <BarChartContainer data={{ today, yesterday }} title={QUEUE_NAME} />
             </div>
         </Page>
     )

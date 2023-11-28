@@ -6,6 +6,7 @@ import Layout from '@/components/Layout/Layout'
 import { ThemeProvider } from '@/util/theme'
 
 import '@/styles/globals.sass'
+import '@/styles/overrides.sass'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
