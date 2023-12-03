@@ -22,23 +22,21 @@ export const horizontalBarGraphOptions = (
     horizontal: boolean,
     seriesLength: number
 ): ApexOptions => {
-    const colors = [
-        getComputedStyle(document.body).getPropertyValue('--color-primary'),
-        getComputedStyle(document.body).getPropertyValue('--color-secondary')
-    ] as ApexOptions['colors']
-
     var optimalColumnWidthPercent = 70 + 60 / (1 + 30 * Math.exp(seriesLength / 3))
 
     return {
-        colors,
+        colors: [
+            getComputedStyle(document.body).getPropertyValue('--color-primary'),
+            getComputedStyle(document.body).getPropertyValue('--color-secondary')
+        ],
         chart: {
             id,
             animations: {
                 easing: 'easeinout',
-                speed: 200,
+                speed: 500,
                 dynamicAnimation: {
                     enabled: true,
-                    speed: 200
+                    speed: 500
                 },
                 animateGradually: {
                     enabled: false

@@ -78,8 +78,6 @@ const BarChartContainer = ({ data, title }: ChartContainerProps): JSX.Element =>
         )
     }
 
-    // This is done on the current page instead of on the entire data set
-    // to reduce scripting during initial page load and improve page performance.
     const page: DomainEventSeriesData[] = createSeriesData(pages[currentPage], yData.Data)
 
     return (

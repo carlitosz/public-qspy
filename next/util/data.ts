@@ -65,7 +65,7 @@ export const getExpiredMessageCount = (today: DomainEvent[] | [], yesterday: Dom
         const t: DomainEvent | undefined = today.find((t: DomainEvent) => y.event === t.event)
 
         if (t) {
-            expired += t.count > y.count ? t.count - y.count : 0
+            expired += t.count < y.count ? y.count - t.count : 0
         } else {
             expired += y.count
         }
@@ -91,10 +91,20 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
         const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
 
         if (y) {
+            if (y.count === t.count) {
+                return {
+                    ...t,
+                    diff: {
+                        change: 0,
+                        eventsYesterday: y.count
+                    }
+                }
+            }
+
             return {
                 ...t,
                 diff: {
-                    change: ((t.count - y.count) / y.count) * 100,
+                    change: t.count - y.count,
                     eventsYesterday: y.count
                 }
             }
@@ -104,7 +114,7 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
         return {
             ...t,
             diff: {
-                change: 100,
+                change: t.count,
                 eventsYesterday: 0
             }
         }
