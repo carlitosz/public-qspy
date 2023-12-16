@@ -15,10 +15,9 @@ interface ChartContainerProps {
         yesterday: GetEventsResponse | undefined
     }
     title: string
-    withToolbar?: boolean
 }
 
-const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerProps): JSX.Element => {
+const BarChartContainer = ({ data, title }: ChartContainerProps): JSX.Element => {
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [max, setMax] = useState<number>(0)
     const [orientation, setOrientation] = useState<Orientation>('vertical')
@@ -48,6 +47,14 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
     }, [tData, resultsPerPage])
 
     useEffect(() => {
+        const currPage: DomainEvent[] | [] = pages[currentPage]
+
+        if (currPage.length > 0) {
+            setMax(currPage[0].count)
+        }
+    }, [pages, currentPage])
+
+    useEffect(() => {
         if (orientation === 'horizontal') {
             setResultsPerPage(20)
         }
@@ -71,8 +78,6 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
         )
     }
 
-    // This is done on the current page instead of on the entire data set
-    // to reduce scripting during initial page load and improve page performance.
     const page: DomainEventSeriesData[] = createSeriesData(pages[currentPage], yData.Data)
 
     return (
@@ -89,7 +94,6 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                     }}
                     orientation={orientation}
                     title={title}
-                    withToolbar={withToolbar}
                 />
             </div>
             <div className="h-full w-full">
@@ -99,6 +103,7 @@ const BarChartContainer = ({ data, title, withToolbar = false }: ChartContainerP
                     max={max}
                     name={title}
                     resultsPerPage={resultsPerPage}
+                    seriesLength={page.length}
                     type="bar"
                 />
             </div>

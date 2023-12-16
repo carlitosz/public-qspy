@@ -62,17 +62,23 @@ const BarChartContainerFooter = ({
                             selected: resultsPerPage === 20
                         },
                         {
-                            disabled: orientation === 'horizontal',
+                            disabled: orientation === 'horizontal' || totalResults < resultsPerPage,
                             icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: 40,
-                            onClick: orientation === 'horizontal' ? () => {} : () => changeResultsPerPage(40),
+                            onClick:
+                                orientation === 'horizontal' || totalResults < resultsPerPage
+                                    ? () => {}
+                                    : () => changeResultsPerPage(40),
                             selected: resultsPerPage === 40
                         },
                         {
-                            disabled: orientation === 'horizontal',
+                            disabled: orientation === 'horizontal' || totalResults < resultsPerPage,
                             icon: <DocumentChartBarIcon className="menu-icon-sm" />,
                             label: `All (${totalResults})`,
-                            onClick: orientation === 'horizontal' ? () => {} : () => changeResultsPerPage(totalResults),
+                            onClick:
+                                orientation === 'horizontal' || totalResults < resultsPerPage
+                                    ? () => {}
+                                    : () => changeResultsPerPage(totalResults),
                             selected: resultsPerPage === totalResults
                         },
                         { divider: true },

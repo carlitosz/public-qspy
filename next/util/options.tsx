@@ -10,9 +10,9 @@ import type { SeriesDataPoint } from '@/util/series'
  * Generates custom options for a bar graph.
  *
  * @param id            Unique id/name for the chart
- * @param max         The maximum value of the y axis
+ * @param max           The maximum value in the series
  * @param horizontal    Boolean indicating horizontal orientation
- * @param results       Number of results per page
+ * @param seriesLength  The length of the series on the chart
  *
  * @returns ApexOptions
  */
@@ -20,23 +20,23 @@ export const horizontalBarGraphOptions = (
     id: string,
     max: number,
     horizontal: boolean,
-    results: number
+    seriesLength: number
 ): ApexOptions => {
-    const colors = [
-        getComputedStyle(document.body).getPropertyValue('--color-primary'),
-        getComputedStyle(document.body).getPropertyValue('--color-secondary')
-    ] as ApexOptions['colors']
+    var optimalColumnWidthPercent = 70 + 60 / (1 + 30 * Math.exp(seriesLength / 3))
 
     return {
-        colors,
+        colors: [
+            getComputedStyle(document.body).getPropertyValue('--color-primary'),
+            getComputedStyle(document.body).getPropertyValue('--color-secondary')
+        ],
         chart: {
             id,
             animations: {
                 easing: 'easeinout',
-                speed: 200,
+                speed: 500,
                 dynamicAnimation: {
                     enabled: true,
-                    speed: 200
+                    speed: 500
                 },
                 animateGradually: {
                     enabled: false
@@ -89,7 +89,7 @@ export const horizontalBarGraphOptions = (
                 opacity: 0.1
             },
             padding: {
-                bottom: horizontal ? -10 : -43,
+                bottom: horizontal ? -15 : -42,
                 right: horizontal ? 20 : 0,
                 top: horizontal ? -30 : -31,
                 left: horizontal ? 20 : 13
@@ -115,10 +115,10 @@ export const horizontalBarGraphOptions = (
         },
         plotOptions: {
             bar: {
-                barHeight: '60%', // Horizontal
-                borderRadius: 3,
+                barHeight: optimalColumnWidthPercent + '%',
+                borderRadius: 2,
                 borderRadiusApplication: 'end',
-                columnWidth: '70%', // Vertical
+                columnWidth: optimalColumnWidthPercent + '%',
                 distributed: true,
                 horizontal: horizontal
             }
@@ -150,9 +150,10 @@ export const horizontalBarGraphOptions = (
                 show: false
             },
             min: 0,
-            max: max + 10,
+            max: max + (10 - max > 0 ? 10 - max : 10),
             labels: {
                 show: true,
+                showDuplicates: false,
                 offsetX: -5,
                 formatter: (val: string) => {
                     const value = parseInt(val)
@@ -162,19 +163,16 @@ export const horizontalBarGraphOptions = (
                     }
 
                     return value.toFixed(0)
-                },
-                style: {
-                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
-            tickAmount: results
+            tickAmount: 10
         },
         yaxis: {
             axisBorder: {
                 show: false
             },
             min: 0,
-            max: max + 10,
+            max: max + (10 - max > 0 ? 10 - max : 10),
             labels: {
                 show: true,
                 offsetY: horizontal ? 2 : -3,
@@ -191,12 +189,9 @@ export const horizontalBarGraphOptions = (
                     }
 
                     return val
-                },
-                style: {
-                    colors: [getComputedStyle(document.body).getPropertyValue('--color-title')]
                 }
             },
-            tickAmount: horizontal ? max : undefined
+            tickAmount: 10
         }
     }
 }

@@ -1,26 +1,52 @@
 import { DomainEvent, DomainEventSeriesData } from 'types'
 
 /**
- * Calculates the % change in yesterday vs today.
+ * Calculates the % change from yesterday to today.
  *
  * @param today         Number of events today
  * @param yesterday     Number of events yesterday
  *
- * @returns             Percent change (+/-) or undefined
+ * @returns             Percent change (+/-)
  */
-export const calculatePercentChange = (today: number, yesterday: number): number => {
-    return ((today - yesterday) / yesterday) * 100
+export const calculatePercentChange = (from: number, to: number): number => {
+    if (from === 0) {
+        return 0
+    }
+
+    return ((to - from) / Math.abs(from)) * 100
 }
 
 /**
+ * Returns percent difference between two numbers (e.g. 90 is what percent of 100)
+ */
+export const calculatePercentOf = (parts: number, whole: number): number => {
+    if (whole === 0) {
+        return 0
+    }
+
+    return (parts / whole) * 100
+}
+
+/**
+ * Returns the number of new messages by comparing yesterday's data with today's data.
  *
+ * @param today     Today's data of DomainEvent[]
+ * @param yesterday Yesterday's data of DomainEvent[]
  */
 export const getNewMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
-    const events: DomainEvent[] | [] = today.filter(
-        (t: DomainEvent) => !yesterday.some((y: DomainEvent) => t.event === y.event)
-    )
+    let newMessages = 0
 
-    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
+    today.forEach((t: DomainEvent) => {
+        const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
+
+        if (y) {
+            newMessages += t.count > y.count ? t.count - y.count : 0
+        } else {
+            newMessages += t.count
+        }
+    })
+
+    return newMessages
 }
 
 /**
@@ -33,11 +59,19 @@ export const getNewMessageCount = (today: DomainEvent[] | [], yesterday: DomainE
  * @returns         Total sum of count of expired events
  */
 export const getExpiredMessageCount = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): number => {
-    const events: DomainEvent[] | [] = yesterday.filter(
-        (y: DomainEvent) => !today.some((t: DomainEvent) => t.event === y.event)
-    )
+    let expired = 0
 
-    return events.reduce((sum, event: DomainEvent) => sum + event.count, 0)
+    yesterday.forEach((y: DomainEvent) => {
+        const t: DomainEvent | undefined = today.find((t: DomainEvent) => y.event === t.event)
+
+        if (t) {
+            expired += t.count < y.count ? y.count - t.count : 0
+        } else {
+            expired += y.count
+        }
+    })
+
+    return expired
 }
 
 /**
@@ -57,10 +91,20 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
         const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
 
         if (y) {
+            if (y.count === t.count) {
+                return {
+                    ...t,
+                    diff: {
+                        change: 0,
+                        eventsYesterday: y.count
+                    }
+                }
+            }
+
             return {
                 ...t,
                 diff: {
-                    change: ((t.count - y.count) / y.count) * 100,
+                    change: t.count - y.count,
                     eventsYesterday: y.count
                 }
             }
@@ -70,7 +114,7 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
         return {
             ...t,
             diff: {
-                change: 100,
+                change: t.count,
                 eventsYesterday: 0
             }
         }

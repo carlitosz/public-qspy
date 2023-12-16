@@ -1,11 +1,22 @@
 .pill
-    @apply inline-flex justify-center items-center rounded-full w-3/12 text-page
+    @apply flex justify-end items-center rounded-md px-2.5 py-0.5 text-white
 
-    &.neutral
-        @apply ring-1 ring-title text-title
+    &.solid
+        &.neutral
+            @apply bg-text
 
-    &.danger
-        @apply ring-1 ring-danger text-danger
+        &.danger
+            @apply bg-danger
 
-    &.success
-        @apply ring-1 ring-success text-success
+        &.success
+            @apply bg-success
+
+    &.outline
+        &.neutral
+            @apply ring-1 ring-text text-text
+
+        &.success
+            @apply ring-1 ring-success text-success
+
+        &.danger
+            @apply ring-1 ring-danger text-danger
