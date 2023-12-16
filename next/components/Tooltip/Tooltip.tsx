@@ -1,5 +1,5 @@
 import React from 'react'
-import { formatDistance } from 'date-fns'
+import { formatDistance, format } from 'date-fns'
 
 import AnalyticsNumber from '@/components/Analytics/AnalyticsNumber'
 import DropdownItem from '@/components/Dropdown/DropdownItem'
@@ -17,16 +17,30 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
             divider: true
         },
         {
-            title: `Oldest occurrence`
+            title: `Change`
         },
         {
-            label: formatDistance(new Date(meta.firstSeen), new Date(), { addSuffix: true })
+            label: (
+                <div className="flex justify-between items-end w-full">
+                    <span className="text-xs text-title font-semibold">Since yesterday</span>
+                    <AnalyticsNumber number={meta.diff.change} />
+                </div>
+            )
         },
         {
-            title: `Newest occurrence`
+            title: `Occurrences`
         },
         {
-            label: formatDistance(new Date(meta.lastSeen), new Date(), { addSuffix: true })
+            label: `Oldest: ${formatDistance(new Date(meta.firstSeen), new Date(), { addSuffix: true })} (${format(
+                new Date(meta.firstSeen),
+                'MMM do'
+            )})`
+        },
+        {
+            label: `Newest: ${formatDistance(new Date(meta.lastSeen), new Date(), { addSuffix: true })} (${format(
+                new Date(meta.lastSeen),
+                'MMM do'
+            )})`
         }
     ]
 
@@ -35,11 +49,7 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
             <div className="flex flex-col justify-center items-center p-2">
                 <p className="text-xs text-text">{meta.path}</p>
                 <p className="text-xs text-primary">{x}</p>
-                <p className="text-4xl font-semibold text-primary my-1">{y}</p>
-                <div className="inline-flex">
-                    <AnalyticsNumber number={meta.diff.change} />
-                    <span className="">from yesterday {meta.diff.eventsYesterday}</span>
-                </div>
+                <p className="text-5xl font-semibold text-primary mt-2">{y}</p>
             </div>
             <ul className="flex flex-col">
                 {items &&
@@ -49,7 +59,7 @@ const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
                             index: number
                         ): JSX.Element => {
                             if (divider) {
-                                return <div className="h-1 w-full border-b mb-2" key={index} />
+                                return <div className="h-1 w-full border-b border-border" key={index} />
                             }
 
                             return (

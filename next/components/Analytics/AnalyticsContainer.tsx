@@ -27,7 +27,6 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
                 <AnalyticsCardSkeleton />
-                <AnalyticsCardSkeleton />
             </div>
         )
     }
@@ -61,7 +60,6 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
                 metric={todaysData.Data.length}
                 title="Unique events"
             />
-            <AnalyticsCard metric={1092} title="Expired events" />
         </div>
     )
 }
