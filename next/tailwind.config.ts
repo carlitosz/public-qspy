@@ -10,7 +10,7 @@ export default {
                 border: 'var(--color-border)',
                 component: 'var(--color-component)',
                 danger: 'var(--color-danger)',
-                hover: 'var(--color-hover)',
+                hover: 'hsl(var(--color-hover) / <alpha-value>)',
                 page: 'var(--color-page)',
                 primary: 'var(--color-primary)',
                 secondary: 'var(--color-secondary)',

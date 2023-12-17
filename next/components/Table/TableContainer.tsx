@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
+import Pagination from '@/components/Pagination/Pagination'
 import Table from '@/components/Table/Table'
+import { paginate } from '@/util/data'
 
-import type { GetEventsResponse } from 'types'
+import type { DomainEvent, GetEventsResponse } from 'types'
 
 interface TableContainerProps {
     data: {
@@ -12,8 +14,20 @@ interface TableContainerProps {
 }
 
 const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
+    const [currentPage, setCurrentPage] = useState<number>(0)
+    const [pages, setPages] = useState<[DomainEvent[]] | [[]]>([[]])
+    const [resultsPerPage, setResultsPerPage] = useState<number>(10)
+
     const { isValidating: tValidating, error: tError, data: tData } = data.today
     const { isValidating: yValidating, error: yError, data: yData } = data.yesterday
+
+    useEffect(() => {
+        if (tData) {
+            setPages(paginate(tData.Data, resultsPerPage))
+        }
+    }, [tData, resultsPerPage])
+
+    useEffect(() => setCurrentPage(0), [resultsPerPage])
 
     if (tValidating || yValidating) {
         return (
@@ -28,8 +42,24 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     }
 
     return (
-        <div className="h-full w-full">
-            <Table data={tData.Data} />
+        <div className="block">
+            <div className="table-container">
+                <Table data={pages[currentPage]} />
+            </div>
+            <div className="py-4">
+                <Pagination
+                    currentPage={currentPage}
+                    goToPage={(desiredPage: number) => {
+                        if (desiredPage < 0 || desiredPage >= pages.length) {
+                            return
+                        }
+
+                        setCurrentPage(desiredPage)
+                    }}
+                    numPages={pages.length}
+                    totalResults={tData.Data.length}
+                />
+            </div>
         </div>
     )
 }

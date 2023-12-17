@@ -1,6 +1,4 @@
 import React from 'react'
-import ArrowLongLeftIcon from '@heroicons/react/24/outline/ArrowLongLeftIcon'
-import ArrowLongRightIcon from '@heroicons/react/24/outline/ArrowLongRightIcon'
 
 interface PaginationProps {
     currentPage: number
@@ -17,32 +15,54 @@ const Pagination = ({ currentPage, goToPage, numPages, totalResults }: Paginatio
     }
 
     return (
-        <div className="pagination-container">
-            <div className="pagination">
-                <div aria-hidden="true" className="pagination-previous" onClick={() => goToPage(currentPage - 1)}>
-                    <ArrowLongLeftIcon className="icon-sm" />
-                    <p className="ml-2">Back</p>
-                </div>
-
-                <div className="pagination-numbers">
-                    {pageNumbers.map((value: string, index: number) => (
-                        <p
-                            className={`pagination-item ${currentPage === index ? 'selected' : ''}`}
-                            key={index}
-                            onClick={() => goToPage(index)}
-                            aria-hidden="true"
-                        >
-                            {index + 1}
-                        </p>
-                    ))}
-                </div>
-
-                <div aria-hidden="true" className="pagination-next" onClick={() => goToPage(currentPage + 1)}>
-                    <p className="mr-2">Next</p>
-                    <ArrowLongRightIcon className="icon-sm" />
-                </div>
-            </div>
-        </div>
+        <nav className="pagination" aria-label="Table Navigation" role="navigation">
+            <span className="results">
+                Showing <span className="font-semibold text-primary">1-10</span> of{' '}
+                <span className="font-semibold text-primary">1000</span>
+            </span>
+            <ul>
+                <li>
+                    <a
+                        aria-label="Go to previous page"
+                        aria-disabled={currentPage === 0}
+                        onClick={() => goToPage(currentPage - 1)}
+                        onKeyDown={() => goToPage(currentPage - 1)}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        Back
+                    </a>
+                </li>
+                {pageNumbers.map((value: string, index: number) => {
+                    return (
+                        <li key={index}>
+                            <a
+                                aria-label={`Page ${index + 1}`}
+                                aria-current={index === currentPage}
+                                onClick={() => goToPage(index)}
+                                onKeyDown={() => goToPage(index)}
+                                role="button"
+                                tabIndex={index + 1}
+                            >
+                                {index + 1}
+                            </a>
+                        </li>
+                    )
+                })}
+                <li>
+                    <a
+                        aria-label="Go to next page"
+                        aria-disabled={currentPage === pageNumbers.length - 1}
+                        onClick={() => goToPage(currentPage + 1)}
+                        onKeyDown={() => goToPage(currentPage + 1)}
+                        role="button"
+                        tabIndex={pageNumbers.length + 1}
+                    >
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
     )
 }
 

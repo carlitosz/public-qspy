@@ -50,7 +50,7 @@ const Home: NextPage = (): JSX.Element => {
             {/* <div className="w-full rounded-md h-3/5">
                 <BarChartContainer data={{ today, yesterday }} title={QUEUE_NAME} />
             </div> */}
-            <div className="w-full h-1/2 rounded-md">
+            <div className="w-full h-fit rounded-md">
                 <TableContainer data={{ today, yesterday }} />
             </div>
         </Page>

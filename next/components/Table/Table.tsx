@@ -3,7 +3,7 @@ import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon'
 
 import type { DomainEvent } from 'types'
 
-type TableData = [DomainEvent]
+type TableData = DomainEvent[] | []
 
 interface TableProps {
     data: TableData
@@ -13,8 +13,8 @@ const Table = ({ data }: TableProps): JSX.Element => {
     const TableHeaders = ['Event', 'Count', 'Last seen', 'First seen']
 
     return (
-        <div className="h-full w-full">
-            <div className="p-4 bg-component border-border">
+        <>
+            <div className="table-search">
                 <label htmlFor="table-search" className="sr-only">
                     Search
                 </label>
@@ -30,7 +30,7 @@ const Table = ({ data }: TableProps): JSX.Element => {
                     />
                 </div>
             </div>
-            <table className="table">
+            <table className="table-items">
                 <thead>
                     <tr>
                         {TableHeaders.map(
@@ -57,7 +57,7 @@ const Table = ({ data }: TableProps): JSX.Element => {
                     })}
                 </tbody>
             </table>
-        </div>
+        </>
     )
 }
 
