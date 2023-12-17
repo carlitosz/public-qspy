@@ -29,7 +29,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
 
     return (
         <div className="h-full w-full">
-            <Table />
+            <Table data={tData.Data} />
         </div>
     )
 }

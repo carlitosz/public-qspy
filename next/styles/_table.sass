@@ -2,16 +2,17 @@
     @apply w-full text-sm text-left rtl:text-right text-text
 
     > thead
-        @apply text-xs text-title uppercase bg-component border-t border-border
+        @apply text-xs text-primary uppercase bg-component border-t border-b border-border
 
         > tr > th
             @apply px-6 py-3
 
-    > tbody > tr
-        @apply text-text bg-component border-b border-border hover:bg-hover
+    > tbody
+        > tr, th, td
+            @apply text-title font-normal px-6 py-4
+
+        > tr
+            @apply bg-component border-b border-border hover:bg-hover
 
         > th
-            @apply px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white
-
-        > td
-            @apply px-6 py-4
+            @apply whitespace-nowrap
