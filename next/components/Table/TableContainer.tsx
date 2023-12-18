@@ -42,7 +42,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     }
 
     return (
-        <div className="block">
+        <div className="block h-full">
             <div className="table-container">
                 <Table data={pages[currentPage]} />
             </div>
