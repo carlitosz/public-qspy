@@ -1,25 +1,25 @@
-.pagination-container
-    @apply flex items-center justify-center  h-full w-full
+.pagination
+    @apply flex items-center justify-between
 
-    .pagination
-        @apply flex items-center justify-center w-1/3 h-full
+    .results
+        @apply text-sm text-title block w-full
 
-        &-previous, &-next
-            @apply flex items-center justify-center hover:text-primary cursor-pointer text-title text-sm p-3 rounded-md hover:bg-hover active:ring-1 active:ring-border transition duration-150 ease-in-out
+    ul
+        @apply inline-flex -space-x-px rtl:space-x-reverse text-sm h-8
 
-        &-previous
-            @apply mr-5
-        &-next
-            @apply ml-5
+        li > a
+            @apply flex items-center justify-center px-3 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-border cursor-pointer
 
-        &-item
-            @apply text-center text-sm font-medium leading-none cursor-pointer text-title hover:text-primary p-4 h-full w-10 hover:bg-hover rounded-md mr-1 transition duration-150 ease-in-out
+        li:first-child
+            > a
+                @apply rounded-s-md
 
-            &:last-child
-                @apply mr-0
+        li:last-child
+            > a
+                @apply rounded-e-md
 
-            &.selected
-                @apply text-sm font-medium leading-none cursor-pointer text-primary bg-page ring-1 ring-border rounded-md p-4 h-full
+        li > a[aria-current="true"]
+            @apply bg-primary text-white
 
-        &-numbers
-            @apply sm:flex hidden
+        li > a[aria-disabled="true"]
+            @apply bg-hover text-title/50 cursor-not-allowed

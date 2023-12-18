@@ -7,16 +7,16 @@ export default {
     theme: {
         extend: {
             colors: {
-                border: 'var(--color-border)',
-                component: 'var(--color-component)',
-                danger: 'var(--color-danger)',
-                hover: 'var(--color-hover)',
-                page: 'var(--color-page)',
-                primary: 'var(--color-primary)',
-                secondary: 'var(--color-secondary)',
-                success: 'var(--color-success)',
-                text: 'var(--color-text)',
-                title: 'var(--color-title)'
+                border: 'hsl(var(--color-border) / <alpha-value>)',
+                component: 'hsl(var(--color-component) / <alpha-value>)',
+                danger: 'hsl(var(--color-danger) / <alpha-value>)',
+                hover: 'hsl(var(--color-hover) / <alpha-value>)',
+                page: 'hsl(var(--color-page) / <alpha-value>)',
+                primary: 'hsl(var(--color-primary) / <alpha-value>)',
+                secondary: 'hsl(var(--color-secondary) / <alpha-value>)',
+                success: 'hsl(var(--color-success) / <alpha-value>)',
+                text: 'hsl(var(--color-text) / <alpha-value>)',
+                title: 'hsl(var(--color-title) / <alpha-value>)'
             },
             fontFamily: {
                 sans: ['Poppins', 'sans-serif']
