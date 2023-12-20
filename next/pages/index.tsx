@@ -3,7 +3,6 @@ import { format } from 'date-fns'
 import { subDays } from 'date-fns'
 
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
-import BarChartContainer from '@/components/Chart/Bar/BarChartContainer'
 import TableContainer from '@/components/Table/TableContainer'
 import Page from '@/components/Layout/Page'
 import { useRequest } from '@/util/axios'
@@ -47,9 +46,6 @@ const Home: NextPage = (): JSX.Element => {
             <div className="w-full rounded-md h-auto mb-6">
                 <AnalyticsContainer data={{ today, yesterday }} />
             </div>
-            {/* <div className="w-full rounded-md h-3/5">
-                <BarChartContainer data={{ today, yesterday }} title={QUEUE_NAME} />
-            </div> */}
             <div className="w-full h-fit rounded-md">
                 <TableContainer data={{ today, yesterday }} />
             </div>

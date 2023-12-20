@@ -30,6 +30,13 @@
         --color-text: 0deg 0% 45.1%
         --color-title: 0deg 0% 83.1%
 
+    ::-webkit-scrollbar
+        @apply w-1
+    ::-webkit-scrollbar-track
+        @apply bg-hover
+    ::-webkit-scrollbar-thumb
+        @apply bg-primary
+
 @layer components
     @import chart
     @import dropdown

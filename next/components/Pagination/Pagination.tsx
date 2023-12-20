@@ -2,12 +2,21 @@ import React from 'react'
 
 interface PaginationProps {
     currentPage: number
+    currentPageTotal: number
     goToPage: (desiredPage: number) => void
     numPages: number
+    resultsPerPage: number
     totalResults: number
 }
 
-const Pagination = ({ currentPage, goToPage, numPages, totalResults }: PaginationProps): JSX.Element => {
+const Pagination = ({
+    currentPage,
+    currentPageTotal,
+    goToPage,
+    numPages,
+    resultsPerPage,
+    totalResults
+}: PaginationProps): JSX.Element => {
     const pageNumbers = Array(numPages).fill('x', 0, numPages)
 
     if (totalResults === 0) {
@@ -17,8 +26,11 @@ const Pagination = ({ currentPage, goToPage, numPages, totalResults }: Paginatio
     return (
         <nav className="pagination" aria-label="Table Navigation" role="navigation">
             <span className="results">
-                Showing <span className="font-semibold text-primary">1-10</span> of{' '}
-                <span className="font-semibold text-primary">1000</span>
+                Showing{' '}
+                <span className="font-semibold text-primary">
+                    {currentPage * resultsPerPage + 1} - {currentPage * resultsPerPage + currentPageTotal}
+                </span>{' '}
+                of <span className="font-semibold text-primary">{totalResults}</span> results
             </span>
             <ul>
                 <li>

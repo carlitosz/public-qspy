@@ -1,32 +1,38 @@
 .table-container
-    @apply ring-1 ring-border rounded-md bg-component h-full
+    @apply ring-1 ring-border rounded-md bg-component h-fit
 
 .table-search
     @apply rounded-t-md p-4
 
-.table-items
-    @apply w-full text-sm text-left rtl:text-right text-text
+.table
+    @apply w-full h-full
 
-    > thead
-        @apply text-xs text-primary uppercase border-b border-border
+    .table-items
+        @apply w-full h-full text-sm text-left rtl:text-right text-text
 
-        > tr > th
-            @apply px-6 py-3
+        > thead
+            @apply text-xs text-primary uppercase border-b border-border
 
-    > tbody
-        @apply rounded-b-md
+            > tr > th
+                @apply px-6 py-4
 
-        > tr, th, td
-            @apply text-title font-normal px-6 py-4
+        > tbody
+            @apply rounded-b-md
 
-        > tr
-            @apply border-b border-border hover:bg-hover/20
+            > tr, th, td
+                @apply text-title font-normal px-6 py-4
 
-        > tr:last-child
-            @apply border-none rounded-b-md
+            > tr
+                @apply border-b border-border hover:bg-hover/70 cursor-pointer
 
-            > th
-                @apply rounded-bl-md
+            > tr:last-child
+                @apply border-none rounded-b-md
 
-            > td:last-child
-                @apply rounded-br-md
+                > th
+                    @apply rounded-bl-md
+
+                > td:last-child
+                    @apply rounded-br-md
+
+            > tr:nth-child(2n)
+                @apply bg-hover/40 hover:bg-hover/70

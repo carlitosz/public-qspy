@@ -8,18 +8,18 @@
         @apply inline-flex -space-x-px rtl:space-x-reverse text-sm h-8
 
         li > a
-            @apply flex items-center justify-center px-3 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-border cursor-pointer
+            @apply flex items-center justify-center w-8 px-3 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-border cursor-pointer
 
         li:first-child
             > a
-                @apply rounded-s-md
+                @apply rounded-s-md w-auto
 
         li:last-child
             > a
-                @apply rounded-e-md
+                @apply rounded-e-md w-auto
 
         li > a[aria-current="true"]
             @apply bg-primary text-white
 
         li > a[aria-disabled="true"]
-            @apply bg-hover text-title/50 cursor-not-allowed
+            @apply bg-hover text-title/40 cursor-not-allowed

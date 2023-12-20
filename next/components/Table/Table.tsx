@@ -30,33 +30,35 @@ const Table = ({ data }: TableProps): JSX.Element => {
                     />
                 </div>
             </div>
-            <table className="table-items">
-                <thead>
-                    <tr>
-                        {TableHeaders.map(
-                            (header: string, i: number): React.ReactNode => (
-                                <th scope="col" key={i}>
-                                    {header}
-                                </th>
-                            )
-                        )}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(({ event, count, fs, ls }: DomainEvent, i: number) => {
-                        var name: string | undefined = event.split('\\').pop()
+            <div className="table">
+                <table className="table-items">
+                    <thead>
+                        <tr>
+                            {TableHeaders.map(
+                                (header: string, i: number): React.ReactNode => (
+                                    <th scope="col" key={i}>
+                                        {header}
+                                    </th>
+                                )
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map(({ event, count, fs, ls }: DomainEvent, i: number) => {
+                            var name: string | undefined = event.split('\\').pop()
 
-                        return (
-                            <tr key={i}>
-                                <th scope="row">{name ?? ''}</th>
-                                <td>{count}</td>
-                                <td>{fs}</td>
-                                <td>{ls}</td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
+                            return (
+                                <tr key={i}>
+                                    <th scope="row">{name ?? ''}</th>
+                                    <td>{count}</td>
+                                    <td>{fs}</td>
+                                    <td>{ls}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }
