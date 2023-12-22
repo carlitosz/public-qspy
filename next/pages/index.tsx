@@ -43,10 +43,10 @@ const Home: NextPage = (): JSX.Element => {
 
     return (
         <Page title="Daily Overview" heading={QUEUE_NAME}>
-            <div className="w-full rounded-md h-auto mb-6">
+            <div className="w-full rounded-md h-auto">
                 <AnalyticsContainer data={{ today, yesterday }} />
             </div>
-            <div className="w-full h-fit rounded-md">
+            <div className="w-full h-fit py-6">
                 <TableContainer data={{ today, yesterday }} />
             </div>
         </Page>

@@ -1,5 +1,8 @@
 .pill
-    @apply flex justify-end items-center rounded-md px-2.5 py-0.5 text-white
+    @apply flex items-center rounded-md px-2.5 py-0.5 text-white w-min
+
+    &.table-change
+        @apply px-0.5 py-0.5
 
     &.solid
         &.neutral
@@ -20,3 +23,13 @@
 
         &.danger
             @apply ring-1 ring-danger text-danger
+
+    &.none
+        &.neutral
+            @apply text-title/80
+
+        &.success
+            @apply text-success
+
+        &.danger
+            @apply text-danger

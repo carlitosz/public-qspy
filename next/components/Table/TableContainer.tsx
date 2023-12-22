@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import Pagination from '@/components/Pagination/Pagination'
 import Table from '@/components/Table/Table'
-import { paginate } from '@/util/data'
+
+import { createTableData, paginate } from '@/util/data'
 
 import type { DomainEvent, GetEventsResponse } from 'types'
 
@@ -43,27 +44,9 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
 
     return (
         <>
-            {pages[currentPage].length > 0 && (
-                <div className="py-4">
-                    <Pagination
-                        currentPage={currentPage}
-                        currentPageTotal={pages[currentPage].length}
-                        goToPage={(desiredPage: number) => {
-                            if (desiredPage < 0 || desiredPage >= pages.length) {
-                                return
-                            }
-
-                            setCurrentPage(desiredPage)
-                        }}
-                        numPages={pages.length}
-                        resultsPerPage={resultsPerPage}
-                        totalResults={tData.Data.length}
-                    />
-                </div>
-            )}
             <div className="table-container">
                 {pages[currentPage].length > 0 ? (
-                    <Table data={pages[currentPage]} />
+                    <Table data={createTableData(pages[currentPage], yData.Data)} />
                 ) : (
                     <div className="flex flex-col items-center justify-center py-6">
                         <p className="text-danger text-xl">Uh-oh!</p>
@@ -83,6 +66,24 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                     </div>
                 )}
             </div>
+            {pages[currentPage].length > 0 && (
+                <div className="block w-full mt-4">
+                    <Pagination
+                        currentPage={currentPage}
+                        currentPageTotal={pages[currentPage].length}
+                        goToPage={(desiredPage: number) => {
+                            if (desiredPage < 0 || desiredPage >= pages.length) {
+                                return
+                            }
+
+                            setCurrentPage(desiredPage)
+                        }}
+                        numPages={pages.length}
+                        resultsPerPage={resultsPerPage}
+                        totalResults={tData.Data.length}
+                    />
+                </div>
+            )}
         </>
     )
 }

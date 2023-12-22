@@ -1,4 +1,4 @@
-import { DomainEvent, DomainEventSeriesData } from 'types'
+import { DomainEvent, DomainEventSeriesData, DomainEventTableData } from 'types'
 
 /**
  * Calculates the % change from yesterday to today.
@@ -117,6 +117,24 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
                 change: t.count,
                 eventsYesterday: 0
             }
+        }
+    })
+}
+
+/**
+ * Compares yesterday vs. today counts and attaches the 'change' property to each DomainEvent.
+ */
+export const createTableData = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventTableData[] => {
+    return today.map((t: DomainEvent) => {
+        const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
+
+        if (y) {
+            return y.count === t.count ? { ...t, change: 0 } : { ...t, change: t.count - y.count }
+        }
+
+        return {
+            ...t,
+            change: t.count
         }
     })
 }

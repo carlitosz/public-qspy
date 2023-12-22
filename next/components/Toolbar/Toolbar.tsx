@@ -11,9 +11,10 @@ interface ToolbarProps {
     disabled: boolean
     items: DropdownItemType[]
     openIcon?: React.ReactNode
+    title?: string
 }
 
-const Toolbar = ({ closeIcon, direction, disabled, items, openIcon }: ToolbarProps): JSX.Element => {
+const Toolbar = ({ closeIcon, direction, disabled, items, openIcon, title }: ToolbarProps): JSX.Element => {
     return (
         <div className="inline-flex" role="group">
             <Dropdown
@@ -22,6 +23,7 @@ const Toolbar = ({ closeIcon, direction, disabled, items, openIcon }: ToolbarPro
                 disabled={disabled}
                 menuItems={items}
                 openIcon={openIcon}
+                title={title}
             />
         </div>
     )

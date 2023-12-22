@@ -1,14 +1,14 @@
 .dropdown-container
-    @apply relative inline-block rounded-full
+    @apply relative inline-block
 
     .dropdown-btn
-        @apply p-2 text-title hover:text-primary hover:bg-hover rounded-full focus:outline-none active:ring-1 active:ring-border transition duration-150 ease-in-out
+        @apply inline-flex h-8 w-fit justify-center items-center px-2 ring-1 ring-border text-sm text-title hover:bg-hover rounded-md focus:outline-none transition duration-150 ease-in-out
 
         &:disabled
             @apply cursor-not-allowed
 
     .dropdown-menu
-        @apply absolute p-2 z-10 w-48 rounded-md bg-component shadow-lg ring-1 ring-border
+        @apply absolute p-2 z-10 w-max rounded-md bg-component shadow-lg ring-1 ring-border
 
         &.up
             @apply bottom-10 right-0 origin-bottom-right

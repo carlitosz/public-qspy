@@ -48,17 +48,17 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
                     type: 'percent'
                 }}
                 metric={todaysData.Total}
-                title="Total Messages"
+                title="Total"
             />
-            <AnalyticsCard metric={newMessagesCount} title="New messages" />
-            <AnalyticsCard metric={expiredMessagesCount} title="Expired messages" />
+            <AnalyticsCard metric={newMessagesCount} title="New" />
+            <AnalyticsCard metric={expiredMessagesCount} title="Expired" />
             <AnalyticsCard
                 difference={{
                     metric: calculatePercentChange(yesterdaysData.Data.length, todaysData.Data.length),
                     type: 'percent'
                 }}
                 metric={todaysData.Data.length}
-                title="Unique events"
+                title="Unique"
             />
         </div>
     )
