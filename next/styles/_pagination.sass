@@ -1,25 +1,28 @@
 .pagination
-    @apply flex items-center justify-between
+    @apply flex
 
-    .results
-        @apply text-sm text-title block w-full
+    nav
+        @apply flex space-x-4 w-fit
 
-    ul
-        @apply inline-flex -space-x-px rtl:space-x-reverse text-sm h-8
+        .navigation-numbers
+            @apply flex -space-x-px rtl:space-x-reverse text-sm h-8
 
-        li > a
-            @apply flex items-center justify-center px-3 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-border cursor-pointer
+            li > a
+                @apply flex items-center justify-center w-8 px-2 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-title/10 cursor-pointer transition duration-300 ease-in-out
 
-        li:first-child
-            > a
-                @apply rounded-s-md
+            li:first-child
+                > a
+                    @apply rounded-s-md w-auto
 
-        li:last-child
-            > a
-                @apply rounded-e-md
+            li:last-child
+                > a
+                    @apply rounded-e-md w-auto
 
-        li > a[aria-current="true"]
-            @apply bg-primary text-white
+            li > a[aria-current="true"]
+                @apply bg-primary text-white
 
-        li > a[aria-disabled="true"]
-            @apply bg-hover text-title/50 cursor-not-allowed
+            li > a[aria-disabled="true"]
+                @apply bg-hover text-title/30 cursor-not-allowed
+
+    .results-per-page
+        @apply ml-4

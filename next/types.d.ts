@@ -16,8 +16,13 @@ declare type DomainEventDiff = {
     }
 }
 
+declare type DailyChange = {
+    change: number
+}
+
 // What is used to plot data points
 export type DomainEventSeriesData = DomainEvent & DomainEventDiff
+export type DomainEventTableData = DomainEvent & DailyChange
 
 // Server response via Axios
 export type GetEventsResponse = Return<{

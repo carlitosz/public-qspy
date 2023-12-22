@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import Pagination from '@/components/Pagination/Pagination'
+import ResultsPerPage from '@/components/Pagination/ResultsPerPage'
 import Table from '@/components/Table/Table'
-import { paginate } from '@/util/data'
+
+import { createTableData, paginate } from '@/util/data'
 
 import type { DomainEvent, GetEventsResponse } from 'types'
 
@@ -31,36 +33,103 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
 
     if (tValidating || yValidating) {
         return (
-            <div role="status" className="chart animate-pulse">
+            <div role="status" className="animate-pulse">
                 skeleton
             </div>
         )
     }
 
-    if (tError || yError || tData.Data.length === 0) {
-        return <div className="chart">empty</div>
+    if (tError || yError) {
+        return <>error</>
     }
 
     return (
-        <div className="block h-full">
-            <div className="table-container">
-                <Table data={pages[currentPage]} />
-            </div>
-            <div className="py-4">
-                <Pagination
-                    currentPage={currentPage}
-                    goToPage={(desiredPage: number) => {
-                        if (desiredPage < 0 || desiredPage >= pages.length) {
-                            return
-                        }
+        <>
+            {pages[currentPage].length > 0 && (
+                <div className="flex items-end justify-between mb-2">
+                    <ResultsPerPage
+                        currentPage={currentPage}
+                        currentPageTotal={pages[currentPage].length}
+                        resultsPerPage={resultsPerPage}
+                        totalResults={tData.Data.length}
+                    />
+                    <Pagination
+                        currentPage={currentPage}
+                        dropdownDirection="down"
+                        goToPage={(desiredPage: number) => {
+                            if (desiredPage < 0 || desiredPage >= pages.length) {
+                                return
+                            }
 
-                        setCurrentPage(desiredPage)
-                    }}
-                    numPages={pages.length}
-                    totalResults={tData.Data.length}
-                />
+                            setCurrentPage(desiredPage)
+                        }}
+                        numPages={pages.length}
+                        resultsPerPage={resultsPerPage}
+                        setResultsPerPage={(desiredResults: number) => {
+                            if (desiredResults < 0 || desiredResults > tData.Data.length) {
+                                return
+                            }
+
+                            setResultsPerPage(desiredResults)
+                        }}
+                        totalResults={tData.Data.length}
+                    />
+                </div>
+            )}
+            <div className="table-container">
+                {pages[currentPage].length > 0 ? (
+                    <Table data={createTableData(pages[currentPage], yData.Data)} />
+                ) : (
+                    <div className="flex flex-col items-center justify-center py-6">
+                        <p className="text-danger text-xl">Uh-oh!</p>
+                        <p className="text-text text-md mb-4">We have nothing to display.</p>
+                        <div className=" p-8 h-full w-1/2 rounded-md">
+                            <p className="text-primary text-md font-semibold border-b border-border py-2">
+                                Possible reasons
+                            </p>
+                            <ol className="text-title list-disc my-2">
+                                <li>Your queue is empty 🥳 Check again tomorrow!</li>
+                                <li>
+                                    Your queue has not been processed today. If you want to manually process your queue,
+                                    follow the instructions here.
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                )}
             </div>
-        </div>
+            {pages[currentPage].length > 0 && (
+                <div className="flex justify-between my-2">
+                    <ResultsPerPage
+                        currentPage={currentPage}
+                        currentPageTotal={pages[currentPage].length}
+                        resultsPerPage={resultsPerPage}
+                        totalResults={tData.Data.length}
+                    />
+                    <Pagination
+                        currentPage={currentPage}
+                        dropdownDirection="up"
+                        goToPage={(desiredPage: number) => {
+                            if (desiredPage < 0 || desiredPage >= pages.length) {
+                                return
+                            }
+
+                            setCurrentPage(desiredPage)
+                        }}
+                        numPages={pages.length}
+                        resultsPerPage={resultsPerPage}
+                        setResultsPerPage={(desiredResults: number) => {
+                            if (desiredResults < 0 || desiredResults > tData.Data.length) {
+                                return
+                            }
+
+                            setResultsPerPage(desiredResults)
+                        }}
+                        totalResults={tData.Data.length}
+                    />
+                </div>
+            )}
+        </>
     )
 }
 

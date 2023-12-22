@@ -1,4 +1,4 @@
-import { DomainEvent, DomainEventSeriesData } from 'types'
+import { DomainEvent, DomainEventSeriesData, DomainEventTableData } from 'types'
 
 /**
  * Calculates the % change from yesterday to today.
@@ -122,6 +122,24 @@ export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEve
 }
 
 /**
+ * Compares yesterday vs. today counts and attaches the 'change' property to each DomainEvent.
+ */
+export const createTableData = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventTableData[] => {
+    return today.map((t: DomainEvent) => {
+        const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
+
+        if (y) {
+            return y.count === t.count ? { ...t, change: 0 } : { ...t, change: t.count - y.count }
+        }
+
+        return {
+            ...t,
+            change: t.count
+        }
+    })
+}
+
+/**
  * Poor man's pagination. Chunks data into an array of arrays.
  *
  * @param data      An array of DomainEvent data
@@ -158,3 +176,15 @@ export const formattedJSONArray = (data: DomainEvent[]): string => {
 
     return JSON.stringify(obj, undefined, 2)
 }
+
+/**
+ * Generates an array of numbers [1, 2, 3, 4, ... ]
+ * Useful for pagination.
+ *
+ * @param start start number
+ * @param stop  stop number
+ * @param step  increment by
+ * @returns
+ */
+export const generateArray = (start: number, stop: number, step: number) =>
+    Array.from({ length: (stop - start) / step + 1 }, (value, index) => start + index * step)

@@ -14,9 +14,10 @@ interface DropdownProps {
     disabled?: boolean
     menuItems: DropdownItemType[]
     openIcon?: React.ReactNode
+    title?: string
 }
 
-const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon }: DropdownProps): JSX.Element => {
+const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon, title }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -55,6 +56,7 @@ const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon }: Dropd
                 {open
                     ? closeIcon ?? <XMarkIcon className="icon-sm animate-wiggle transform-gpu" />
                     : openIcon ?? <EllipsisVerticalIcon className="icon-sm animate-wiggle transform-gpu" />}
+                {title ?? ''}
             </button>
 
             {open && (

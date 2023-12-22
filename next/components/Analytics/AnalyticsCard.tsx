@@ -14,9 +14,9 @@ interface AnalyticsCardProps {
 const AnalyticsCard = ({ difference, metric, title }: AnalyticsCardProps): JSX.Element => {
     return (
         <div className="ring-1 ring-border rounded-md bg-component h-full w-full p-4">
-            <p className="text-primary font-medium text-4xl antialiased">{metric.toLocaleString()}</p>
+            <p className="text-primary font-semibold text-4xl antialiased">{metric.toLocaleString()}</p>
             <div className="flex items-center justify-between w-full mt-2">
-                <p className="text-md text-title font-semibold antialiased">{title}</p>
+                <p className="text-sm text-title font-semibold antialiased">{title}</p>
                 {difference && difference.type === 'percent' && (
                     <AnalyticsPercent percent={difference.metric} color={difference.color} />
                 )}

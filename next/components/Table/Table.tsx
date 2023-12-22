@@ -1,16 +1,19 @@
 import React from 'react'
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon'
+import { formatDistance } from 'date-fns'
 
-import type { DomainEvent } from 'types'
+import AnalyticsNumber from '@/components/Analytics/AnalyticsNumber'
 
-type TableData = DomainEvent[] | []
+import type { DailyChange, DomainEvent, DomainEventTableData } from 'types'
+
+type TableData = DomainEventTableData[] | []
 
 interface TableProps {
     data: TableData
 }
 
 const Table = ({ data }: TableProps): JSX.Element => {
-    const TableHeaders = ['Event', 'Count', 'Last seen', 'First seen']
+    const TableHeaders = ['Event', 'Count', '(+/-)', 'Last seen', 'First seen']
 
     return (
         <>
@@ -30,33 +33,38 @@ const Table = ({ data }: TableProps): JSX.Element => {
                     />
                 </div>
             </div>
-            <table className="table-items">
-                <thead>
-                    <tr>
-                        {TableHeaders.map(
-                            (header: string, i: number): React.ReactNode => (
-                                <th scope="col" key={i}>
-                                    {header}
-                                </th>
-                            )
-                        )}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(({ event, count, fs, ls }: DomainEvent, i: number) => {
-                        var name: string | undefined = event.split('\\').pop()
+            <div className="table">
+                <table className="table-items">
+                    <thead>
+                        <tr>
+                            {TableHeaders.map(
+                                (header: string, i: number): React.ReactNode => (
+                                    <th scope="col" key={i}>
+                                        {header}
+                                    </th>
+                                )
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map(({ event, count, fs, ls, change }: DomainEvent & DailyChange, i: number) => {
+                            var name: string | undefined = event.split('\\').pop()
 
-                        return (
-                            <tr key={i}>
-                                <th scope="row">{name ?? ''}</th>
-                                <td>{count}</td>
-                                <td>{fs}</td>
-                                <td>{ls}</td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
+                            return (
+                                <tr key={i}>
+                                    <td width={500}>{name ?? ''}</td>
+                                    <td>{count}</td>
+                                    <td>
+                                        <AnalyticsNumber className="table-change" number={change} style="none" />
+                                    </td>
+                                    <td>{`${formatDistance(new Date(ls), new Date(), { addSuffix: true })}`}</td>
+                                    <td>{`${formatDistance(new Date(fs), new Date(), { addSuffix: true })}`}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }
