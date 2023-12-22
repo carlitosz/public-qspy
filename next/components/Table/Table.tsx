@@ -57,8 +57,8 @@ const Table = ({ data }: TableProps): JSX.Element => {
                                     <td>
                                         <AnalyticsNumber className="table-change" number={change} style="none" />
                                     </td>
-                                    <td>{`${formatDistance(new Date(fs), new Date(), { addSuffix: true })}`}</td>
                                     <td>{`${formatDistance(new Date(ls), new Date(), { addSuffix: true })}`}</td>
+                                    <td>{`${formatDistance(new Date(fs), new Date(), { addSuffix: true })}`}</td>
                                 </tr>
                             )
                         })}

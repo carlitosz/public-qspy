@@ -176,3 +176,15 @@ export const formattedJSONArray = (data: DomainEvent[]): string => {
 
     return JSON.stringify(obj, undefined, 2)
 }
+
+/**
+ * Generates an array of numbers [1, 2, 3, 4, ... ]
+ * Useful for pagination.
+ *
+ * @param start start number
+ * @param stop  stop number
+ * @param step  increment by
+ * @returns
+ */
+export const generateArray = (start: number, stop: number, step: number) =>
+    Array.from({ length: (stop - start) / step + 1 }, (value, index) => start + index * step)

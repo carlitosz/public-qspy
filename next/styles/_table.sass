@@ -1,5 +1,5 @@
 .table-container
-    @apply ring-1 ring-border rounded-md bg-component h-fit
+    @apply ring-1 ring-border rounded-md bg-component h-fit antialiased
 
 .table-search
     @apply rounded-t-md p-4
@@ -11,10 +11,10 @@
         @apply w-full h-full text-sm text-left rtl:text-right text-text
 
         > thead
-            @apply text-sm text-primary uppercase border-b border-border
+            @apply text-xs text-primary uppercase border-b border-border
 
             > tr > th
-                @apply p-4
+                @apply px-4 pb-2
 
         > tbody
             @apply rounded-b-md
