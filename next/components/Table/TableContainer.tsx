@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import Pagination from '@/components/Pagination/Pagination'
 import Table from '@/components/Table/Table'
+import TableEmptyMsg from '@/components/Table/TableEmptyMsg'
+import TableSkeleton from '@/components/Table/TableSkeleton'
 
 import { createTableData, paginate } from '@/util/data'
 
@@ -32,11 +34,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     useEffect(() => setCurrentPage(0), [resultsPerPage])
 
     if (tValidating || yValidating) {
-        return (
-            <div role="status" className="animate-pulse">
-                skeleton
-            </div>
-        )
+        return <TableSkeleton />
     }
 
     if (tError || yError) {
@@ -75,22 +73,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                 {pages[currentPage].length > 0 ? (
                     <Table data={createTableData(pages[currentPage], yData.Data)} />
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-6">
-                        <p className="text-danger text-xl">Uh-oh!</p>
-                        <p className="text-text text-md mb-4">We have nothing to display.</p>
-                        <div className=" p-8 h-full w-1/2 rounded-md">
-                            <p className="text-primary text-md font-semibold border-b border-border py-2">
-                                Possible reasons
-                            </p>
-                            <ol className="text-title list-disc my-2">
-                                <li>Your queue is empty 🥳 Check again tomorrow!</li>
-                                <li>
-                                    Your queue has not been processed today. If you want to manually process your queue,
-                                    follow the instructions here.
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
+                    <TableEmptyMsg />
                 )}
             </div>
             {pages[currentPage].length > 0 && <div className="my-2">{renderPagination('up')}</div>}
