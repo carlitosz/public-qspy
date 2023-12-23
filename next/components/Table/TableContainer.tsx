@@ -7,8 +7,8 @@ import TableSkeleton from '@/components/Table/TableSkeleton'
 
 import { createTableData, paginate } from '@/util/data'
 
+import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 import type { DomainEvent, GetEventsResponse } from 'types'
-import { DropdownDirection } from '../Dropdown/Dropdown'
 
 interface TableContainerProps {
     data: {
