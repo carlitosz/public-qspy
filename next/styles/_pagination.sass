@@ -1,5 +1,5 @@
 .pagination
-    @apply flex
+    @apply flex justify-between items-baseline
 
     nav
         @apply flex space-x-4 w-fit
@@ -8,7 +8,7 @@
             @apply flex -space-x-px rtl:space-x-reverse text-sm h-8
 
             li > a
-                @apply flex items-center justify-center w-8 px-2 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover/20 border border-title/10 cursor-pointer transition duration-300 ease-in-out
+                @apply flex items-center justify-center w-8 px-2 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover border border-border cursor-pointer transition duration-300 ease-in-out
 
             li:first-child
                 > a
@@ -22,7 +22,10 @@
                 @apply bg-primary text-white
 
             li > a[aria-disabled="true"]
-                @apply bg-hover text-title/30 cursor-not-allowed
+                @apply bg-hover/40 text-title/40 cursor-not-allowed
 
     .results-per-page
-        @apply ml-4
+        @apply ml-2
+
+    .go-to-page
+        @apply ml-2
