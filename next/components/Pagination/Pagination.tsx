@@ -1,5 +1,5 @@
 import Pagino from 'pagino'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, FormEvent } from 'react'
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon'
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon'
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon'
@@ -7,11 +7,20 @@ import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon'
 import ChevronDoubleLeftIcon from '@heroicons/react/24/outline/ChevronDoubleLeftIcon'
 import ChevronDoubleRightIcon from '@heroicons/react/24/outline/ChevronDoubleRightIcon'
 import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon'
+import MagnifyingGlassIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon'
 
 import Dropdown from '@/components/Dropdown/Dropdown'
 import PaginationItem from '@/components/Pagination/PaginationItem'
 
 import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
+
+interface FormElements extends HTMLFormControlsCollection {
+    goToPage: HTMLInputElement
+}
+
+interface GoToPageElement extends HTMLFormElement {
+    readonly elements: FormElements
+}
 
 interface PaginationProps {
     currentPage: number
@@ -156,7 +165,7 @@ const Pagination = ({
     }
 
     return (
-        <div className="pagination ">
+        <div className="pagination">
             <div className="summary">
                 <span className="text-sm text-title antialiased">
                     Showing{' '}
@@ -167,8 +176,10 @@ const Pagination = ({
                     of <span className="font-semibold text-primary">{totalResults}</span>
                 </span>
             </div>
-            <nav aria-label="Table Navigation" role="navigation">
-                <ul className="navigation-numbers">{pages.map((page: number | string) => renderElement(page))}</ul>
+            <div className="flex">
+                <nav aria-label="Table Navigation" role="navigation">
+                    <ul className="navigation-numbers">{pages.map((page: number | string) => renderElement(page))}</ul>
+                </nav>
                 <div className="results-per-page">
                     <Dropdown
                         closeIcon={dropdownDirection === 'up' ? ChevronUp : ChevronDown}
@@ -204,7 +215,38 @@ const Pagination = ({
                         title={`${resultsPerPage}`}
                     />
                 </div>
-            </nav>
+                <form
+                    className="inline-flex h-8 relative"
+                    onSubmit={(e: FormEvent<GoToPageElement>) => {
+                        e.preventDefault()
+                        goToPage(parseInt(e.currentTarget.elements.goToPage.value) - 1)
+                        e.currentTarget.elements.goToPage.value = ''
+                    }}
+                >
+                    <label htmlFor="goToPage" className="sr-only">
+                        Go to page
+                    </label>
+                    <input
+                        aria-label="Go to page"
+                        aria-required={true}
+                        className="bg-component h-8 w-24 text-xs px-2 ml-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed"
+                        disabled={numPages <= 1}
+                        name="goToPage"
+                        max={numPages}
+                        min={1}
+                        placeholder={numPages <= 1 ? '' : 'Go to page'}
+                        required={true}
+                        type="number"
+                    />
+                    <button
+                        className="bg-component ring-1 ring-border rounded-e-md text-text text-sm h-8 px-2 hover:bg-component disabled:bg-hover/40 disabled:text-text/40 disabled:cursor-not-allowed"
+                        disabled={numPages <= 1}
+                        type="submit"
+                    >
+                        <MagnifyingGlassIcon className="icon-xs" />
+                    </button>
+                </form>
+            </div>
         </div>
     )
 }
