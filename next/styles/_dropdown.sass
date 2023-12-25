@@ -10,20 +10,20 @@
     .dropdown-menu
         @apply absolute p-2 z-10 w-max rounded-md bg-component shadow-lg ring-1 ring-border
 
+        li
+            @apply flex flex-row justify-between items-center rounded text-title hover:bg-hover hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
+
+            > a[aria-selected="true"]
+                @apply bg-page ring-1 ring-border text-primary
+
+            > a[aria-disabled="true"]
+                @apply pointer-events-none hover:cursor-not-allowed text-border hover:bg-transparent
+
         &.up
             @apply bottom-10 right-0 origin-bottom-right
 
         &.down
             @apply right-0 origin-top-right
-
-.dropdown-item
-    @apply flex flex-row justify-between items-center rounded text-title hover:bg-hover hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
-
-    &.selected
-        @apply bg-page ring-1 ring-border text-primary
-
-    &.disabled
-        @apply hover:cursor-not-allowed text-border hover:bg-transparent
 
 .dropdown-title
     @apply inline flex items-center text-text w-full h-full cursor-auto p-2

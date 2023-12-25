@@ -29,6 +29,7 @@ interface PaginationProps {
     goToPage: (desiredPage: number) => void
     numPages: number
     resultsPerPage: number
+    searchTerm: string
     setResultsPerPage: (desiredResults: number) => void
     totalResults: number
 }
@@ -40,6 +41,7 @@ const Pagination = ({
     goToPage,
     numPages,
     resultsPerPage,
+    searchTerm,
     setResultsPerPage,
     totalResults
 }: PaginationProps): JSX.Element => {
@@ -164,16 +166,19 @@ const Pagination = ({
         }
     }
 
+    const paginationResults = `${
+        (pagino.page - 1) * resultsPerPage + 1 - (pagino.page - 1) * resultsPerPage + currentPageSize
+    }`
+
     return (
         <div className="pagination">
             <div className="summary">
                 <span className="text-sm text-title antialiased">
                     Showing{' '}
                     <span className="font-semibold text-primary">
-                        {(pagino.page - 1) * resultsPerPage + 1} -{' '}
-                        {(pagino.page - 1) * resultsPerPage + currentPageSize}
+                        {searchTerm.length > 0 ? `${totalResults}` : `${paginationResults} of ${totalResults}`}
                     </span>{' '}
-                    of <span className="font-semibold text-primary">{totalResults}</span>
+                    {searchTerm.length > 0 ? `search results for "${searchTerm}"` : ` events`}
                 </span>
             </div>
             <div className="flex">
@@ -229,7 +234,7 @@ const Pagination = ({
                     <input
                         aria-label="Go to page"
                         aria-required={true}
-                        className="bg-component h-8 w-24 text-xs px-2 ml-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed"
+                        className="bg-hover/30 h-8 w-24 text-xs px-2 ml-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed focus:bg-component"
                         disabled={numPages <= 1}
                         name="goToPage"
                         max={numPages}

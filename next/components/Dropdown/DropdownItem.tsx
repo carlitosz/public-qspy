@@ -44,19 +44,19 @@ const DropdownItem = ({
     }
 
     return (
-        <li
-            aria-hidden="true"
-            className={`dropdown-item ${selected ? ' selected' : ''} ${disabled ? ' disabled' : ''}`}
-            data-value={label}
-            id={id}
-            onClick={onClick}
-            role={role}
-            tabIndex={tabIndex}
-        >
-            <div className="inline-flex items-center">
+        <li>
+            <a
+                aria-disabled={disabled}
+                aria-current={selected}
+                className="dropdown-item"
+                onClick={onClick}
+                onKeyDown={onClick}
+                role="menuitem"
+                tabIndex={0}
+            >
                 {icon && icon}
                 <span className="text-xs font-medium antialiased">{label && label}</span>
-            </div>
+            </a>
             {selected && <CheckCircleIcon className="icon-sm text-primary" />}
         </li>
     )
