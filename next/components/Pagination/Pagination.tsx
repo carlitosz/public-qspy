@@ -29,7 +29,7 @@ interface PaginationProps {
     goToPage: (desiredPage: number) => void
     numPages: number
     resultsPerPage: number
-    searchTerm: string
+    searchText: string
     setResultsPerPage: (desiredResults: number) => void
     totalResults: number
 }
@@ -41,7 +41,7 @@ const Pagination = ({
     goToPage,
     numPages,
     resultsPerPage,
-    searchTerm,
+    searchText,
     setResultsPerPage,
     totalResults
 }: PaginationProps): JSX.Element => {
@@ -171,17 +171,21 @@ const Pagination = ({
     }`
 
     return (
-        <div className="pagination">
-            <div className="summary">
+        <div aria-label="Pagination" className="pagination">
+            <div aria-label="Pagination results summary" className="summary">
                 <span className="text-sm text-title antialiased">
                     Showing{' '}
                     <span className="font-semibold text-primary">
-                        {searchTerm.length > 0 ? `${totalResults}` : `${paginationResults} of ${totalResults}`}
+                        {searchText.length > 0 ? `${totalResults}` : `${paginationResults} of ${totalResults}`}
                     </span>{' '}
-                    {searchTerm.length > 0 ? `search results for "${searchTerm}"` : ` events`}
+                    {searchText.length > 0 ? `search results for "${searchText}"` : ` events`}
                 </span>
             </div>
-            <div className="flex">
+            <div
+                aria-label="Pagination navigation"
+                aria-disabled={currentPageSize === 0 && searchText.length > 0}
+                className="navigation"
+            >
                 <nav aria-label="Table Navigation" role="navigation">
                     <ul className="navigation-numbers">{pages.map((page: number | string) => renderElement(page))}</ul>
                 </nav>

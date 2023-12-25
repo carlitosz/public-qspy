@@ -1,38 +1,32 @@
 .table-container
     @apply ring-1 ring-border rounded-md bg-component h-fit antialiased w-full
 
-.table-search
-    @apply inline-flex w-full px-4 py-6
-
 .table
-    @apply w-full h-full
+    @apply w-full h-full text-sm text-left rtl:text-right text-text
 
-    .table-items
-        @apply w-full h-full text-sm text-left rtl:text-right text-text
+    > thead
+        @apply text-xs text-primary uppercase border-b border-border
 
-        > thead
-            @apply text-xs text-primary uppercase border-b border-border
+        > tr > th
+            @apply px-4 pb-2
 
-            > tr > th
-                @apply px-4 pb-2
+    > tbody
+        @apply rounded-b-md
 
-        > tbody
-            @apply rounded-b-md
+        > tr, th, td
+            @apply text-title font-normal p-4
 
-            > tr, th, td
-                @apply text-title font-normal p-4
+        > tr
+            @apply border-b border-border hover:bg-hover/70 cursor-pointer
 
-            > tr
-                @apply border-b border-border hover:bg-hover/70 cursor-pointer
+        > tr:last-child
+            @apply border-none rounded-b-md
 
-            > tr:last-child
-                @apply border-none rounded-b-md
+            > th
+                @apply rounded-bl-md
 
-                > th
-                    @apply rounded-bl-md
+            > td:last-child
+                @apply rounded-br-md
 
-                > td:last-child
-                    @apply rounded-br-md
-
-            > tr:nth-child(2n)
-                @apply bg-hover/40 hover:bg-hover/70
+        > tr:nth-child(2n)
+            @apply bg-hover/40 hover:bg-hover/70
