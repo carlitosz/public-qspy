@@ -36,7 +36,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         }
     }, [tData, resultsPerPage])
 
-    useEffect(() => setCurrentPage(0), [resultsPerPage])
+    useEffect(() => setCurrentPage(0), [resultsPerPage, searchText])
 
     useEffect(() => {
         if (!tData) {
@@ -45,7 +45,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
 
         if (searchText.length > 0) {
             const searchResults = tData.Data.filter((value: DomainEvent) =>
-                value.event.toLowerCase().includes(searchText.toLowerCase().trim())
+                value.event.toLowerCase().includes(searchText.toLowerCase().trim().replaceAll(' ', ''))
             )
 
             searchResults.length > 0 ? setPages(paginate(searchResults, resultsPerPage)) : setPages([[]])
@@ -69,30 +69,18 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
             currentPage={currentPage + 1}
             currentPageSize={pages[currentPage].length}
             dropdownDirection={direction}
-            goToPage={(desiredPage: number) => {
-                if (desiredPage < 0 || desiredPage >= pages.length) {
-                    return
-                }
-
-                setCurrentPage(desiredPage)
-            }}
+            goToPage={(desiredPage: number) => setCurrentPage(desiredPage)}
             numPages={pages.length}
             resultsPerPage={resultsPerPage}
             searchText={searchText}
-            setResultsPerPage={(desiredResults: number) => {
-                if (desiredResults < 0 || desiredResults > tData.Data.length) {
-                    return
-                }
-
-                setResultsPerPage(desiredResults)
-            }}
+            setResultsPerPage={(desiredResults: number) => setResultsPerPage(desiredResults)}
             totalResults={maxResults}
         />
     )
 
     return (
         <>
-            <div className="pagination-container mb-2">{renderPagination('down')}</div>
+            <div className="mb-2">{renderPagination('down')}</div>
             <div className="table-container">
                 <TableSearchForm onSubmitHandler={(text: string) => setSearchText(text)} />
                 <Table>
@@ -100,7 +88,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                     <TableBody data={createTableData(pages[currentPage], yData.Data)} searchText={searchText} />
                 </Table>
             </div>
-            <div className="pagination-container my-2">{renderPagination('up')}</div>
+            <div className="my-2">{renderPagination('up')}</div>
         </>
     )
 }

@@ -12,7 +12,7 @@ const TableSkeleton = (): JSX.Element => {
                 </div>
             </div>
             <div className="table-container">
-                <div className="table-search">
+                <div className="px-4 py-6">
                     <div className="h-10 rounded-md bg-border w-1/5 p-4" />
                 </div>
                 <div className="space-y-4 p-4">
