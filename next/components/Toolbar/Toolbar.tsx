@@ -2,7 +2,7 @@ import React from 'react'
 
 import Dropdown from '@/components/Dropdown/Dropdown'
 
-import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+import type { DropdownItemType } from '@/components/Dropdown/Item'
 import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 
 interface ToolbarProps {

@@ -31,8 +31,9 @@ const PaginationGoToPageForm = ({ disabled, goToPage, max }: PaginationGoToPageF
             <input
                 aria-label="Go to page"
                 aria-required={true}
-                className="bg-hover h-8 w-24 text-xs px-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed focus:bg-component"
+                className="bg-hover/30 h-8 w-24 text-xs px-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed focus:bg-component"
                 disabled={disabled}
+                id="goToPage"
                 name="goToPage"
                 max={max}
                 min={1}

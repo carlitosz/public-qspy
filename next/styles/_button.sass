@@ -1,0 +1,48 @@
+.button
+    &-sm
+        @apply h-8 w-full
+        @apply px-2
+        @apply rounded-md
+        @apply text-sm antialiased
+        @apply transition duration-150 ease-in-out
+
+    &-md
+        @apply h-10 w-full
+        @apply px-2 py-2
+        @apply rounded-md
+        @apply text-md antialiased
+        @apply transition duration-150 ease-in-out
+
+    &-lg
+        @apply h-12 w-full
+        @apply px-4 py-4
+        @apply rounded-lg
+        @apply text-lg antialiased
+        @apply transition duration-150 ease-in-out
+
+.button
+    &-primary
+        @apply bg-component
+        @apply text-primary
+        @apply ring-1 ring-primary
+        @apply hover:bg-hover
+        @apply disabled:bg-hover/40 disabled:text-primary/40 disabled:cursor-not-allowed disabled:pointer-events-none
+
+    &-secondary
+        @apply bg-component
+        @apply text-secondary
+        @apply ring-1 ring-secondary
+        @apply hover:bg-hover
+        @apply disabled:bg-hover/40 disabled:text-secondary/40 disabled:cursor-not-allowed disabled:pointer-events-none
+
+    &-general
+        @apply bg-component
+        @apply text-title
+        @apply ring-1 ring-border
+        @apply hover:bg-hover
+        @apply disabled:bg-hover/40 disabled:text-title/40 disabled:cursor-not-allowed disabled:pointer-events-none
+
+.button
+    &-menu-item
+        @extend .button-general
+        @apply ring-transparent

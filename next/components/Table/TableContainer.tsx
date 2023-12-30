@@ -7,7 +7,7 @@ import TableHeaders from '@/components/Table/TableHeaders'
 import TableSearchForm from '@/components/Table/TableSearchForm'
 import TableSkeleton from '@/components/Table/TableSkeleton'
 
-import { createTableData, paginate } from '@/util/data'
+import { createTableData, paginate, search } from '@/util/data'
 
 import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 import type { DomainEvent, GetEventsResponse } from 'types'
@@ -29,6 +29,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     const { isValidating: tValidating, error: tError, data: tData } = data.today
     const { isValidating: yValidating, error: yError, data: yData } = data.yesterday
 
+    // Paginate data on initial mount and when resultsPerPage changes.
     useEffect(() => {
         if (tData) {
             setPages(paginate(tData.Data, resultsPerPage))
@@ -36,20 +37,18 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         }
     }, [tData, resultsPerPage])
 
+    // Reset page to 0.
     useEffect(() => setCurrentPage(0), [resultsPerPage, searchText])
 
+    // Search.
     useEffect(() => {
-        if (!tData) {
-            return
-        }
+        if (!tData) return
 
         if (searchText.length > 0) {
-            const searchResults = tData.Data.filter((value: DomainEvent) =>
-                value.event.toLowerCase().includes(searchText.toLowerCase().trim().replaceAll(' ', ''))
-            )
+            const results = search(tData.Data, searchText)
 
-            searchResults.length > 0 ? setPages(paginate(searchResults, resultsPerPage)) : setPages([[]])
-            setMaxResults(searchResults.length)
+            setPages(paginate(results))
+            setMaxResults(results.length)
         } else {
             setPages(paginate(tData.Data, resultsPerPage))
             setMaxResults(tData.Data.length)
