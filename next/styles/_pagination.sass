@@ -1,10 +1,13 @@
-.pagination
-    @apply flex justify-between items-baseline
+.navigation
+    @apply flex
+
+    &[aria-disabled="true"]
+        @apply invisible
 
     nav
         @apply flex space-x-4 w-fit
 
-        .navigation-numbers
+        ul
             @apply flex -space-x-px rtl:space-x-reverse text-sm h-8
 
             li > a
@@ -22,10 +25,4 @@
                 @apply bg-primary text-white
 
             li > a[aria-disabled="true"]
-                @apply bg-hover/40 text-title/40 cursor-not-allowed
-
-    .results-per-page
-        @apply ml-2
-
-    .go-to-page
-        @apply ml-2
+                @apply bg-hover/40 text-title/40 cursor-not-allowed pointer-events-none

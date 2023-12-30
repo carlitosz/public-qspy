@@ -148,6 +148,10 @@ export const createTableData = (today: DomainEvent[] | [], yesterday: DomainEven
  * @returns         An array of arrays of size perChunk
  */
 export const paginate = (data: DomainEvent[] | [], perChunk: number = 20): [DomainEvent[]] | [[]] => {
+    if (data.length === 0) {
+        return [[]]
+    }
+
     let chunks: [DomainEvent[]] = [[]]
     chunks.shift()
 
@@ -175,4 +179,18 @@ export const formattedJSONArray = (data: DomainEvent[]): string => {
     data.forEach(({ event, count }: DomainEvent) => (obj[event] = count))
 
     return JSON.stringify(obj, undefined, 2)
+}
+
+/**
+ * Searches domain event data (event property) for matches.
+ *
+ * @param data          An array of DomainEvent data
+ * @param searchString  The search string
+ *
+ * @returns An array of DomainEvent search results or empty
+ */
+export const search = (data: DomainEvent[], searchString: string): DomainEvent[] | [] => {
+    return data.filter((value: DomainEvent) =>
+        value.event.toLowerCase().includes(searchString.toLowerCase().trim().replaceAll(' ', ''))
+    )
 }

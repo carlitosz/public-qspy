@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
-import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon'
-import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon'
 
-import DropdownMenuItem from '@/components/Dropdown/DropdownItem'
+import Item from '@/components/Dropdown/Item'
 
-import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+import type { DropdownItem } from '@/components/Dropdown/Item'
 
 export type DropdownDirection = 'up' | 'down'
 
 interface DropdownProps {
+    id: HTMLButtonElement['id']
     closeIcon?: React.ReactNode
     direction: DropdownDirection
-    disabled?: boolean
-    menuItems: DropdownItemType[]
+    items: DropdownItem[]
     openIcon?: React.ReactNode
     title?: string
 }
 
-const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon, title }: DropdownProps): JSX.Element => {
+const Dropdown = ({ closeIcon, direction, id, items, openIcon, title }: DropdownProps): JSX.Element => {
     const [open, setOpen] = useState<boolean>(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -42,59 +40,44 @@ const Dropdown = ({ closeIcon, direction, disabled, menuItems, openIcon, title }
     }
 
     return (
-        <div
-            aria-hidden={true}
-            className="dropdown-container"
-            onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setOpen(!open)
-            }}
-            ref={menuRef}
-        >
-            <button className="dropdown-btn" id="menu-button" type="button" disabled={disabled}>
-                {open
-                    ? closeIcon ?? <XMarkIcon className="icon-sm animate-wiggle transform-gpu" />
-                    : openIcon ?? <EllipsisVerticalIcon className="icon-sm animate-wiggle transform-gpu" />}
-                {title ?? ''}
-            </button>
+        <div className="relative inline-block text-left" ref={menuRef}>
+            <div>
+                <button
+                    aria-expanded={open}
+                    aria-haspopup={open}
+                    className="inline-flex items-center gap-x-1.5 button-sm button-general"
+                    id={id}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setOpen(!open)
+                    }}
+                    type="button"
+                >
+                    {title}
+                    {open ? openIcon : closeIcon}
+                </button>
+            </div>
 
             {open && (
                 <div
-                    className={`dropdown-menu ${direction}`}
+                    className="dropdown-menu"
+                    data-direction={direction}
                     role="menu"
                     aria-orientation="vertical"
-                    aria-labelledby="menu-button"
+                    aria-labelledby={id}
                     tabIndex={-1}
                 >
-                    <ul className="flex flex-col" role="none">
-                        {menuItems &&
-                            menuItems.map(
-                                (
-                                    { disabled, divider, label, icon, onClick, selected, title }: DropdownItemType,
-                                    index: number
-                                ): JSX.Element => {
-                                    if (divider) {
-                                        return <div className="h-1 w-full border-b px-2 my-2" key={index} />
-                                    }
-
-                                    return (
-                                        <DropdownMenuItem
-                                            disabled={disabled}
-                                            id={`menu-item-${index}`}
-                                            icon={icon}
-                                            onClick={onClick}
-                                            role="menuitem"
-                                            key={index}
-                                            label={label}
-                                            tabIndex={-1}
-                                            title={title}
-                                            selected={selected}
-                                        />
-                                    )
-                                }
-                            )}
-                    </ul>
+                    {items.map((item: DropdownItem, i: number) => (
+                        <Item
+                            disabled={item.disabled}
+                            heading={item.heading}
+                            key={i}
+                            label={item?.label}
+                            onClick={item.onClick}
+                            selected={item.selected}
+                        />
+                    ))}
                 </div>
             )}
         </div>

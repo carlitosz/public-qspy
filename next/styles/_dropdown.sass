@@ -1,32 +1,8 @@
-.dropdown-container
-    @apply relative inline-block
+.dropdown-menu
+    @apply absolute p-2 z-10 w-max rounded-md bg-component shadow-lg ring-1 ring-border
 
-    .dropdown-btn
-        @apply inline-flex h-8 w-fit bg-component justify-center items-center px-2 ring-1 ring-border text-sm text-title hover:bg-hover rounded-md focus:outline-none transition duration-150 ease-in-out
+    &[data-direction="up"]
+        @apply bottom-10 right-0 origin-bottom-right
 
-        &:disabled
-            @apply cursor-not-allowed
-
-    .dropdown-menu
-        @apply absolute p-2 z-10 w-max rounded-md bg-component shadow-lg ring-1 ring-border
-
-        &.up
-            @apply bottom-10 right-0 origin-bottom-right
-
-        &.down
-            @apply right-0 origin-top-right
-
-.dropdown-item
-    @apply flex flex-row justify-between items-center rounded text-title hover:bg-hover hover:text-primary w-full h-full p-2 my-0.5 transition duration-150 ease-out hover:ease-in cursor-pointer
-
-    &.selected
-        @apply bg-page ring-1 ring-border text-primary
-
-    &.disabled
-        @apply hover:cursor-not-allowed text-border hover:bg-transparent
-
-.dropdown-title
-    @apply inline flex items-center text-text w-full h-full cursor-auto p-2
-
-.dropdown-label
-    @apply inline flex items-center text-text w-full h-full cursor-auto p-2
+    &[data-direction="down"]
+        @apply right-0 origin-top-right

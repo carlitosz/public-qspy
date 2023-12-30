@@ -2,9 +2,9 @@ import React from 'react'
 import { formatDistance, format } from 'date-fns'
 
 import AnalyticsNumber from '@/components/Analytics/AnalyticsNumber'
-import DropdownItem from '@/components/Dropdown/DropdownItem'
+import DropdownItem from '@/components/Dropdown/Item'
 
-import type { DropdownItemType } from '@/components/Dropdown/DropdownItem'
+import type { DropdownItemType } from '@/components/Dropdown/Item'
 import type { SeriesDataPoint } from '@/util/series'
 
 const Tooltip = ({ x, y, meta }: SeriesDataPoint): JSX.Element => {
