@@ -29,9 +29,9 @@ const PaginationGoToPageForm = ({ disabled, goToPage, max }: PaginationGoToPageF
                 Go to page
             </label>
             <input
-                aria-label="Go to page"
+                aria-label="Go to page input form"
                 aria-required={true}
-                className="bg-hover/30 h-8 w-24 text-xs px-2 ring-1 ring-border text-text focus:outline-none rounded-s-md disabled:bg-hover/40 disabled:cursor-not-allowed focus:bg-component"
+                className="bg-component h-8 w-24 text-sm px-2 ring-1 ring-border text-title focus:outline-none rounded-s-md disabled:bg-disabled disabled:cursor-not-allowed focus:bg-component"
                 disabled={disabled}
                 id="goToPage"
                 name="goToPage"
@@ -42,7 +42,8 @@ const PaginationGoToPageForm = ({ disabled, goToPage, max }: PaginationGoToPageF
                 type="number"
             />
             <button
-                className="bg-component ring-1 ring-border rounded-e-md text-text text-sm h-8 px-2 hover:bg-component disabled:bg-hover/40 disabled:text-text/40 disabled:cursor-not-allowed"
+                aria-label="Go to page button"
+                className="bg-component ring-1 ring-border rounded-e-md text-text text-sm h-8 px-2 hover:bg-component disabled:bg-disabled disabled:text-text/40 disabled:cursor-not-allowed"
                 disabled={disabled}
                 type="submit"
             >

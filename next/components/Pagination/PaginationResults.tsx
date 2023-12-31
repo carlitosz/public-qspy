@@ -19,10 +19,10 @@ const PaginationResults = ({
         return (
             <span aria-label="Pagination results" className="text-sm text-title antialiased">
                 Showing{' '}
-                <span className="font-semibold text-primary">
+                <span className="font-bold text-primary">
                     {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`}
                 </span>{' '}
-                of <span className="font-semibold text-primary">{totalResults}</span> results for &quot;{searchText}
+                of <span className="font-bold text-primary">{totalResults}</span> results for &quot;{searchText}
                 &quot;
             </span>
         )
@@ -31,10 +31,10 @@ const PaginationResults = ({
     return (
         <span aria-label="Pagination results" className="text-sm text-title antialiased">
             Showing{' '}
-            <span className="font-semibold text-primary">
+            <span className="font-bold text-primary">
                 {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`}
             </span>{' '}
-            of <span className="font-semibold text-primary">{totalResults}</span> events
+            of <span className="font-bold text-primary">{totalResults}</span> events
         </span>
     )
 }

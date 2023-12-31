@@ -63,6 +63,8 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         return <>error</>
     }
 
+    console.log(currentPage)
+
     const renderPagination = (direction: DropdownDirection) => (
         <Pagination
             currentPage={currentPage + 1}

@@ -23,6 +23,8 @@ const SwitchTheme = ({ icons }: SwitchProps) => {
             <label className="flex items-center cursor-pointer" htmlFor="toggle">
                 <div className="relative">
                     <input
+                        aria-label={`Toggle to ${!checked ? 'checked' : 'unchecked'}`}
+                        aria-checked={checked}
                         type="checkbox"
                         id="toggle"
                         className="switch"

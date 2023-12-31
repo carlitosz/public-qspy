@@ -2,21 +2,18 @@
     &-sm
         @apply h-8 w-full
         @apply px-2
-        @apply rounded-md
         @apply text-sm antialiased
         @apply transition duration-150 ease-in-out
 
     &-md
         @apply h-10 w-full
         @apply px-2 py-2
-        @apply rounded-md
-        @apply text-md antialiased
+        @apply text-base antialiased
         @apply transition duration-150 ease-in-out
 
     &-lg
         @apply h-12 w-full
         @apply px-4 py-4
-        @apply rounded-lg
         @apply text-lg antialiased
         @apply transition duration-150 ease-in-out
 
@@ -26,23 +23,38 @@
         @apply text-primary
         @apply ring-1 ring-primary
         @apply hover:bg-hover
-        @apply disabled:bg-hover/40 disabled:text-primary/40 disabled:cursor-not-allowed disabled:pointer-events-none
+        @apply disabled:bg-disabled disabled:text-primary/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
     &-secondary
         @apply bg-component
         @apply text-secondary
         @apply ring-1 ring-secondary
         @apply hover:bg-hover
-        @apply disabled:bg-hover/40 disabled:text-secondary/40 disabled:cursor-not-allowed disabled:pointer-events-none
+        @apply disabled:bg-disabled disabled:text-secondary/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
     &-general
         @apply bg-component
         @apply text-title
         @apply ring-1 ring-border
         @apply hover:bg-hover
-        @apply disabled:bg-hover/40 disabled:text-title/40 disabled:cursor-not-allowed disabled:pointer-events-none
+        @apply disabled:bg-disabled disabled:text-title/40 disabled:cursor-not-allowed disabled:pointer-events-none
+
+    &-sidebar
+        @apply bg-component
+        @apply flex items-center justify-center
+        @apply w-14 h-14 mt-2 rounded-none
+        @apply text-title
+        @apply transition duration-150 ease-in-out
 
 .button
     &-menu-item
         @extend .button-general
         @apply ring-transparent
+
+    &-sidebar-item
+        @extend .button-sidebar
+        @apply hover:text-primary hover:shadow-inner hover:bg-hover/40
+        @apply rounded-md
+
+        &[aria-current="true"]
+            @apply text-primary shadow-inner bg-hover/40

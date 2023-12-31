@@ -53,7 +53,7 @@ const TableSearchForm = ({ onSubmitHandler }: TableSearchFormProps): JSX.Element
             </div>
             <input
                 aria-label="Search input"
-                className="block h-8 ps-10 text-xs text-title border-l border-l-border border-y border-y-border rounded-s-md w-80 bg-hover/30 focus:outline-none focus:bg-component"
+                className="block bg-component h-8 ps-10 text-xs text-title border-l border-l-border border-y border-y-border rounded-s-md w-80 focus:outline-none focus:bg-component"
                 id="search"
                 name="search"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.currentTarget.value)}
@@ -65,7 +65,7 @@ const TableSearchForm = ({ onSubmitHandler }: TableSearchFormProps): JSX.Element
                 aria-label="Submit search"
                 aria-disabled={searchText.length === 0}
                 disabled={searchText.length === 0}
-                className="bg-component border border-border rounded-e-md text-primary text-sm h-8 px-2 hover:bg-component disabled:bg-hover/40 disabled:text-text/40 disabled:cursor-not-allowed"
+                className="bg-component border border-border rounded-e-md text-primary text-sm h-8 px-2 hover:bg-component disabled:bg-disabled disabled:text-text/40 disabled:cursor-not-allowed"
             >
                 Search
             </button>

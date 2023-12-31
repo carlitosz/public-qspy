@@ -7,7 +7,7 @@ import SwitchTheme from '@/components/Switch/SwitchTheme'
 const ThemeTab = (): JSX.Element => {
     return (
         <div className="w-full h-full">
-            <p className="text-title text-md font-normal antialiased pb-2 border-b border-b-border">
+            <p className="text-title text-base font-normal antialiased pb-2 border-b border-b-border">
                 Theme Preferences
             </p>
             <SwitchTheme
