@@ -29,7 +29,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => {}}
                         onKeyDown={() => {}}
                         role="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                     >
                         <EllipsisHorizontalIcon className="icon-xs" />
                     </PaginationItem>
@@ -43,7 +43,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => {}}
                         onKeyDown={() => {}}
                         role="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                     >
                         <EllipsisHorizontalIcon className="icon-xs" />
                     </PaginationItem>
@@ -57,7 +57,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => goToPage(0)}
                         onKeyDown={() => goToPage(0)}
                         role="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                     >
                         <ChevronDoubleLeftIcon className="icon-xs" />
                     </PaginationItem>
@@ -71,7 +71,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => goToPage(pagino.page - 2)}
                         onKeyDown={() => goToPage(pagino.page - 2)}
                         role="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                     >
                         <ChevronLeftIcon className="icon-xs" />
                     </PaginationItem>
@@ -85,7 +85,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => goToPage(pagino.page)}
                         onKeyDown={() => goToPage(pagino.page)}
                         role="button"
-                        tabIndex={0}
+                        tabIndex={-1}
                     >
                         <ChevronRightIcon className="icon-xs" />
                     </PaginationItem>
@@ -99,7 +99,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         onClick={() => goToPage(pagino.last().page - 1)}
                         onKeyDown={() => goToPage(pagino.last().page - 1)}
                         role="button"
-                        tabIndex={pages.length}
+                        tabIndex={-1}
                     >
                         <ChevronDoubleRightIcon className="icon-xs" />
                     </PaginationItem>
@@ -107,14 +107,14 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
             default:
                 return (
                     <PaginationItem
-                        ariaLabel="Page"
+                        ariaLabel={`Page ${page}`}
                         ariaDisabled={false}
                         key={page}
                         ariaCurrent={currentPage === (page as number)}
                         onClick={() => goToPage((page as number) - 1)}
                         onKeyDown={() => goToPage((page as number) - 1)}
                         role="button"
-                        tabIndex={(page as number) - 1}
+                        tabIndex={0}
                     >
                         {page}
                     </PaginationItem>
@@ -123,7 +123,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
     }
 
     return (
-        <nav aria-label="Table Navigation" role="navigation">
+        <nav className="relative" aria-label="Table Navigation" role="navigation">
             <ul>{pages.map((page: number | string) => renderElement(page))}</ul>
         </nav>
     )

@@ -40,7 +40,7 @@ const Pagination = ({
     }, [numPages, currentPage])
 
     return (
-        <div aria-label="Pagination" className="flex justify-between items-center">
+        <div aria-label="Pagination" className="flex justify-between items-baseline">
             <PaginationResults
                 currentPage={pagino.page - 1}
                 currentPageSize={currentPageSize}
@@ -48,7 +48,7 @@ const Pagination = ({
                 searchText={searchText}
                 totalResults={totalResults}
             />
-            <div aria-disabled={currentPageSize === 0 && searchText.length > 0} className="navigation">
+            <div aria-disabled={searchText.length > 0} className="navigation">
                 <PaginationNav
                     currentPage={currentPage}
                     goToPage={goToPage}
@@ -64,7 +64,12 @@ const Pagination = ({
                     />
                 </div>
                 <div className="ml-2">
-                    <PaginationGoToPageForm disabled={numPages <= 1} max={numPages} goToPage={goToPage} />
+                    <PaginationGoToPageForm
+                        direction={dropdownDirection}
+                        disabled={numPages <= 1}
+                        max={numPages}
+                        goToPage={goToPage}
+                    />
                 </div>
             </div>
         </div>

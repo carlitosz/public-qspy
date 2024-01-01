@@ -38,11 +38,11 @@ const Home: NextPage = (): JSX.Element => {
     )
 
     if (today.error || yesterday.error) {
-        return <></>
+        return <>An error has occurred.</>
     }
 
     return (
-        <Page title="Daily Overview" heading={QUEUE_NAME}>
+        <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
             <div className="w-full rounded-md h-auto">
                 <AnalyticsContainer data={{ today, yesterday }} />
             </div>

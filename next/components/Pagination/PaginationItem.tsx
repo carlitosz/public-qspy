@@ -26,12 +26,13 @@ const PaginationItem = ({
             <a
                 aria-current={ariaCurrent}
                 aria-disabled={ariaDisabled}
-                aria-label={ariaLabel}
+                aria-labelledby={ariaLabel}
                 onClick={onClick}
                 onKeyDown={onKeyDown}
                 role={role}
                 tabIndex={tabIndex}
             >
+                <span className="sr-only">{ariaLabel}</span>
                 {children}
             </a>
         </li>

@@ -5,7 +5,7 @@
     @apply w-full h-full text-sm text-left rtl:text-right text-text
 
     > thead
-        @apply text-xs text-primary uppercase border-b border-border
+        @apply text-sm text-primary uppercase border-b border-border
 
         > tr > th
             @apply px-4 pb-2
@@ -18,6 +18,9 @@
 
         > tr
             @apply border-b border-border hover:bg-hover/70 cursor-pointer
+
+            &[aria-disabled="true"]
+                @apply pointer-events-none
 
         > tr:last-child
             @apply border-none rounded-b-md
