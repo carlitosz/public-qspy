@@ -29,7 +29,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     const { isValidating: tValidating, error: tError, data: tData } = data.today
     const { isValidating: yValidating, error: yError, data: yData } = data.yesterday
 
-    // Paginate data on initial mount and when resultsPerPage changes.
+    // Initial mount.
     useEffect(() => {
         if (tData) {
             setPages(paginate(tData.Data, resultsPerPage))
@@ -37,23 +37,32 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         }
     }, [tData, resultsPerPage])
 
+    // Search
+    useEffect(() => {
+        if (tData && searchText.length > 0) {
+            const results = search(tData.Data, searchText)
+
+            if (results.length > 0) {
+                setPages(paginate(results, results.length))
+                setMaxResults(results.length)
+                setResultsPerPage(results.length)
+            } else {
+                setPages(paginate([]))
+                setMaxResults(0)
+                setResultsPerPage(10)
+            }
+        }
+    }, [tData, searchText, resultsPerPage])
+
     // Reset page to 0.
     useEffect(() => setCurrentPage(0), [resultsPerPage, searchText])
 
-    // Search.
-    useEffect(() => {
-        if (!tData) return
-
-        if (searchText.length > 0) {
-            const results = search(tData.Data, searchText)
-
-            setPages(paginate(results))
-            setMaxResults(results.length)
-        } else {
-            setPages(paginate(tData.Data, resultsPerPage))
-            setMaxResults(tData.Data.length)
-        }
-    }, [tData, searchText, resultsPerPage])
+    const resetToPristine = (): void => {
+        setSearchText('')
+        setResultsPerPage(10)
+        setPages(paginate(tData.Data, resultsPerPage))
+        setMaxResults(tData.Data.length)
+    }
 
     if (tValidating || yValidating) {
         return <TableSkeleton />
@@ -62,8 +71,6 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     if (tError || yError) {
         return <>error</>
     }
-
-    console.log(currentPage)
 
     const renderPagination = (direction: DropdownDirection) => (
         <Pagination
@@ -83,7 +90,10 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         <>
             <div className="mb-2">{renderPagination('down')}</div>
             <div className="table-container">
-                <TableSearchForm onSubmitHandler={(text: string) => setSearchText(text)} />
+                <TableSearchForm
+                    clearSearchHandler={resetToPristine}
+                    onSubmitHandler={(text: string) => setSearchText(text)}
+                />
                 <Table>
                     <TableHeaders headers={['Event', 'Count', '(+/-)', 'Last seen', 'First seen']} />
                     <TableBody data={createTableData(pages[currentPage], yData.Data)} searchText={searchText} />

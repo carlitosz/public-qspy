@@ -15,26 +15,20 @@ const PaginationResults = ({
     searchText,
     totalResults
 }: PaginationResultsProps): JSX.Element => {
-    if (searchText && searchText.length > 0) {
+    const results = <span className="font-semibold text-primary">{totalResults}</span>
+
+    if (searchText) {
         return (
-            <span aria-label="Pagination results" className="text-sm text-title antialiased">
-                Showing{' '}
-                <span className="font-bold text-primary">
-                    {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`}
-                </span>{' '}
-                of <span className="font-bold text-primary">{totalResults}</span> results for &quot;{searchText}
-                &quot;
+            <span aria-label="Search results" className="text-base text-title antialiased">
+                Showing {results} results for &quot;{searchText}&quot;
             </span>
         )
     }
 
     return (
-        <span aria-label="Pagination results" className="text-sm text-title antialiased">
-            Showing{' '}
-            <span className="font-bold text-primary">
-                {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`}
-            </span>{' '}
-            of <span className="font-bold text-primary">{totalResults}</span> events
+        <span aria-label="Pagination results" className="text-base text-title antialiased">
+            Showing {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`} of{' '}
+            {results} events
         </span>
     )
 }

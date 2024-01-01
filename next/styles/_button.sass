@@ -40,7 +40,6 @@
         @apply disabled:bg-disabled disabled:text-title/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
     &-sidebar
-        @apply bg-component
         @apply flex items-center justify-center
         @apply w-14 h-14 mt-2 rounded-none
         @apply text-title
@@ -49,6 +48,7 @@
 .button
     &-menu-item
         @extend .button-general
+        @apply rounded-md
         @apply ring-transparent
 
     &-sidebar-item
@@ -57,4 +57,5 @@
         @apply rounded-md
 
         &[aria-current="true"]
+            @apply ring-1 ring-border
             @apply text-primary shadow-inner bg-hover/40

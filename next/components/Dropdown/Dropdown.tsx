@@ -61,7 +61,7 @@ const Dropdown = ({ closeIcon, direction, id, items, openIcon, title }: Dropdown
 
             {open && (
                 <div
-                    className="dropdown-menu"
+                    className="dropdown-menu space-y-1"
                     data-direction={direction}
                     role="menu"
                     aria-orientation="vertical"

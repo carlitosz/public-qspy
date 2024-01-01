@@ -14,8 +14,8 @@ interface TableBodyProps {
 const TableBody = ({ data, searchText }: TableBodyProps): JSX.Element => {
     if (data.length === 0) {
         return (
-            <tbody>
-                <tr>
+            <tbody aria-label="">
+                <tr aria-disabled={true}>
                     <td width="100%" colSpan={5}>
                         <TableEmpty searchText={searchText} />
                     </td>

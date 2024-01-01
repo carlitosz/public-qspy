@@ -19,6 +19,9 @@
         > tr
             @apply border-b border-border hover:bg-hover/70 cursor-pointer
 
+            &[aria-disabled="true"]
+                @apply pointer-events-none
+
         > tr:last-child
             @apply border-none rounded-b-md
 

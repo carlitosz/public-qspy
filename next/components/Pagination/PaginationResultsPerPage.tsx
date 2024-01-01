@@ -57,7 +57,7 @@ const PaginationResultsPerPage = ({
                 }
             ]}
             openIcon={dropdownDirection === 'up' ? ChevronUp : ChevronDown}
-            title={resultsPerPage === totalResults ? `All (${totalResults})` : `${resultsPerPage} per page`}
+            title={resultsPerPage === totalResults ? `All (${totalResults})` : `${resultsPerPage}`}
         />
     )
 }

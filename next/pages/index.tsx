@@ -38,7 +38,7 @@ const Home: NextPage = (): JSX.Element => {
     )
 
     if (today.error || yesterday.error) {
-        return <></>
+        return <>An error has occurred.</>
     }
 
     return (
