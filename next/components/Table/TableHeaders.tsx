@@ -1,4 +1,4 @@
-import React, { AriaAttributes, useEffect, useState } from 'react'
+import React, { AriaAttributes, useState } from 'react'
 
 import type { DomainEventTableData } from 'types'
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon'
@@ -18,11 +18,9 @@ interface TableHeadersProps {
 
 const TableHeaders = ({ headers, sortHandler }: TableHeadersProps): JSX.Element => {
     const [localSort, setLocalSort] = useState<{ direction: SortDirection; sortKey: SortableHeader['sortKey'] }>({
-        sortKey: 'change',
+        sortKey: 'count',
         direction: 'DESC'
     })
-
-    useEffect(() => {})
 
     const handleSort = (sortKey: SortableHeader['sortKey']): void => {
         const direction: SortDirection = localSort.direction === 'ASC' ? 'DESC' : 'ASC'
