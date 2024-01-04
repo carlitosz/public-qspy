@@ -8,7 +8,7 @@ interface HeadProps {
 const PageHead = ({ title }: HeadProps): JSX.Element => {
     return (
         <Head>
-            <title>{`QSPY | ${title}`}</title>
+            <title>{`qspy | ${title}`}</title>
             <meta property="og:title" content={title} key="title" />
             <meta name="theme-color" content="#FFFFFF" />
             <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1" />

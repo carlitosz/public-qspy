@@ -27,8 +27,11 @@ const PaginationResults = ({
 
     return (
         <span aria-label="Pagination results" className="text-base text-title antialiased">
-            Showing {`${currentPage * resultsPerPage + 1} - ${currentPage * resultsPerPage + currentPageSize}`} of{' '}
-            {results} events
+            Showing{' '}
+            <span className="font-semibold text-primary">{`${currentPage * resultsPerPage + 1} - ${
+                currentPage * resultsPerPage + currentPageSize
+            }`}</span>{' '}
+            of {results} events
         </span>
     )
 }
