@@ -72,7 +72,7 @@ const TableSearchForm = ({ clearSearchHandler, onSubmitHandler }: TableSearchFor
             {currentSearch.searching ? (
                 <button
                     aria-label="Clear search"
-                    className="bg-component border border-border rounded-e-md text-primary text-sm h-8 px-2 hover:bg-component disabled:bg-disabled disabled:text-text/40 disabled:cursor-not-allowed"
+                    className="button-sm button-input-form text-sm"
                     onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent | KeyboardEvent>) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -89,7 +89,7 @@ const TableSearchForm = ({ clearSearchHandler, onSubmitHandler }: TableSearchFor
                     aria-label="Submit search"
                     aria-disabled={searchText.length === 0}
                     disabled={searchText.length === 0}
-                    className="bg-component border border-border rounded-e-md text-primary text-sm h-8 px-2 hover:bg-component disabled:bg-disabled disabled:text-text/40 disabled:cursor-not-allowed"
+                    className="button-sm button-input-form text-sm"
                 >
                     Search
                 </button>

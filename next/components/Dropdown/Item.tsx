@@ -14,7 +14,7 @@ export type DropdownItem = {
 const Item = ({ disabled, heading, icon, label, onClick, selected }: DropdownItem): JSX.Element => {
     if (heading) {
         return (
-            <button aria-label={label} className="button-sm uppercase text-text font-semibold text-xs">
+            <button aria-label={label} className="button-sm uppercase text-text font-semibold text-xs w-full">
                 {label}
             </button>
         )
@@ -24,7 +24,7 @@ const Item = ({ disabled, heading, icon, label, onClick, selected }: DropdownIte
         <button
             aria-current={selected}
             aria-label={label}
-            className="flex justify-between items-center button-sm button-menu-item"
+            className="flex justify-between items-center button-sm button-menu-item w-full"
             disabled={disabled}
             onClick={onClick}
             role="menuitem"

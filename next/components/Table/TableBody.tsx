@@ -31,7 +31,7 @@ const TableBody = ({ data, searchText }: TableBodyProps): JSX.Element => {
 
                 return (
                     <tr key={i}>
-                        <td width={500}>{name ?? ''}</td>
+                        <td width={600}>{name ?? ''}</td>
                         <td>{count}</td>
                         <td>
                             <AnalyticsNumber className="table-change" number={change} style="none" />

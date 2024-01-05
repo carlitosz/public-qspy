@@ -1,3 +1,4 @@
+import { SortDirection } from '@/components/Table/TableHeaders'
 import { DomainEvent, DomainEventSeriesData, DomainEventTableData } from 'types'
 
 /**
@@ -75,53 +76,6 @@ export const getExpiredMessageCount = (today: DomainEvent[] | [], yesterday: Dom
 }
 
 /**
- * Compares today's data with yesterday's data and calculate's a difference in
- * events. The end result is a union between DomainEvent & DomainEventDiff
- * called DomainEventSeriesData.
- *
- * Returns an array of DomainEventSeriesData plot data.
- *
- * @param today     Today's data of DomainEvent[]
- * @param yesterday Yesterday's data of DomainEvent[]
- *
- * @returns         An array of DomainEventSeriesData ready for plotting
- */
-export const createSeriesData = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventSeriesData[] => {
-    return today.map((t: DomainEvent) => {
-        const y: DomainEvent | undefined = yesterday.find((y: DomainEvent) => t.event === y.event)
-
-        if (y) {
-            if (y.count === t.count) {
-                return {
-                    ...t,
-                    diff: {
-                        change: 0,
-                        eventsYesterday: y.count
-                    }
-                }
-            }
-
-            return {
-                ...t,
-                diff: {
-                    change: t.count - y.count,
-                    eventsYesterday: y.count
-                }
-            }
-        }
-
-        // This event did not occur yesterday. It's a new event.
-        return {
-            ...t,
-            diff: {
-                change: t.count,
-                eventsYesterday: 0
-            }
-        }
-    })
-}
-
-/**
  * Compares yesterday vs. today counts and attaches the 'change' property to each DomainEvent.
  */
 export const createTableData = (today: DomainEvent[] | [], yesterday: DomainEvent[] | []): DomainEventTableData[] => {
@@ -147,12 +101,12 @@ export const createTableData = (today: DomainEvent[] | [], yesterday: DomainEven
  *
  * @returns         An array of arrays of size perChunk
  */
-export const paginate = (data: DomainEvent[] | [], perChunk: number = 20): [DomainEvent[]] | [[]] => {
+export const paginate = (data: DomainEventTableData[] | [], perChunk: number = 20): [DomainEventTableData[]] | [[]] => {
     if (data.length === 0) {
         return [[]]
     }
 
-    let chunks: [DomainEvent[]] = [[]]
+    let chunks: [DomainEventTableData[]] = [[]]
     chunks.shift()
 
     for (let i: number = 0; i < data.length; i += perChunk) {
@@ -189,8 +143,32 @@ export const formattedJSONArray = (data: DomainEvent[]): string => {
  *
  * @returns An array of DomainEvent search results or empty
  */
-export const search = (data: DomainEvent[], searchString: string): DomainEvent[] | [] => {
-    return data.filter((value: DomainEvent) =>
+export const search = (data: DomainEventTableData[], searchString: string): DomainEventTableData[] | [] => {
+    return data.filter((value: DomainEventTableData) =>
         value.event.toLowerCase().includes(searchString.toLowerCase().trim().replaceAll(' ', ''))
     )
+}
+
+export const sortBy = (
+    data: DomainEventTableData[] | [],
+    sortKey: keyof DomainEventTableData,
+    direction: SortDirection
+): DomainEventTableData[] | [] => {
+    if (data.length === 0) {
+        return []
+    }
+
+    return data.sort((a: DomainEventTableData, b: DomainEventTableData): number => {
+        if (typeof a[sortKey] === 'string' && typeof b[sortKey] === 'string') {
+            let aval = a[sortKey] as string
+            let bval = b[sortKey] as string
+
+            return direction === 'ASC' ? bval.localeCompare(aval) : aval.localeCompare(bval)
+        }
+
+        let aval = a[sortKey] as number
+        let bval = b[sortKey] as number
+
+        return direction === 'ASC' ? aval - bval : bval - aval
+    })
 }
