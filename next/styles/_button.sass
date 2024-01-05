@@ -1,18 +1,18 @@
 .button
     &-sm
-        @apply h-8 w-full
+        @apply h-8 w-fit
         @apply px-2
         @apply text-sm antialiased
         @apply transition duration-150 ease-in-out
 
     &-md
-        @apply h-10 w-full
+        @apply h-10 w-fit
         @apply px-2 py-2
         @apply text-base antialiased
         @apply transition duration-150 ease-in-out
 
     &-lg
-        @apply h-12 w-full
+        @apply h-12 w-fit
         @apply px-4 py-4
         @apply text-lg antialiased
         @apply transition duration-150 ease-in-out
@@ -21,21 +21,21 @@
     &-primary
         @apply bg-component
         @apply text-primary
-        @apply ring-1 ring-primary
+        @apply border border-primary
         @apply hover:bg-hover
         @apply disabled:bg-disabled disabled:text-primary/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
     &-secondary
         @apply bg-component
         @apply text-secondary
-        @apply ring-1 ring-secondary
+        @apply border border-secondary
         @apply hover:bg-hover
         @apply disabled:bg-disabled disabled:text-secondary/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
     &-general
         @apply bg-component
         @apply text-title
-        @apply ring-1 ring-border
+        @apply border border-border
         @apply hover:bg-hover
         @apply disabled:bg-disabled disabled:text-title/40 disabled:cursor-not-allowed disabled:pointer-events-none
 
@@ -53,9 +53,14 @@
 
     &-sidebar-item
         @extend .button-sidebar
-        @apply hover:text-primary hover:shadow-inner hover:bg-hover/40
+        @apply hover:text-primary hover:bg-hover/50
         @apply rounded-md
 
         &[aria-current="true"]
             @apply ring-1 ring-border
-            @apply text-primary shadow-inner bg-hover/40
+            @apply text-primary bg-hover/50
+
+    &-input-form
+        @extend .button-general
+        @apply rounded-e-md
+        @apply text-primary
