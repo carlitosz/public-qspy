@@ -37,5 +37,3 @@ export type Orientation = 'horizontal' | 'vertical'
 
 // Sort direction
 export type SortDirection = 'ASC' | 'DESC'
-
-export type QSpyTheme = 'dark' | 'light'

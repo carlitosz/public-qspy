@@ -31,7 +31,9 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         role="button"
                         tabIndex={-1}
                     >
-                        <EllipsisHorizontalIcon className="icon-xs" />
+                        <div className="flex h-full items-end">
+                            <EllipsisHorizontalIcon className="icon-xs" />
+                        </div>
                     </PaginationItem>
                 )
             case 'end-ellipsis':
@@ -45,7 +47,9 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
                         role="button"
                         tabIndex={-1}
                     >
-                        <EllipsisHorizontalIcon className="icon-xs" />
+                        <div className="flex h-full items-end">
+                            <EllipsisHorizontalIcon className="icon-xs" />
+                        </div>
                     </PaginationItem>
                 )
             case 'first':

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { QSpyTheme } from 'types'
+type QSpyTheme = 'dark' | 'light'
 
 // Main type definition for Theme.
 export declare type Theme = {

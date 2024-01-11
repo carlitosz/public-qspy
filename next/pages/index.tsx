@@ -46,7 +46,7 @@ const Home: NextPage = (): JSX.Element => {
             <div className="w-full rounded-md h-auto">
                 <AnalyticsContainer data={{ today, yesterday }} />
             </div>
-            <div className="w-full h-fit py-6">
+            <div className="w-full h-fit py-8">
                 <TableContainer data={{ today, yesterday }} />
             </div>
         </Page>

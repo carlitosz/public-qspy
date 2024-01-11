@@ -70,23 +70,29 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         return <>error</>
     }
 
-    const renderPagination = (direction: DropdownDirection) => (
-        <Pagination
-            currentPage={currentPage + 1}
-            currentPageSize={pages[currentPage].length}
-            dropdownDirection={direction}
-            goToPage={(desiredPage: number) => setCurrentPage(desiredPage)}
-            numPages={pages.length}
-            resultsPerPage={resultsPerPage}
-            searchText={searchText}
-            setResultsPerPage={(desiredResults: number) => setResultsPerPage(desiredResults)}
-            totalResults={maxResults}
-        />
-    )
+    const renderPagination = (direction: DropdownDirection) => {
+        if (pages[currentPage].length === 0 && searchText.length === 0) {
+            return <></>
+        }
+
+        return (
+            <Pagination
+                currentPage={currentPage + 1}
+                currentPageSize={pages[currentPage].length}
+                dropdownDirection={direction}
+                goToPage={(desiredPage: number) => setCurrentPage(desiredPage)}
+                numPages={pages.length}
+                resultsPerPage={resultsPerPage}
+                searchText={searchText}
+                setResultsPerPage={(desiredResults: number) => setResultsPerPage(desiredResults)}
+                totalResults={maxResults}
+            />
+        )
+    }
 
     return (
         <>
-            <div className="mb-2">{renderPagination('down')}</div>
+            <div className="mb-4">{renderPagination('down')}</div>
             <div className="table-container">
                 <TableSearchForm
                     clearSearchHandler={resetToPristine}
@@ -108,7 +114,6 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                     <TableBody data={pages[currentPage]} searchText={searchText} />
                 </Table>
             </div>
-            <div className="my-2">{renderPagination('up')}</div>
         </>
     )
 }
