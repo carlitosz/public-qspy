@@ -32,7 +32,7 @@ const Pagination = ({
     totalResults
 }: PaginationProps): JSX.Element => {
     const pagino: Pagino = useMemo(() => {
-        const _: Pagino = new Pagino()
+        const _: Pagino = new Pagino({ siblingCount: 0 })
         _.setCount(numPages)
         _.setPage(currentPage)
 
