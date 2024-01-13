@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "NodeNext",
@@ -13,18 +11,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["node", "jest"],
+    "types": ["node", "jest", "./node_modules/pagino/index.d.ts"],
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/components/*": ["components/*"],
+      "@/data-layers/*": ["data-layers/*"],
       "@/styles/*": ["styles/*"],
       "@/util/*": ["util/*"],
-      "@/test/utils": ["tests/test-utils"]
+      "@/test-utils": ["tests/test-utils"]
     },
     "forceConsistentCasingInFileNames": true
   },

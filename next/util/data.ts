@@ -1,5 +1,5 @@
 import { SortDirection } from '@/components/Table/TableHeaders'
-import { DomainEvent, DomainEventSeriesData, DomainEventTableData } from 'types'
+import { DomainEvent, DomainEventTableData } from 'types'
 
 /**
  * Calculates the % change from yesterday to today.
