@@ -1,12 +1,12 @@
 import React from 'react'
 
 import Pill from '@/components/Pill/Pill'
-import { analyticsPillColor, analyticsPillIcon } from '@/data-layers/Analytics'
+import { analyticsPillColor, analyticsPillIcon } from '@/utils/data/analytics'
 
 interface AnalyticsCardProps {
+    metric: number | string
     percentOfChange?: number
     title: string
-    metric: number | string
 }
 
 const AnalyticsCard = ({ metric, percentOfChange, title }: AnalyticsCardProps): JSX.Element => {

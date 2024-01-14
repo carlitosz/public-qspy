@@ -1,4 +1,5 @@
 name: Test
+concurrency: ci-${{ github.ref || github.run_id }}
 
 on:
   push:

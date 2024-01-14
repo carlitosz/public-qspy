@@ -2,9 +2,9 @@ import '@testing-library/jest-dom'
 import React from 'react'
 
 import Pill, { PillProps } from '@/components/Pill/Pill'
-import { render, screen } from '@/test-utils'
 import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon'
 import ArrowLongDownIcon from '@heroicons/react/24/outline/ArrowLongDownIcon'
+import { render, screen } from '@/test-config'
 
 describe('<AnalyticsPercent />', () => {
     test.each([

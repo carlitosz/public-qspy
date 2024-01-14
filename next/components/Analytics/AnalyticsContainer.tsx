@@ -2,7 +2,7 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
-import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/util/data'
+import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/utils/data/data'
 
 import type { GetEventsResponse } from 'types'
 

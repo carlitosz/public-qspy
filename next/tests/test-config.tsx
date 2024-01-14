@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 
-import { ThemeProvider } from '@/util/theme'
+import { ThemeProvider } from '@/utils/application/theme'
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     return <ThemeProvider>{children}</ThemeProvider>

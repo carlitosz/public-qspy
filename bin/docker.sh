@@ -21,7 +21,7 @@ function _docker {
 # ==================================================================================
 BIN_DIR="$(cd $(dirname "$0") && pwd)"
 BASE_DIR="$(dirname "$BIN_DIR")"
-IMAGES=$(_compose images | grep "$(basename $PWD)-next" | awk '{ print $2 }')
+IMAGES=$(_compose images | grep "$(basename $PWD)-app" | awk '{ print $2 }')
 
 # Get environment variables
 export AWS_ACCOUNT_ID="$(cat ${BASE_DIR}/.env | grep AWS_ACCOUNT_ID | cut -d'=' -f2)"
@@ -67,6 +67,6 @@ case ${1} in
         ;;
 
     sh)
-        _docker exec -it --detach-keys 'ctrl-q,q' next sh
+        _docker exec -it --detach-keys 'ctrl-q,q' app sh
         ;;
 esac

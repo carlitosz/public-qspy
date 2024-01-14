@@ -5,6 +5,11 @@ build: #! Generate a production build of next
 	@echo "Creating a production build ...\n"
 	cd $(PREFIX)/next && npm run build
 
+.PHONY: dev
+dev: #! Start a dev environment
+	@echo "+ $@"
+	cd $(PREFIX)/next && npm run dev
+
 .PHONY: frontend-deps
 frontend-deps: #! Initialize frontend dependencies
 	@echo "Installing client-side deps...\n"

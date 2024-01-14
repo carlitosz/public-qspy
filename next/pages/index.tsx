@@ -5,7 +5,7 @@ import { subDays } from 'date-fns'
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
 import TableContainer from '@/components/Table/TableContainer'
 import Page from '@/components/Layout/Page'
-import { useRequest } from '@/util/axios'
+import { useRequest } from '@/utils/application/axios'
 
 import type { NextPage } from 'next'
 import type { GetEventsResponse } from 'types'

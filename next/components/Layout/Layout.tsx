@@ -3,7 +3,7 @@ import { Poppins } from 'next/font/google'
 
 import Sidebar from '@/components/Sidebar/Sidebar'
 
-import { Theme, useTheme } from '@/util/theme'
+import { Theme, useTheme } from '@/utils/application/theme'
 
 interface LayoutProps {
     children: React.ReactNode

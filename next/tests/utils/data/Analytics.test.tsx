@@ -2,7 +2,7 @@ import React from 'react'
 import ArrowLongUpIcon from '@heroicons/react/24/outline/ArrowLongUpIcon'
 import ArrowLongDownIcon from '@heroicons/react/24/outline/ArrowLongDownIcon'
 
-import { analyticsPillColor, analyticsPillIcon } from '@/data-layers/Analytics'
+import { analyticsPillColor, analyticsPillIcon } from '@/utils/data/analytics'
 
 describe('Analytics data-layer', () => {
     test.each([

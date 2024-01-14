@@ -3,10 +3,9 @@ import React from 'react'
 import type { AppProps } from 'next/app'
 
 import Layout from '@/components/Layout/Layout'
-import { ThemeProvider } from '@/util/theme'
+import { ThemeProvider } from '@/utils/application/theme'
 
 import '@/styles/globals.sass'
-import '@/styles/overrides.sass'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (

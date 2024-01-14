@@ -7,7 +7,7 @@ import TableHeaders, { SortDirection, SortableHeader } from '@/components/Table/
 import TableSearchForm from '@/components/Table/TableSearchForm'
 import TableSkeleton from '@/components/Table/TableSkeleton'
 
-import { createTableData, paginate, search, sortBy } from '@/util/data'
+import { createTableData, paginate, search, sortBy } from '@/utils/data/data'
 
 import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 import type { DomainEventTableData, GetEventsResponse } from 'types'

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  next:
+  app:
     build:
       args:
         - AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
@@ -9,11 +9,12 @@ services:
       dockerfile: Dockerfile
       target: dev
     command: make dev
-    container_name: next
+    container_name: app
     ports:
       - 3000:3000
     volumes:
       - ./next:/app/next
+      - ./infrastructure:/app/infrastructure
       - node_modules:/app/next/node_modules
       - cache:/app/next/.next
 

@@ -11,7 +11,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["node", "jest", "./node_modules/pagino/index.d.ts"],
+    "types": [
+      "node",
+      "jest",
+      "./node_modules/pagino/index.d.ts"
+    ],
     "plugins": [
       {
         "name": "next"
@@ -19,14 +23,34 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/data-layers/*": ["data-layers/*"],
-      "@/styles/*": ["styles/*"],
-      "@/util/*": ["util/*"],
-      "@/test-utils": ["tests/test-utils"]
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ],
+      "@/test-config": [
+        "tests/test-config"
+      ]
     },
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "strict": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["./node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
 }
