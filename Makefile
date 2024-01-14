@@ -52,6 +52,12 @@ frontend-tests: #! Run frontend tests
 	@echo "\nRunning Jest ...\n"
 	cd $(PREFIX)/next && npm run jest
 
+.PHONY: watch
+watch: #! Enter Jest watch mode
+	@echo "+ $@"
+	@echo "Entering watch mode ...\n"
+	cd $(PREFIX)/next && npm run jest:watch
+
 .PHONY: test
 test: #! Run all tests
 	@echo "+ $@"

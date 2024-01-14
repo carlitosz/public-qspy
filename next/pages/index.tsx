@@ -2,10 +2,11 @@ import React from 'react'
 import { format } from 'date-fns'
 import { subDays } from 'date-fns'
 
+import Alert from '@/components/Alert/Alert'
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
 import TableContainer from '@/components/Table/TableContainer'
 import Page from '@/components/Layout/Page'
-import { useRequest } from '@/utils/application/axios'
+import { getErrorMessage, useRequest } from '@/utils/application/axios'
 
 import type { NextPage } from 'next'
 import type { GetEventsResponse } from 'types'
@@ -37,8 +38,24 @@ const Home: NextPage = (): JSX.Element => {
         }
     )
 
-    if (today.error || yesterday.error) {
-        return <>An error has occurred.</>
+    if (today.error) {
+        const { code, message } = getErrorMessage(today.error)
+
+        return (
+            <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
+                <Alert message={`${code} ${message}`} title="An error has occurred" type="danger" />
+            </Page>
+        )
+    }
+
+    if (yesterday.error) {
+        const { code, message } = getErrorMessage(yesterday.error.error)
+
+        return (
+            <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
+                <Alert message={`${code} ${message}`} title="An error has occurred" type="danger" />
+            </Page>
+        )
     }
 
     return (

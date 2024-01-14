@@ -16,11 +16,7 @@ interface AnalyticsContainerProps {
 const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     const { today, yesterday } = data
 
-    if (today.error || yesterday.error) {
-        return <>Error occurred.</>
-    }
-
-    if (today.isValidating || yesterday.isValidating || !today || !yesterday) {
+    if (today.isValidating || yesterday.isValidating) {
         return (
             <div className="flex h-full gap-x-6">
                 <AnalyticsCardSkeleton />
