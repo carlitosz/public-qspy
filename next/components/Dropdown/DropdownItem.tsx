@@ -14,7 +14,11 @@ export type DropdownItemProps = {
 const DropdownItem = ({ disabled, heading, icon, label, onClick, selected }: DropdownItemProps): JSX.Element => {
     if (heading) {
         return (
-            <button aria-label={label} className="button-sm uppercase text-text font-semibold text-xs w-full">
+            <button
+                aria-label={label}
+                className="button-sm uppercase text-text font-semibold text-xs w-full"
+                type="button"
+            >
                 {label}
             </button>
         )
@@ -29,6 +33,7 @@ const DropdownItem = ({ disabled, heading, icon, label, onClick, selected }: Dro
             onClick={onClick}
             role="menuitem"
             tabIndex={-1}
+            type="button"
         >
             {icon}
             {label}
