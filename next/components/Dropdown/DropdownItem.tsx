@@ -2,7 +2,7 @@ import React from 'react'
 
 import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon'
 
-export type DropdownItem = {
+export type DropdownItemProps = {
     disabled?: boolean
     heading?: boolean
     icon?: React.ReactElement
@@ -11,7 +11,7 @@ export type DropdownItem = {
     selected?: boolean
 }
 
-const Item = ({ disabled, heading, icon, label, onClick, selected }: DropdownItem): JSX.Element => {
+const DropdownItem = ({ disabled, heading, icon, label, onClick, selected }: DropdownItemProps): JSX.Element => {
     if (heading) {
         return (
             <button aria-label={label} className="button-sm uppercase text-text font-semibold text-xs w-full">
@@ -37,4 +37,4 @@ const Item = ({ disabled, heading, icon, label, onClick, selected }: DropdownIte
     )
 }
 
-export default Item
+export default DropdownItem

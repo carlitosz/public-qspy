@@ -1,8 +1,9 @@
 import React from 'react'
 import { formatDistance } from 'date-fns'
 
-import AnalyticsNumber from '@/components/Analytics/AnalyticsNumber'
+import Pill from '@/components/Pill/Pill'
 import TableEmpty from '@/components/Table/TableEmpty'
+import { tablePillColor, tablePillIcon } from '@/utils/data/table'
 
 import type { DailyChange, DomainEvent, DomainEventTableData } from 'types'
 
@@ -34,7 +35,7 @@ const TableBody = ({ data, searchText }: TableBodyProps): JSX.Element => {
                         <td width={600}>{name ?? ''}</td>
                         <td>{count}</td>
                         <td>
-                            <AnalyticsNumber className="table-change" number={change} style="none" />
+                            <Pill color={tablePillColor(change)} icon={tablePillIcon(change)} label={`${change}`} />
                         </td>
                         <td>{`${formatDistance(new Date(ls), new Date(), { addSuffix: true })}`}</td>
                         <td>{`${formatDistance(new Date(fs), new Date(), { addSuffix: true })}`}</td>

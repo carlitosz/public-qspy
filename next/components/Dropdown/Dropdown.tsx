@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import Item from '@/components/Dropdown/Item'
+import Item from '@/components/Dropdown/DropdownItem'
 
-import type { DropdownItem } from '@/components/Dropdown/Item'
+import type { DropdownItemProps } from '@/components/Dropdown/DropdownItem'
 
 export type DropdownDirection = 'up' | 'down'
 
@@ -10,7 +10,7 @@ interface DropdownProps {
     id: HTMLButtonElement['id']
     closeIcon?: React.ReactNode
     direction: DropdownDirection
-    items: DropdownItem[]
+    items: DropdownItemProps[]
     openIcon?: React.ReactNode
     title?: string
 }
@@ -68,7 +68,7 @@ const Dropdown = ({ closeIcon, direction, id, items, openIcon, title }: Dropdown
                     aria-labelledby={id}
                     tabIndex={-1}
                 >
-                    {items.map((item: DropdownItem, i: number) => (
+                    {items.map((item: DropdownItemProps, i: number) => (
                         <Item
                             disabled={item.disabled}
                             heading={item.heading}

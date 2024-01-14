@@ -2,7 +2,7 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
-import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/util/data'
+import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/utils/data/data'
 
 import type { GetEventsResponse } from 'types'
 
@@ -43,21 +43,15 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     return (
         <div className="flex h-full gap-x-6">
             <AnalyticsCard
-                difference={{
-                    metric: calculatePercentChange(yesterdaysData.Total, todaysData.Total),
-                    type: 'percent'
-                }}
                 metric={todaysData.Total}
+                percentOfChange={calculatePercentChange(yesterdaysData.Total, todaysData.Total)}
                 title="Total messages"
             />
             <AnalyticsCard metric={newMessagesCount} title="New" />
             <AnalyticsCard metric={expiredMessagesCount} title="Expired" />
             <AnalyticsCard
-                difference={{
-                    metric: calculatePercentChange(yesterdaysData.Data.length, todaysData.Data.length),
-                    type: 'percent'
-                }}
                 metric={todaysData.Data.length}
+                percentOfChange={calculatePercentChange(yesterdaysData.Data.length, todaysData.Data.length)}
                 title="Unique messages"
             />
         </div>
