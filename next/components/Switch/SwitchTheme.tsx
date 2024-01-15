@@ -30,6 +30,7 @@ const SwitchTheme = ({ icons }: SwitchProps) => {
                         className="switch"
                         checked={checked}
                         onChange={() => setChecked(!checked)}
+                        role="switch"
                     />
                     <div className="pane" />
                     <div className="dot">{checked ? icons.checked : icons.unchecked}</div>

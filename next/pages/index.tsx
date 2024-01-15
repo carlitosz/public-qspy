@@ -4,8 +4,8 @@ import { subDays } from 'date-fns'
 
 import Alert from '@/components/Alert/Alert'
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
+import Page from '@/components/Page/Page'
 import TableContainer from '@/components/Table/TableContainer'
-import Page from '@/components/Layout/Page'
 import { getErrorMessage, useRequest } from '@/utils/application/axios'
 
 import type { NextPage } from 'next'

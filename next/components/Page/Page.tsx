@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PageHead from '@/components/Layout/PageHead'
+import PageHead from '@/components/Page/PageHead'
 
 interface PageProps {
     children: React.ReactNode

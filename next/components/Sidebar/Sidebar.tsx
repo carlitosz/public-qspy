@@ -9,7 +9,7 @@ import SwitchTheme from '@/components/Switch/SwitchTheme'
 const Sidebar = (): JSX.Element => {
     return (
         <div
-            className="flex flex-col items-center justify-between w-20 h-full py-4 overflow-hidden fixed bg-component text-title"
+            className="flex flex-col items-center justify-between w-20 h-full py-6 overflow-hidden fixed bg-component text-title"
             role="menubar"
         >
             <div className="h-fit w-fit">
@@ -20,18 +20,12 @@ const Sidebar = (): JSX.Element => {
                     icon={<HomeIcon className="icon-md" />}
                 />
             </div>
-            <SidebarItem
-                ariaLabel="Go to homepage"
-                className="button-sidebar"
-                href="/"
-                icon={
-                    <SwitchTheme
-                        icons={{
-                            checked: <MoonIcon className="icon-sm" />,
-                            unchecked: <SunIcon className="icon-sm" />
-                        }}
-                    />
-                }
+
+            <SwitchTheme
+                icons={{
+                    checked: <MoonIcon className="icon-sm" />,
+                    unchecked: <SunIcon className="icon-sm" />
+                }}
             />
         </div>
     )
