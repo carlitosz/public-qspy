@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { useTheme } from '@/utils/application/theme'
-import type { Theme } from '@/utils/application/theme'
+import { useTheme } from '@/utils/theme'
+import type { Theme } from '@/utils/theme'
 
 interface SwitchProps {
     icons: {

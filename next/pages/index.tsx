@@ -6,7 +6,7 @@ import Alert from '@/components/Alert/Alert'
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
 import Page from '@/components/Page/Page'
 import TableContainer from '@/components/Table/TableContainer'
-import { getErrorMessage, useRequest } from '@/utils/application/axios'
+import { getErrorMessage, useRequest } from '@/utils/axios'
 
 import type { NextPage } from 'next'
 import type { GetEventsResponse } from 'types'

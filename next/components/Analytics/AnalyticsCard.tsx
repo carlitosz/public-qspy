@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Pill from '@/components/Pill/Pill'
-import { analyticsPillColor, analyticsPillIcon } from '@/utils/data/analytics'
+import { analyticsPillColor, analyticsPillIcon } from '@/helpers/analytics'
 
 interface AnalyticsCardProps {
     metric: number | string
