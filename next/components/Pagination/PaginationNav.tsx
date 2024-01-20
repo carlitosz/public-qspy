@@ -127,7 +127,7 @@ const PaginationNav = ({ currentPage, goToPage, pagino, totalNumberOfPages }: Pa
     }
 
     return (
-        <nav className="relative" aria-label="Table Navigation" role="navigation">
+        <nav className="relative" aria-label="Pagination navigation" role="navigation">
             <ul>{pages.map((page: number | string) => renderElement(page))}</ul>
         </nav>
     )
