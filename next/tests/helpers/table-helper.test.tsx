@@ -3,9 +3,9 @@ import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon
 import ArrowLongUpIcon from '@heroicons/react/24/outline/ArrowLongUpIcon'
 import ArrowLongDownIcon from '@heroicons/react/24/outline/ArrowLongDownIcon'
 
-import { tablePillColor, tablePillIcon } from '@/utils/data/table'
+import { tablePillColor, tablePillIcon } from '@/helpers/table-helper'
 
-describe('Table data-layer ', () => {
+describe('table-helper ', () => {
     test.each([
         { change: 0, expected: 'neutral' },
         { change: 1, expected: 'danger' },

@@ -22,7 +22,7 @@ const PaginationResultsPerPage = ({
 
     return (
         <Dropdown
-            closeIcon={dropdownDirection === 'up' ? ChevronUp : ChevronDown}
+            closeIcon={dropdownDirection === 'up' ? ChevronDown : ChevronUp}
             direction={dropdownDirection}
             id={`pagination-dropdown-${dropdownDirection}`}
             items={[

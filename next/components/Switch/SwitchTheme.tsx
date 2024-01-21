@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { useTheme } from '@/utils/application/theme'
-import type { Theme } from '@/utils/application/theme'
+import { useTheme } from '@/utils/theme'
+import type { Theme } from '@/utils/theme'
 
 interface SwitchProps {
     icons: {
@@ -23,13 +23,14 @@ const SwitchTheme = ({ icons }: SwitchProps) => {
             <label className="flex items-center cursor-pointer" htmlFor="toggle">
                 <div className="relative">
                     <input
-                        aria-label={`Toggle to ${!checked ? 'checked' : 'unchecked'}`}
+                        aria-label={`Toggle to ${checked ? 'light theme' : 'dark theme'}`}
                         aria-checked={checked}
                         type="checkbox"
                         id="toggle"
                         className="switch"
                         checked={checked}
                         onChange={() => setChecked(!checked)}
+                        role="switch"
                     />
                     <div className="pane" />
                     <div className="dot">{checked ? icons.checked : icons.unchecked}</div>

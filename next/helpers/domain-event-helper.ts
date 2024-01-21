@@ -18,17 +18,6 @@ export const calculatePercentChange = (from: number, to: number): number => {
 }
 
 /**
- * Returns percent difference between two numbers (e.g. 90 is what percent of 100)
- */
-export const calculatePercentOf = (parts: number, whole: number): number => {
-    if (whole === 0) {
-        return 0
-    }
-
-    return (parts / whole) * 100
-}
-
-/**
  * Returns the number of new messages by comparing yesterday's data with today's data.
  *
  * @param today     Today's data of DomainEvent[]

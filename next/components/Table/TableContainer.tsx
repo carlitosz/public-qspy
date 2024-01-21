@@ -7,7 +7,7 @@ import TableHeaders, { SortDirection, SortableHeader } from '@/components/Table/
 import TableSearchForm from '@/components/Table/TableSearchForm'
 import TableSkeleton from '@/components/Table/TableSkeleton'
 
-import { createTableData, paginate, search, sortBy } from '@/utils/data/data'
+import { createTableData, paginate, search, sortBy } from '@/helpers/domain-event-helper'
 
 import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
 import type { DomainEventTableData, GetEventsResponse } from 'types'
@@ -27,8 +27,8 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     const [searchText, setSearchText] = useState<string>('')
     const [sortedData, setSortedData] = useState<DomainEventTableData[] | []>([])
 
-    const { isValidating: tValidating, error: tError, data: tData } = data.today
-    const { isValidating: yValidating, error: yError, data: yData } = data.yesterday
+    const { isValidating: tValidating, data: tData } = data.today
+    const { isValidating: yValidating, data: yData } = data.yesterday
 
     // Initial mount.
     useEffect(() => {
@@ -64,10 +64,6 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
 
     if (tValidating || yValidating) {
         return <TableSkeleton />
-    }
-
-    if (tError || yError) {
-        return <>error</>
     }
 
     const renderPagination = (direction: DropdownDirection) => {

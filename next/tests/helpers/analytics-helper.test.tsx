@@ -2,9 +2,9 @@ import React from 'react'
 import ArrowLongUpIcon from '@heroicons/react/24/outline/ArrowLongUpIcon'
 import ArrowLongDownIcon from '@heroicons/react/24/outline/ArrowLongDownIcon'
 
-import { analyticsPillColor, analyticsPillIcon } from '@/utils/data/analytics'
+import { analyticsPillColor, analyticsPillIcon } from '@/helpers/analytics-helper'
 
-describe('Analytics data-layer', () => {
+describe('analytics-helper', () => {
     test.each([
         { percentOfChange: 0, expected: 'neutral' },
         { percentOfChange: 1, expected: 'danger' },

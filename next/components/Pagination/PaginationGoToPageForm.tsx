@@ -1,10 +1,7 @@
 import React, { FormEvent } from 'react'
 import MagnifyingGlassIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon'
 
-import type { DropdownDirection } from '@/components/Dropdown/Dropdown'
-
 interface PaginationGoToPageFormProps {
-    direction: DropdownDirection
     disabled: boolean
     goToPage: (desiredPage: number) => void
     max: number
@@ -18,9 +15,10 @@ interface GoToPageElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-const PaginationGoToPageForm = ({ direction, disabled, goToPage, max }: PaginationGoToPageFormProps): JSX.Element => {
+const PaginationGoToPageForm = ({ disabled, goToPage, max }: PaginationGoToPageFormProps): JSX.Element => {
     return (
         <form
+            aria-label="Navigate to page form"
             className="inline-flex h-8 relative"
             onSubmit={(e: FormEvent<GoToPageElement>) => {
                 e.preventDefault()
@@ -28,15 +26,15 @@ const PaginationGoToPageForm = ({ direction, disabled, goToPage, max }: Paginati
                 e.currentTarget.elements.goToPage.value = ''
             }}
         >
-            <label htmlFor={`goToPage-${direction}`} className="sr-only">
+            <label htmlFor="goToPage" className="sr-only">
                 Go to page
             </label>
             <input
-                aria-label="Go to page input form"
+                aria-label="Go to page input"
                 aria-required={true}
                 className="bg-disabled h-8 w-24 text-sm px-2 ring-1 ring-border text-title focus:outline-none rounded-s-md disabled:bg-disabled disabled:cursor-not-allowed focus:bg-component"
                 disabled={disabled}
-                id={`goToPage-${direction}`}
+                id="goToPage"
                 name={`goToPage`}
                 max={max}
                 min={1}

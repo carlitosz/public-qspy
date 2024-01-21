@@ -45,6 +45,7 @@ const Dropdown = ({ closeIcon, direction, id, items, openIcon, title }: Dropdown
                 <button
                     aria-expanded={open}
                     aria-haspopup={open}
+                    aria-label={`${open ? 'Close' : 'Open'} dropdown menu`}
                     className="inline-flex items-center gap-x-1.5 button-sm button-general rounded-md"
                     id={id}
                     onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -55,7 +56,7 @@ const Dropdown = ({ closeIcon, direction, id, items, openIcon, title }: Dropdown
                     type="button"
                 >
                     {title}
-                    {open ? openIcon : closeIcon}
+                    {open ? closeIcon : openIcon}
                 </button>
             </div>
 

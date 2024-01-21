@@ -2,7 +2,7 @@ import React from 'react'
 
 import AnalyticsCard from '@/components/Analytics/AnalyticsCard'
 import AnalyticsCardSkeleton from '@/components/Analytics/AnalyticsCardSkeleton'
-import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/utils/data/data'
+import { calculatePercentChange, getExpiredMessageCount, getNewMessageCount } from '@/helpers/domain-event-helper'
 
 import type { GetEventsResponse } from 'types'
 
@@ -16,11 +16,7 @@ interface AnalyticsContainerProps {
 const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
     const { today, yesterday } = data
 
-    if (today.error || yesterday.error) {
-        return <>Error occurred.</>
-    }
-
-    if (today.isValidating || yesterday.isValidating || !today || !yesterday) {
+    if (today.isValidating || yesterday.isValidating) {
         return (
             <div className="flex h-full gap-x-6">
                 <AnalyticsCardSkeleton />

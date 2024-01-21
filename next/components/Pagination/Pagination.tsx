@@ -64,12 +64,7 @@ const Pagination = ({
                     />
                 </div>
                 <div className="ml-2">
-                    <PaginationGoToPageForm
-                        direction={dropdownDirection}
-                        disabled={numPages <= 1}
-                        max={numPages}
-                        goToPage={goToPage}
-                    />
+                    <PaginationGoToPageForm disabled={numPages <= 1} max={numPages} goToPage={goToPage} />
                 </div>
             </div>
         </div>

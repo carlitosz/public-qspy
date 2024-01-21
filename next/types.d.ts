@@ -1,4 +1,4 @@
-import type { Return } from '@/utils/application/axios'
+import type { Return } from '@/utils/axios'
 
 // What is returned from the server
 export interface DomainEvent {

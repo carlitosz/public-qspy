@@ -26,7 +26,7 @@ const PaginationItem = ({
             <a
                 aria-current={ariaCurrent}
                 aria-disabled={ariaDisabled}
-                aria-labelledby={ariaLabel}
+                aria-label={ariaLabel}
                 onClick={onClick}
                 onKeyDown={onKeyDown}
                 role={role}

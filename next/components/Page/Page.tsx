@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PageHead from '@/components/Layout/PageHead'
+import PageHead from '@/components/Page/PageHead'
 
 interface PageProps {
     children: React.ReactNode
@@ -13,7 +13,7 @@ const Page = ({ children, heading, title }: PageProps): JSX.Element => {
         <>
             <PageHead title={title} />
             <div className="lg:container mx-auto py-1">
-                <div className="my-6 h-10">
+                <div className="my-6 h-10" role="presentation">
                     <p className="text-primary text-sm">Daily overview</p>
                     <p className="text-title text-lg font-semibold antialiased">{heading}</p>
                 </div>

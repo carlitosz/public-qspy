@@ -48,35 +48,33 @@ export const useRequest = <Data = unknown, Error = unknown>(
     }
 }
 
-interface ServerErrorResponse {
-    data: {
-        error: {
-            message: string
+export const getErrorMessage = (error: Error): { code: string; message: string } => {
+    let code = 'UNKNOWN_CODE'
+    let message = 'An unknown error has occurred.'
+
+    if (axios.defaults.baseURL === '') {
+        return {
+            code: '',
+            message: 'Missing API_GATEWAY in .env configuration'
         }
     }
-}
 
-export const getErrorMessage = (error: Error): string => {
+    if (axios.defaults.headers.common['x-api-key'] === '') {
+        return {
+            code: '',
+            message: 'Missing API_KEY in .env configuration'
+        }
+    }
+
     if (axios.isAxiosError(error)) {
-        const { code } = error
-
-        // No status? This sucks. Return a generic message.
-        if (!code) {
-            return 'No status code returned. Something really bad happened.'
+        if ('code' in error) {
+            code = error.code
         }
 
-        const { response } = error
-
-        // No response? At least we have a status code.
-        if (!response) {
-            return `Failed to fetch data with status code: ${code}`
+        if ('message' in error) {
+            message = error.message
         }
-
-        const { data } = response as ServerErrorResponse
-
-        // We got server data and a status code
-        return data.error.message
     }
 
-    return 'Everything failed'
+    return { code, message }
 }
