@@ -3,7 +3,7 @@ import { formatDistance } from 'date-fns'
 
 import Pill from '@/components/Pill/Pill'
 import TableEmpty from '@/components/Table/TableEmpty'
-import { tablePillColor, tablePillIcon } from '@/helpers/table'
+import { tablePillColor, tablePillIcon } from '@/helpers/table-helper'
 
 import type { DailyChange, DomainEvent, DomainEventTableData } from 'types'
 
