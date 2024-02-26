@@ -1,8 +1,8 @@
-import React, { AriaAttributes, useState } from 'react'
+import React, { useState } from 'react'
+
+import { tableHeaderArrows, tableAriaSort } from '@/helpers/table-helper'
 
 import type { DomainEventTableData } from 'types'
-import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon'
-import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon'
 
 export type SortDirection = 'ASC' | 'DESC'
 
@@ -29,30 +29,28 @@ const TableHeaders = ({ headers, sortHandler }: TableHeadersProps): JSX.Element 
         setLocalSort({ sortKey, direction })
     }
 
-    const arrow = () =>
-        localSort.direction === 'ASC' ? (
-            <ChevronDownIcon className="icon-xs ml-1 [&>path]:stroke-[2]" />
-        ) : (
-            <ChevronUpIcon className="icon-xs ml-1 [&>path]:stroke-[2]" />
-        )
-
-    const ariaSort = (sortKey: SortableHeader['sortKey']): AriaAttributes['aria-sort'] => {
-        if (localSort.sortKey !== sortKey) {
-            return undefined
-        }
-
-        return localSort.direction === 'ASC' ? 'ascending' : 'descending'
-    }
-
     return (
         <thead>
             <tr>
                 {headers.map(
                     ({ value, sortKey }: SortableHeader, i: number): React.ReactNode => (
-                        <th aria-sort={ariaSort(sortKey)} scope="col" key={i} onClick={() => handleSort(sortKey)}>
+                        <th
+                            aria-sort={tableAriaSort({
+                                selectedSortKey: sortKey,
+                                sortKey: localSort.sortKey,
+                                direction: localSort.direction
+                            })}
+                            scope="col"
+                            key={i}
+                            onClick={() => handleSort(sortKey)}
+                        >
                             <div className="inline-flex items-center">
                                 {value}
-                                {localSort.sortKey === sortKey ? arrow() : <div className="invisible">{arrow()}</div>}
+                                {tableHeaderArrows({
+                                    selectedSortKey: sortKey,
+                                    sortKey: localSort.sortKey,
+                                    direction: localSort.direction
+                                })}
                             </div>
                         </th>
                     )

@@ -37,7 +37,11 @@ const TableBody = ({ data, searchText }: TableBodyProps): JSX.Element => {
                         </td>
                         <td aria-label="Count">{count}</td>
                         <td aria-label="Change">
-                            <Pill color={tablePillColor(change)} icon={tablePillIcon(change)} label={`${change}`} />
+                            <Pill
+                                color={tablePillColor(change)}
+                                icon={tablePillIcon(change)}
+                                label={`${Math.abs(change)}`}
+                            />
                         </td>
                         <td aria-label="Last seen">{`${formatDistance(new Date(ls), new Date(), {
                             addSuffix: true

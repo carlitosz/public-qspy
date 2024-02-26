@@ -50,6 +50,7 @@ aws lambda invoke \
     --function-name FUNCTION_NAME \
     --profile PROFILE \
     --region REGION \
+    --cli-binary-format raw-in-base64-out \
     --payload file://infrastructure/functions/events/analyze_event.json response.json
 ```
 
