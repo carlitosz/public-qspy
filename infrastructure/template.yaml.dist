@@ -11,13 +11,9 @@ Parameters:
     Default: development
     Description: The stage where this stack will be deployed to.
     Type: String
-  readPolicyResource:
+  deadletterQueue:
     AllowedPattern: ^arn\:aws\:sqs\:us\-east\-(1|2)\:\d+\:domain\-events\-.*\-deadletter$
-    Description: Resource to create a read policy for. For a single DLQ, the ARN of the DLQ.
-    Type: String
-  queueUrl:
-    AllowedPattern: ^https\:\/\/sqs\.us\-east\-(1|2)\.amazonaws\.com\/\d+\/domain\-events\-.*\-deadletter$
-    Description: The target deadletter queue URL. This URL is passed to the Lambda function from EventBridge for Asynchronous execution.
+    Description: The ARN of the deadletter queue to read from.
     Type: String
 
 Resources:
@@ -65,7 +61,7 @@ Resources:
               Action:
                 - sqs:ReceiveMessage
                 - sqs:GetQueueAttributes
-              Resource: !Ref readPolicyResource
+              Resource: !Ref deadletterQueue
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
