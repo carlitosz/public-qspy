@@ -138,6 +138,15 @@ export const search = (data: DomainEventTableData[], searchString: string): Doma
     )
 }
 
+/**
+ * Sorts by a given sortKey and sort direction.
+ *
+ * @param data      An array of DomainEvent data
+ * @param sortKey   The key to sort by
+ * @param direction The direction to sort by
+ *
+ * @returns An array of sorted DomainEventTableData
+ */
 export const sortBy = (
     data: DomainEventTableData[] | [],
     sortKey: keyof DomainEventTableData,

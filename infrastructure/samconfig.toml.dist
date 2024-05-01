@@ -9,8 +9,7 @@ s3_bucket = "cz-aws-sam-cli-managed-default-samclisourcebucket-development"
 s3_prefix = "development-cz-functions"
 stack_name = "qspy-development"
 parameter_overrides = [
-    "queueUrl=",
-    "readPolicyResource=",
+    "deadletterQueue=",
     "projectName=QSpy",
     "stage=development",
 ]
@@ -24,8 +23,7 @@ s3_bucket = "cz-aws-sam-cli-managed-default-samclisourcebucket-production"
 s3_prefix = "production-cz-functions"
 stack_name = "qspy-production"
 parameter_overrides = [
-    "queueUrl=",
-    "readPolicyResource=",
+    "deadletterQueue=",
     "projectName=QSpy",
     "stage=production"
 ]
