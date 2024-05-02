@@ -1,0 +1,54 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+@tailwind colors
+
+@layer base
+    :root[data-theme="light"]
+        --color-border: 0deg 0% 90%
+        --color-component: 0deg 0% 98%
+        --color-danger: 0deg 84.2% 60.2%
+        --color-dark: 0deg 0% 45.1%
+        --color-disabled: 0deg 0% 93.1%
+        --color-hover: 0deg 0% 93.8%
+        --color-page: 0deg 0% 95.1%
+        --color-primary: 238.7deg 83.5% 66.7%
+        --color-secondary: 228deg 96.5% 88.8%
+        --color-text: 0deg 0% 63.9%
+        --color-success: 142.1deg 76.2% 36.3%
+        --color-title: 0deg 0% 32.2%
+
+    :root[data-theme="dark"]
+        --color-border: 0deg 0% 19%
+        --color-component: 0deg 0% 16.9%
+        --color-danger: 346.8deg 77.2% 49.8%
+        --color-dark: 0deg 0% 5%
+        --color-disabled: 0deg 0% 10%
+        --color-hover: 0deg 0% 9%
+        --color-page: 0deg 0% 13%
+        --color-primary: 234.5deg 89.5% 73.9%
+        --color-secondary: 226.5deg 100% 93.9%
+        --color-success: 142.1deg 76.2% 36.3%
+        --color-text: 0deg 0% 45.1%
+        --color-title: 0deg 0% 93.1%
+
+    ::-webkit-scrollbar
+        @apply w-1
+    ::-webkit-scrollbar-track
+        @apply bg-hover
+    ::-webkit-scrollbar-thumb
+        @apply bg-primary
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button
+        -webkit-appearance: none
+        margin: 0
+
+@layer components
+    @import button
+    @import dropdown
+    @import icon
+    @import pagination
+    @import pill
+    @import switch
+    @import table

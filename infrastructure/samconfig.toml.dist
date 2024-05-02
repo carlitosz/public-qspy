@@ -1,0 +1,29 @@
+version = 0.1
+
+[development.global.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+region = "us-east-1"
+profile = "YOUR_AWS_PROFILE"
+s3_bucket = "YOUR_S3_ARTIFACTS_BUCKET___NEEDS_TO_EXIST"
+s3_prefix = "development-functions"
+stack_name = "development-stack"
+parameter_overrides = [
+    "deadletterQueue=YOUR_DEADLETTER_QUEUE_ARN___NEEDS_TO_EXIST",
+    "projectName=QSpy",
+    "stage=development",
+]
+
+[production.global.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+region = "us-east-1"
+profile = "YOUR_AWS_PROFILE"
+s3_bucket = "YOUR_S3_ARTIFACTS_BUCKET___NEEDS_TO_EXIST"
+s3_prefix = "production-functions"
+stack_name = "production-stack"
+parameter_overrides = [
+    "deadletterQueue=YOUR_DEADLETTER_QUEUE_ARN___NEEDS_TO_EXIST",
+    "projectName=QSpy",
+    "stage=production"
+]

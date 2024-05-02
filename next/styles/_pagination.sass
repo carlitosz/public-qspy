@@ -1,0 +1,28 @@
+.navigation
+    @apply flex
+
+    &[aria-disabled="true"]
+        @apply invisible
+
+    nav
+        @apply flex space-x-4 w-fit
+
+        ul
+            @apply flex -space-x-px rtl:space-x-reverse text-sm h-8
+
+            li > a
+                @apply flex items-center justify-center w-8 px-2 h-8 ms-0 leading-tight text-title hover:text-title bg-component hover:bg-hover border border-border cursor-pointer transition duration-150 ease-in-out
+
+            li:first-child
+                > a
+                    @apply rounded-s-md w-auto
+
+            li:last-child
+                > a
+                    @apply rounded-e-md w-auto
+
+            li > a[aria-current="true"]
+                @apply bg-primary text-white
+
+            li > a[aria-disabled="true"]
+                @apply bg-disabled text-title/40 cursor-not-allowed pointer-events-none

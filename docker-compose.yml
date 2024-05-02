@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    command: make dev
+    container_name: app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./next:/app/next
+      - ./infrastructure:/app/infrastructure
+      - node_modules:/app/next/node_modules
+      - cache:/app/next/.next
+
+volumes:
+  node_modules:
+  cache:
+
+networks:
+  default:
+    name: spynet

@@ -1,0 +1,28 @@
+{
+  "responseContext": {
+    "statusCode": 200
+  },
+  "responsePayload": {
+    "data": [
+      {
+        "event": "Event1",
+        "count": 1,
+        "fs": "2023-10-30 22:02:45",
+        "ls": "2023-10-30 22:02:45"
+      },
+      {
+        "event": "Event2",
+        "count": 2,
+        "fs": "2023-10-30 22:02:45",
+        "ls": "2023-10-30 22:02:45"
+      },
+      {
+        "event": "Event3",
+        "count": 3,
+        "fs": "2023-10-30 22:02:45",
+        "ls": "2023-10-30 22:02:45"
+      }
+    ],
+    "queue": "test-queue"
+  }
+}

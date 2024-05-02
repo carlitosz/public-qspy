@@ -1,0 +1,24 @@
+{
+  "root": true,
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "eslint:recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-undef": "off",
+        "jsx-a11y/anchor-is-valid": "off"
+      }
+    }
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-unused-vars": "off"
+  }
+}

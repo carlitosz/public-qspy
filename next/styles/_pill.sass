@@ -1,0 +1,32 @@
+.pill
+    @apply flex items-center rounded-md px-2.5 py-0.5 text-white w-min
+
+    &.solid
+        &.neutral
+            @apply bg-dark
+
+        &.danger
+            @apply bg-danger
+
+        &.success
+            @apply bg-success
+
+    &.outline
+        &.neutral
+            @apply ring-1 ring-text text-text
+
+        &.success
+            @apply ring-1 ring-success text-success
+
+        &.danger
+            @apply ring-1 ring-danger text-danger
+
+    &.none
+        &.neutral
+            @apply text-title/80 p-0
+
+        &.success
+            @apply text-success p-0
+
+        &.danger
+            @apply text-danger p-0

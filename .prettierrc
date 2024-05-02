@@ -1,0 +1,23 @@
+{
+    "printWidth": 120,
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": true,
+    "formatOnSave": true,
+    "overrides": [
+        {
+            "files": ["*.yaml", "*.yml", "*.toml", "*.json"],
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": ["*.test.ts"],
+            "options": {
+                "printWidth": 100
+            }
+        }
+    ]
+}
