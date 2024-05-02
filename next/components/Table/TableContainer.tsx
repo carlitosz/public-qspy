@@ -14,8 +14,8 @@ import type { DomainEventTableData, GetEventsResponse } from 'types'
 
 interface TableContainerProps {
     data: {
-        today: GetEventsResponse | undefined
-        yesterday: GetEventsResponse | undefined
+        todayMockData: GetEventsResponse | undefined
+        yesterdayMockData: GetEventsResponse | undefined
     }
 }
 
@@ -27,22 +27,24 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
     const [searchText, setSearchText] = useState<string>('')
     const [sortedData, setSortedData] = useState<DomainEventTableData[] | []>([])
 
-    const { isValidating: tValidating, data: tData } = data.today
-    const { isValidating: yValidating, data: yData } = data.yesterday
+    const { isValidating: tValidating, Data: tData } = data.todayMockData
+    const { isValidating: yValidating, Data: yData } = data.yesterdayMockData
 
     // Initial mount.
     useEffect(() => {
         if (tData && yData) {
-            setSortedData(createTableData(tData.Data, yData.Data))
+            setSortedData(createTableData(tData, yData))
         }
     }, [tData, yData])
 
     // Results per page changed.
     useEffect(() => {
+        setCurrentPage(0)
         setPages(paginate(sortedData, resultsPerPage))
         setMaxResults(sortedData.length)
     }, [resultsPerPage, sortedData])
 
+    // Reset table to original state
     const resetToPristine = (): void => {
         setSearchText('')
         setResultsPerPage(10)
@@ -50,6 +52,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         setMaxResults(sortedData.length)
     }
 
+    // Search handler
     const handleSearch = (searchText: string): void => {
         if (searchText.length === 0) {
             return
@@ -66,6 +69,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
         return <TableSkeleton />
     }
 
+    // Renders pagination
     const renderPagination = (direction: DropdownDirection) => {
         if (pages[currentPage].length === 0 && searchText.length === 0) {
             return <></>
@@ -96,6 +100,7 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                 />
                 <Table>
                     <TableHeaders
+                        data={pages[currentPage]}
                         headers={[
                             { value: 'Event', sortKey: 'event' },
                             { value: 'Count', sortKey: 'count' },
@@ -104,7 +109,12 @@ const TableContainer = ({ data }: TableContainerProps): JSX.Element => {
                             { value: 'First seen', sortKey: 'fs' }
                         ]}
                         sortHandler={(sortKey: SortableHeader['sortKey'], direction: SortDirection): void =>
-                            setPages(paginate(sortBy(sortedData, sortKey, direction), resultsPerPage))
+                            setPages(
+                                paginate(
+                                    sortBy(searchText.length > 0 ? pages[currentPage] : sortedData, sortKey, direction),
+                                    resultsPerPage
+                                )
+                            )
                         }
                     />
                     <TableBody data={pages[currentPage]} searchText={searchText} />

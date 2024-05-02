@@ -15,22 +15,22 @@ paths:
     get:
       summary: Get events for a dead-letter queue
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       parameters:
-        - in: query
-          name: queue
-          required: true
-          schema:
-            type: string
-            example: "domain-events-preprints-deadletter"
-          description: The name of the dead-letter queue
-        - in: query
-          name: date
-          schema:
-            type: string
-            format: date
-            example: "2023-09-01"
-          description: Date when the items were collected (yyyy-MM-dd America/New_York)
+      - in: query
+        name: queue
+        required: true
+        schema:
+          type: string
+          example: "domain-events-deadletter"
+        description: The name of the dead-letter queue
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+          example: "2023-09-01"
+        description: Date when the items were collected (yyyy-MM-dd America/New_York)
       x-amazon-apigateway-request-validator: query-and-headers
       responses:
         "200":

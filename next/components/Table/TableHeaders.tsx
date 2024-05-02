@@ -12,17 +12,20 @@ export interface SortableHeader {
 }
 
 interface TableHeadersProps {
+    data: DomainEventTableData[] | []
     headers: SortableHeader[]
     sortHandler: (sortKey: SortableHeader['sortKey'], direction: SortDirection) => void
 }
 
-const TableHeaders = ({ headers, sortHandler }: TableHeadersProps): JSX.Element => {
+const TableHeaders = ({ data, headers, sortHandler }: TableHeadersProps): JSX.Element => {
     const [localSort, setLocalSort] = useState<{ direction: SortDirection; sortKey: SortableHeader['sortKey'] }>({
         sortKey: 'count',
         direction: 'DESC'
     })
 
     const handleSort = (sortKey: SortableHeader['sortKey']): void => {
+        if (data.length === 0) return
+
         const direction: SortDirection = localSort.direction === 'ASC' ? 'DESC' : 'ASC'
 
         sortHandler(sortKey, direction)

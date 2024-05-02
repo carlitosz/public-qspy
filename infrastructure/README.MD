@@ -1,38 +1,12 @@
 # QSpy
 
-QSpy is a project that uses a Lambda function to count and list Domain Events in dead-letter queues. The Lambda function can be run synchronously to quickly read from a dead-letter queue, or asynchronously to have the results stored in DynamoDB for later retrieval.
+QSpy is a project that uses a Lambda function to count and list events in dead-letter queues. The Lambda function can be run synchronously to quickly read from a dead-letter queue, or asynchronously to have the results stored in DynamoDB for later retrieval.
 
 ## Configuration
 
 The project contains a `samconfig.toml.dist` which is a project-level configuration file that stores default parameters for the SAM CLI commands.
 
 Update this file with your configuration parameters.
-
-### Parameter overrides
-
--   **stage**: The stage where you want to deploy the stack.
-    -   This will also serve as a prefix to all resources created, such as `lambda-function-development`.
--   **readPolicyResource**: The resource ARN of the dead-letter queue if you intend to read from a single deadletter-queue, or a modified ARN that includes wildcard a `*` character to read from multiple queues.
--   **queueUrl**: The URL of your target dead-letter queue.
-
-## Deploy
-
-The stack can is configured to deploy to `development` and `production` environments. There is a `Makefile` included in the project that will deploy to both environments.
-
--   `Make deploy-development` to deploy development
--   `Make deploy-production` to deploy production
-
-These commands will remove any locally existing builds, re-build the project, and deploy to AWS.
-
-### CloudFormation
-
-The provided `template.yaml` will create the following major resources:
-
--   Lambda function to read from the deadletter queue
--   Lambda function to store the data into Dynamo
--   DynamoDB table to store the data
--   Serverless API with configured endpoints to READ from DynamoDB
--   Lambda proxy function to handle GET requests to the API
 
 ## How it works
 

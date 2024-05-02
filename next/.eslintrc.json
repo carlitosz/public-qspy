@@ -1,8 +1,8 @@
 {
+  "root": true,
   "extends": [
     "next",
     "next/core-web-vitals",
-    "plugin:@next/next/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "eslint:recommended",
@@ -17,5 +17,8 @@
       }
     }
   ],
-  "plugins": ["prettier"]
+  "plugins": ["prettier"],
+  "rules": {
+    "no-unused-vars": "off"
+  }
 }

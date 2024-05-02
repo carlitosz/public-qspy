@@ -2,12 +2,11 @@ import { v4 as uuidv4 } from 'uuid'
 import { Message } from '@aws-sdk/client-sqs'
 
 export const EVENT_TYPES = [
-    'Preprints\\Domain\\Model\\Article\\ArticleDuplicatesDetected',
-    'Preprints\\Domain\\Model\\Article\\ArticleDeskRejected',
-    'Preprints\\Domain\\Model\\Article\\ArticlesMerged',
-    'Preprints\\Domain\\Model\\Article\\ArticleOptedOut',
-    'Preprints\\Domain\\Model\\Article\\ArticlePublished',
-    'Preprints\\Domain\\Model\\Article\\ArticlePublished'
+    'Project\\Domain\\Model\\Event\\EventDuplicatesDetected',
+    'Project\\Domain\\Model\\Event\\EventRejected',
+    'Project\\Domain\\Model\\Event\\EventsMerged',
+    'Project\\Domain\\Model\\Event\\EventOptedOut',
+    'Project\\Domain\\Model\\Event\\EventPublished'
 ]
 
 /**

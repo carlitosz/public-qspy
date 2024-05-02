@@ -8,15 +8,15 @@ import type { GetEventsResponse } from 'types'
 
 interface AnalyticsContainerProps {
     data: {
-        today: GetEventsResponse | undefined
-        yesterday: GetEventsResponse | undefined
+        todayMockData: GetEventsResponse | undefined
+        yesterdayMockData: GetEventsResponse | undefined
     }
 }
 
 const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
-    const { today, yesterday } = data
+    const { todayMockData, yesterdayMockData } = data
 
-    if (today.isValidating || yesterday.isValidating) {
+    if (todayMockData.isValidating || yesterdayMockData.isValidating) {
         return (
             <div className="flex h-full gap-x-6">
                 <AnalyticsCardSkeleton />
@@ -27,27 +27,24 @@ const AnalyticsContainer = ({ data }: AnalyticsContainerProps): JSX.Element => {
         )
     }
 
-    const todaysData: GetEventsResponse = today.data
-    const yesterdaysData: GetEventsResponse = yesterday.data
+    // How many messages expired since yesterdayMockData?
+    const expiredMessagesCount: number = getExpiredMessageCount(todayMockData.Data, yesterdayMockData.Data)
 
-    // How many messages expired since yesterday?
-    const expiredMessagesCount: number = getExpiredMessageCount(todaysData.Data, yesterdaysData.Data)
-
-    // How many new events have entered the queue since yesterday?
-    const newMessagesCount: number = getNewMessageCount(todaysData.Data, yesterdaysData.Data)
+    // How many new events have entered the queue since yesterdayMockData?
+    const newMessagesCount: number = getNewMessageCount(todayMockData.Data, yesterdayMockData.Data)
 
     return (
         <div className="flex h-full gap-x-6">
             <AnalyticsCard
-                metric={todaysData.Total}
-                percentOfChange={calculatePercentChange(yesterdaysData.Total, todaysData.Total)}
+                metric={todayMockData.Total}
+                percentOfChange={calculatePercentChange(yesterdayMockData.Total, todayMockData.Total)}
                 title="Total messages"
             />
             <AnalyticsCard metric={newMessagesCount} title="New" />
             <AnalyticsCard metric={expiredMessagesCount} title="Expired" />
             <AnalyticsCard
-                metric={todaysData.Data.length}
-                percentOfChange={calculatePercentChange(yesterdaysData.Data.length, todaysData.Data.length)}
+                metric={todayMockData.Data.length}
+                percentOfChange={calculatePercentChange(yesterdayMockData.Data.length, todayMockData.Data.length)}
                 title="Unique messages"
             />
         </div>

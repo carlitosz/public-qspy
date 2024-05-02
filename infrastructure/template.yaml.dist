@@ -164,7 +164,7 @@ Resources:
       TableName: !Sub '${projectName}Events-${stage}'
       BillingMode: PAY_PER_REQUEST
       KeySchema:
-        # e.g. "domain-events-preprints-deadletter"
+        # e.g. "domain-events-deadletter"
         - AttributeName: 'Queue'
           KeyType: 'HASH'
         # e.g. 2023-01-01

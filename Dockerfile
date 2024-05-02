@@ -1,8 +1,7 @@
 # ==================================================================================
 # Local development image
 # ==================================================================================
-ARG AWS_ACCOUNT_ID
-FROM ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/qspy-node:20-base AS dev
+FROM public.ecr.aws/c6h2f5t7/qspy-public:20-base AS dev
 WORKDIR /app
 
 COPY Makefile /app/Makefile
@@ -12,7 +11,7 @@ COPY Makefile /app/Makefile
 # ==================================================================================
 # Deps image
 # ==================================================================================
-FROM ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/qspy-node:20-base as deps
+FROM public.ecr.aws/c6h2f5t7/qspy-public:20-base AS deps
 WORKDIR /app
 
 # Install next deps
@@ -22,12 +21,12 @@ COPY ./next/package-lock.json /app/next/package-lock.json
 COPY Makefile /app/Makefile
 
 ARG APPLICATION_ENV
-RUN ENVIRONMENT=${APPLICATION_ENV} make next-deps
+RUN ENVIRONMENT=${APPLICATION_ENV} make frontend-deps
 
 # ==================================================================================
-# Builder image
+# Build image
 # ==================================================================================
-FROM ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/qspy-node:20-base as build
+FROM public.ecr.aws/c6h2f5t7/qspy-public:20-base AS build
 WORKDIR /app
 
 # Copy contents of /next -> /app/next
@@ -39,7 +38,7 @@ RUN make build
 # ==================================================================================
 # Production image
 # ==================================================================================
-FROM ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/qspy-node:20-base as deploy
+FROM public.ecr.aws/c6h2f5t7/qspy-public:20-base AS deploy
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -51,11 +50,11 @@ RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 USER nextjs
 
-# Copy from builder image to production image
+# Copy from build image to production image
 # Forget /next directory in production
-COPY --from=builder --chown=nextjs:nodejs /app/next/.next ./.next
-COPY --from=builder /app/next/node_modules ./node_modules
-COPY --from=builder /app/next/package.json ./package.json
-COPY --from=builder /app/next/public ./public
+COPY --from=build --chown=nextjs:nodejs /app/next/.next ./.next
+COPY --from=build /app/next/node_modules ./node_modules
+COPY --from=build /app/next/package.json ./package.json
+COPY --from=build /app/next/public ./public
 
 CMD npm start

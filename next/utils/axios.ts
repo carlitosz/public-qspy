@@ -4,6 +4,8 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_GATEWAY || ''
 axios.defaults.headers.common['x-api-key'] = process.env.NEXT_PUBLIC_API_KEY || ''
 
+export { axios }
+
 export type Request = AxiosRequestConfig | null
 
 export interface Return<Data, Error>

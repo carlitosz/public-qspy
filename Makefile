@@ -10,6 +10,24 @@ dev: #! Start a dev environment
 	@echo "+ $@"
 	cd $(PREFIX)/next && npm run dev
 
+.PHONY: config
+config: #! Configure the application
+	@echo "+ $@"
+	@echo "Creating backend configuration files..."
+	cd $(PREFIX)/infrastructure && cp template.yaml.dist template.yaml && cp samconfig.toml.dist samconfig.toml
+	@echo "\n"
+
+	@echo "Creating frontend configuration files..."
+	cd $(PREFIX)/next && cp .env.dist .env
+
+	@echo "Done."
+
+.PHONY: deps
+deps: #! Install all deps
+	@echo "+ $@"
+	@echo "Installing dependencies..."
+	cd $(PREFIX) npm i && cd $(PREFIX)/infrastructure && npm i
+
 .PHONY: frontend-deps
 frontend-deps: #! Initialize frontend dependencies
 	@echo "Installing client-side deps...\n"
@@ -29,12 +47,6 @@ deploy-development: #! Deploys backend to AWS
 	cd $(PREFIX)/infrastructure && sam build
 	@echo "\nDeploying..."
 	cd $(PREFIX)/infrastructure && sam deploy --config-env development
-
-.PHONY: sync-development
-sync-development: #! Syncs lambda function code without deploying. *ONLY USE ON DEVELOPMENT*
-	@echo "Running SYNC on lambda code..."
-	@echo "\nSyncing..."
-	cd $(PREFIX)/infrastructure && sam sync --code --config-env development
 
 .PHONY: backend-tests
 backend-tests: #! Run backend tests

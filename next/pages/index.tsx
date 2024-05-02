@@ -6,40 +6,23 @@ import Alert from '@/components/Alert/Alert'
 import AnalyticsContainer from '@/components/Analytics/AnalyticsContainer'
 import Page from '@/components/Page/Page'
 import TableContainer from '@/components/Table/TableContainer'
-import { getErrorMessage, useRequest } from '@/utils/axios'
+import { getErrorMessage, axios } from '@/utils/axios'
 
 import type { NextPage } from 'next'
 import type { GetEventsResponse } from 'types'
 
-const Home: NextPage = (): JSX.Element => {
-    const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
-    const DATE_TODAY = format(new Date(), 'yyyy-MM-dd')
-    const DATE_YESTERDAY = format(subDays(new Date(), 1), 'yyyy-MM-dd')
+interface MockData {
+    todayMockData: GetEventsResponse
+    yesterdayMockData: GetEventsResponse
+}
 
-    const today: GetEventsResponse = useRequest<GetEventsResponse>(
-        {
-            url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_TODAY)}`,
-            method: 'GET'
-        },
-        {
-            revalidateOnFocus: false,
-            shouldRetryOnError: false
-        }
-    )
+const QUEUE_NAME = 'domain-events-carlos-zaragoza-deadletter'
+const DATE_TODAY = format(new Date(), 'yyyy-MM-dd')
+const DATE_YESTERDAY = format(subDays(new Date(), 1), 'yyyy-MM-dd')
 
-    const yesterday: GetEventsResponse = useRequest<GetEventsResponse>(
-        {
-            url: `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_YESTERDAY)}`,
-            method: 'GET'
-        },
-        {
-            revalidateOnFocus: false,
-            shouldRetryOnError: false
-        }
-    )
-
-    if (today.error) {
-        const { code, message } = getErrorMessage(today.error)
+const Home: NextPage = ({ todayMockData, yesterdayMockData }: MockData): JSX.Element => {
+    if (todayMockData.error) {
+        const { code, message } = getErrorMessage(todayMockData.error)
 
         return (
             <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
@@ -48,8 +31,8 @@ const Home: NextPage = (): JSX.Element => {
         )
     }
 
-    if (yesterday.error) {
-        const { code, message } = getErrorMessage(yesterday.error.error)
+    if (yesterdayMockData.error) {
+        const { code, message } = getErrorMessage(yesterdayMockData.error)
 
         return (
             <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
@@ -61,13 +44,63 @@ const Home: NextPage = (): JSX.Element => {
     return (
         <Page title={QUEUE_NAME} heading={QUEUE_NAME}>
             <div className="w-full rounded-md h-auto">
-                <AnalyticsContainer data={{ today, yesterday }} />
+                <AnalyticsContainer data={{ todayMockData, yesterdayMockData }} />
             </div>
             <div className="w-full h-fit py-8">
-                <TableContainer data={{ today, yesterday }} />
+                <TableContainer data={{ todayMockData, yesterdayMockData }} />
             </div>
         </Page>
     )
+}
+
+export async function getStaticProps() {
+    var today = null
+    var yesterday = null
+
+    try {
+        today = await axios.get(
+            `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_TODAY)}`
+        )
+    } catch (e) {
+        console.error(`Failed to fetch today's data: ${JSON.stringify(e)}`)
+        return {
+            props: {
+                today: {
+                    error: true
+                },
+                yesterday: {}
+            }
+        }
+    }
+
+    try {
+        yesterday = await axios.get(
+            `/events?queue=${encodeURIComponent(QUEUE_NAME)}&date=${encodeURIComponent(DATE_YESTERDAY)}`
+        )
+    } catch (e) {
+        console.error(`Failed to fetch yesterady's data: ${JSON.stringify(e)}`)
+        return {
+            props: {
+                today: {},
+                yesterday: {
+                    error: true
+                }
+            }
+        }
+    }
+
+    return {
+        props: {
+            todayMockData: {
+                ...today.data,
+                isValidating: false
+            },
+            yesterdayMockData: {
+                ...yesterday.data,
+                isValidating: false
+            }
+        }
+    }
 }
 
 export default Home
