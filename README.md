@@ -2,10 +2,6 @@
 
 This project contains the code for running the Qspy project locally within a docker container and the code for deploying the backend to AWS.
 
-## Static site demo
-
-A static version of qspy is hosted at: [qspy.carloszaragoza.me](https://qspy.carloszaragoza.me) with mock data.
-
 ## Prerequisites
 
 This project uses [Docker](https://docs.docker.com/get-docker/) on the frontend and the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) to configure and deploy an AWS infrastructure.
